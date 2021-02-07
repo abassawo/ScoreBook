@@ -10,7 +10,7 @@ class HomeViewModel : ViewModel() {
 
     init {
         if(IsFirstRun()) {
-            viewState.postValue(HomeViewState.InitialState)
+            viewState.postValue(HomeViewState.EmptyState)
         }
     }
 }

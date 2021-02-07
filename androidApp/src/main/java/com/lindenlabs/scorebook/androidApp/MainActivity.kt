@@ -8,6 +8,7 @@ import com.lindenlabs.scorebook.androidApp.databinding.ActivityMainBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewState
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewState.GamesState
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy { viewBinding() }
@@ -37,9 +38,9 @@ class MainActivity : AppCompatActivity() {
         toolbar.setTitle(R.string.app_name)
     }
 
-    private fun processViewState(viewState: HomeViewState) = when (viewState) {
-        HomeViewState.InitialState -> {
-        }
+    private fun processViewState(viewState: HomeViewState) = when(viewState) {
+        HomeViewState.EmptyState -> Unit // showTutorial()
+        is GamesState -> Unit
     }
 }
 
