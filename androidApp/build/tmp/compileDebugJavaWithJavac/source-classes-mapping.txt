@@ -1,2 +1,0 @@
-com/lindenlabs/scorebook/androidApp/BuildConfig.java
- com.lindenlabs.scorebook.androidApp.BuildConfig
