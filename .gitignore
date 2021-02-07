@@ -14,5 +14,5 @@
 .cxx
 local.properties
 /androidApp/build/
-/androidApp/build/
 /shared/build/
+/.idea/
