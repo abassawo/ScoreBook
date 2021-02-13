@@ -6,7 +6,7 @@ import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 import java.util.*
 
 class TestRepository : GameRepository() {
-    override fun getGames(): List<Game> = openGames
+    override fun getGames(): List<Game> = openGames + closedGames
 
     override fun getGameById(id: UUID): Game? = openGames.find { it.id == id }
 

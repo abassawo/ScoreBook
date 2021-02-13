@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.lindenlabs.scorebook.androidApp.databinding.ActivityMainBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewEntity
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewEntity.*
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewState
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameAdapter
 
 class MainActivity : AppCompatActivity() {
@@ -45,8 +44,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun showGames(viewEntity: HomeViewEntity) = with(viewEntity) {
-        binding.gamesRecyclerView.adapter = GameAdapter(openGames, closedGames)
+    private fun showGames(viewState: HomeViewState) {
+        binding.gamesRecyclerView.adapter = GameAdapter(viewState.entities)
     }
 }
 
