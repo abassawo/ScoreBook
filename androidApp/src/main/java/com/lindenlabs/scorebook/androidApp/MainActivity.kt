@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.lindenlabs.scorebook.androidApp.databinding.ActivityMainBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewState
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewState
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameAdapter
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy { viewBinding() }
@@ -26,20 +28,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
             binding.updateUi()
-            viewModel.viewState.observe(this, ::processViewState)
+            viewModel.viewState.observe(this, ::showGames)
         }
     }
 
     private fun ActivityMainBinding.updateUi() {
-        val homeScreenBinding = IncludeHomeScreenBinding.bind(findViewById<View>(R.id.homeScrenRoot))
+        val homeScreenBinding =
+            IncludeHomeScreenBinding.bind(findViewById<View>(R.id.homeScrenRoot))
         homeScreenBinding.gameRuleSwitch.textOff = getString(R.string.high_score)
         homeScreenBinding.gameRuleSwitch.textOn = getString(R.string.low_score)
         toolbar.setTitle(R.string.app_name)
+        binding.gamesRecyclerView.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+        }
     }
 
-    private fun processViewState(viewState: HomeViewState) = when (viewState) {
-        HomeViewState.InitialState -> {
-        }
+
+    private fun showGames(viewState: HomeViewState) {
+        binding.gamesRecyclerView.adapter = GameAdapter(viewState.entities)
     }
 }
 
