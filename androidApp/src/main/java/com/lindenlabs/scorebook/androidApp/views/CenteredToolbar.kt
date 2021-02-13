@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.base.views
+package com.lindenlabs.scorebook.androidApp.views
 
 import android.content.Context
 import android.text.TextUtils

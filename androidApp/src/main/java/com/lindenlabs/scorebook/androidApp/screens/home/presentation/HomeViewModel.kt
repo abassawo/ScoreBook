@@ -2,15 +2,17 @@ package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.lindenlabs.scorebook.androidApp.screens.home.domain.IsFirstRun
+import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetClosedGames
+import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetOpenGames
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(getOpenGames: GetOpenGames, getClosedGames: GetClosedGames) : ViewModel() {
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
-//    val viewEvent: SingleLiveEvent<HomeViewState> = SingleLiveEvent()
 
     init {
-        if(IsFirstRun()) {
-            viewState.postValue(HomeViewState.EmptyState)
-        }
+        val state = HomeViewState.GamesState(
+            openGames = getOpenGames(),
+            closedGames = getClosedGames()
+        )
+        viewState.postValue(state)
     }
 }
