@@ -7,10 +7,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lindenlabs.scorebook.androidApp.databinding.ActivityMainBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewState
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewState.GamesState
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewEntity
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewEntity.*
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameAdapter
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy { viewBinding() }
@@ -29,12 +29,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
             binding.updateUi()
-            viewModel.viewState.observe(this, ::processViewState)
+            viewModel.viewState.observe(this, ::showGames)
         }
     }
 
     private fun ActivityMainBinding.updateUi() {
-        val homeScreenBinding = IncludeHomeScreenBinding.bind(findViewById<View>(R.id.homeScrenRoot))
+        val homeScreenBinding =
+            IncludeHomeScreenBinding.bind(findViewById<View>(R.id.homeScrenRoot))
         homeScreenBinding.gameRuleSwitch.textOff = getString(R.string.high_score)
         homeScreenBinding.gameRuleSwitch.textOn = getString(R.string.low_score)
         toolbar.setTitle(R.string.app_name)
@@ -43,14 +44,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun processViewState(viewState: HomeViewState) = when(viewState) {
-        HomeViewState.EmptyState -> Unit // showTutorial()
-        is GamesState -> showGames(viewState)
 
-    }
-
-    private fun showGames(viewState: HomeViewState.GamesState) {
-        binding.gamesRecyclerView.adapter = GameAdapter(viewState.openGames)
+    private fun showGames(viewEntity: HomeViewEntity) = with(viewEntity) {
+        binding.gamesRecyclerView.adapter = GameAdapter(openGames, closedGames)
     }
 }
 
