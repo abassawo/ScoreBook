@@ -1,5 +1,9 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.domain
 
-class GetClosedGames(private val gameRepository: GameRepository) {
-    operator fun invoke() = gameRepository.getGames().filterNot { it.isInSession }
+import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
+
+class GetClosedGames(private val gameRepository: GameRepository = TestRepository()) {
+    operator fun invoke(): List<Game> {
+        return gameRepository.getGames().filterNot { it.isInSession }
+    }
 }

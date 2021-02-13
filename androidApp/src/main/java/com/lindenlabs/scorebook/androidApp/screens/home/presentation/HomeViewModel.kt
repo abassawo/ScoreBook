@@ -5,13 +5,13 @@ import androidx.lifecycle.ViewModel
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetClosedGames
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetOpenGames
 
-class HomeViewModel(getOpenGames: GetOpenGames, getClosedGames: GetClosedGames) : ViewModel() {
+class HomeViewModel  : ViewModel() {
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
 
     init {
         val state = HomeViewState.GamesState(
-            openGames = getOpenGames(),
-            closedGames = getClosedGames()
+            openGames = GetOpenGames().invoke(),
+            closedGames = GetClosedGames().invoke()
         )
         viewState.postValue(state)
     }

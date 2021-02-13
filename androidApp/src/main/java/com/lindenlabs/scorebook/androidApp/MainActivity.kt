@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.lindenlabs.scorebook.androidApp.databinding.ActivityMainBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
+import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewState
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewState.GamesState
@@ -36,11 +38,19 @@ class MainActivity : AppCompatActivity() {
         homeScreenBinding.gameRuleSwitch.textOff = getString(R.string.high_score)
         homeScreenBinding.gameRuleSwitch.textOn = getString(R.string.low_score)
         toolbar.setTitle(R.string.app_name)
+        binding.gamesRecyclerView.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+        }
     }
 
     private fun processViewState(viewState: HomeViewState) = when(viewState) {
         HomeViewState.EmptyState -> Unit // showTutorial()
-        is GamesState -> Unit
+        is GamesState -> showGames(viewState)
+
+    }
+
+    private fun showGames(viewState: HomeViewState.GamesState) {
+        binding.gamesRecyclerView.adapter = GameAdapter(viewState.openGames)
     }
 }
 

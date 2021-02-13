@@ -4,10 +4,11 @@ import com.lindenlabs.scorebook.androidApp.screens.home.data.GameDataSource
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import java.util.*
 
-class GameRepository : GameDataSource {
+open class GameRepository : GameDataSource {
 
     override fun getGames(): List<Game> = listOf()
 
     override fun getGameById(id: UUID) : Game? = getGames().find { it.id == id }
 
 }
+
