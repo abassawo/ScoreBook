@@ -11,10 +11,11 @@ import com.lindenlabs.scorebook.androidApp.databinding.HeaderItemRowBinding
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameRowEntity
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameRowEntity.BodyType
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameRowEntity.HeaderType
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameViewHolder.BodyViewHolder
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameViewHolder.HeaderViewHolder
 
-class GameAdapter() :
+internal class GameAdapter() :
     Adapter<GameViewHolder>() {
     val data: MutableList<GameRowEntity> = mutableListOf()
 
@@ -64,15 +65,22 @@ private fun ViewGroup.inflate(layout: Int): View {
 
 abstract sealed class GameViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-    class HeaderViewHolder(view: View) : GameViewHolder(view) {
+    internal class HeaderViewHolder(view: View) : GameViewHolder(view) {
         private val binding: HeaderItemRowBinding by lazy { viewBinding() }
         private fun viewBinding(): HeaderItemRowBinding = HeaderItemRowBinding.bind(itemView)
         fun bind(row: HeaderType) = with(binding.text1) { text = row.title }
     }
 
-    class BodyViewHolder(view: View) : GameViewHolder(view) {
+    internal class BodyViewHolder(view: View) : GameViewHolder(view) {
         private val binding: GameItemRowBinding by lazy { viewBinding() }
         private fun viewBinding(): GameItemRowBinding = GameItemRowBinding.bind(itemView)
-        fun bind(row: BodyType) = with(binding.text1) { text = row.game.name }
+
+        fun bind(row: BodyType) {
+            with(binding.text1) { text = row.game.name }
+
+            itemView.setOnClickListener {
+                row.clickAction(GameInteraction.GameClicked(row.game))
+            }
+        }
     }
 }

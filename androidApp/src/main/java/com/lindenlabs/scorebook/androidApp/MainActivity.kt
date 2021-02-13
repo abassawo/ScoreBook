@@ -7,9 +7,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lindenlabs.scorebook.androidApp.databinding.ActivityMainBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.GameDetailActivity
+import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.*
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewState
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameAdapter
 
@@ -19,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private val gameAdapter = GameAdapter()
 
     private fun homeScreenBinding() =
-        IncludeHomeScreenBinding.bind(findViewById<View>(R.id.homeScrenRoot))
+        IncludeHomeScreenBinding.bind(findViewById(R.id.homeScrenRoot))
 
     private val viewModel: HomeViewModel by lazy { viewModel() }
 
@@ -36,13 +39,21 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             binding.updateUi()
             viewModel.viewState.observe(this, ::showGames)
-            viewModel.viewEvent.observe(this, ::showTextError)
+            viewModel.viewEvent.observe(this, ::processViewEvent)
         }
     }
 
-    private fun showTextError(event: HomeViewEvent) = when(event){
-        HomeViewEvent.AlertNoTextEntered -> homeScreenBinding().enterNewGameEditText.setError("Enter a name for this game!",
-            getDrawable(android.R.drawable.stat_notify_error))
+    private fun processViewEvent(event: HomeViewEvent) = when(event){
+        is AlertNoTextEntered -> showError(event)
+        is ShowGameDetail -> showGameDetail(event.game)
+    }
+
+    private fun showGameDetail(game: Game) =
+        startActivity(GameDetailActivity.newIntent(this, game.id))
+
+    private fun showError(event: HomeViewEvent.AlertNoTextEntered) {
+        val errorPair = event.errorText to  getDrawable(android.R.drawable.stat_notify_error)
+        gameBinding.enterNewGameEditText.setError(errorPair.first, errorPair.second)
     }
 
     private fun ActivityMainBinding.updateUi() {
@@ -57,7 +68,7 @@ class MainActivity : AppCompatActivity() {
             gameRuleSwitch.textOn = getString(R.string.low_score)
             newGameButton.setOnClickListener {
                 val enteredText =  enterNewGameEditText.text.toString()
-                viewModel.handleInteraction(NewGameClicked(enteredText))
+                viewModel.handleInteraction(GameNameEntered(enteredText))
             }
         }
         gameBinding.bind()
@@ -66,5 +77,3 @@ class MainActivity : AppCompatActivity() {
     private fun showGames(viewState: HomeViewState) =
         gameAdapter.setData(viewState.entities)
 }
-
-

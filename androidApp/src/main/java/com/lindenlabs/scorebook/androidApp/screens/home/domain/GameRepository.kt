@@ -9,7 +9,7 @@ open class GameRepository : GameDataSource {
 
     override fun getGameById(id: UUID) : Game? = games.find { it.id == id }
 
-    override fun storeGame(name: String) {
-        games += Game(name = name)
+    override fun storeGame(game : Game) {
+        games += game
     }
 }

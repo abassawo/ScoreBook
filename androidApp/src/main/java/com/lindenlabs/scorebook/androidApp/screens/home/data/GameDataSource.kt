@@ -6,5 +6,5 @@ import java.util.*
 interface GameDataSource {
     val games : List<Game>
     fun getGameById(id: UUID) : Game?
-    fun storeGame(name: String)
+    fun storeGame(game: Game)
 }

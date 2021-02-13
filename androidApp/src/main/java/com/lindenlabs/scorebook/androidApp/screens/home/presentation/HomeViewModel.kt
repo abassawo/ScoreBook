@@ -6,10 +6,11 @@ import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GameRepository
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetClosedGames
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetOpenGames
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameDataEntity
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GamesWrapper
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.*
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewState
 
 internal class HomeViewModel : ViewModel() {
@@ -23,31 +24,34 @@ internal class HomeViewModel : ViewModel() {
     }
 
     private fun showGames() {
-        val viewEntity = GameDataEntity(
+        val viewEntity = GamesWrapper(
             openGames = GetOpenGames(repository).invoke(),
             closedGames = GetClosedGames(repository).invoke()
         )
         viewState.postValue(viewEntity.toViewState())
     }
 
-    fun handleInteraction(interaction: GameInteraction) = when (interaction) {
-        is NewGameClicked -> {
+    internal fun handleInteraction(interaction: GameInteraction) = when (interaction) {
+        is GameNameEntered -> {
             if (interaction.name.isNullOrEmpty()) {
                 showError()
             } else {
                 storeNewGame(interaction.name)
             }
         }
+        is GameClicked -> viewEvent.postValue(ShowGameDetail(interaction.game))
     }
 
-    private fun showError() = viewEvent.postValue(HomeViewEvent.AlertNoTextEntered)
+    private fun showError() = viewEvent.postValue(AlertNoTextEntered())
 
     private fun storeNewGame(name: String) {
-        repository.storeGame(name)
+        val game = Game(name = name)
+        repository.storeGame(game)
+        viewEvent.postValue(ShowGameDetail(game))
         showGames()
     }
 
-    private fun GameDataEntity.toViewState(): HomeViewState {
+    private fun GamesWrapper.toViewState(): HomeViewState {
         val listOfEntities = mutableListOf<GameRowEntity>()
         if (openGames.isNotEmpty()) {
             listOfEntities += GameRowEntity.HeaderType("Open Games:")
@@ -59,14 +63,15 @@ internal class HomeViewModel : ViewModel() {
         }
         return HomeViewState(listOfEntities)
     }
+
+    private fun List<Game>.toBodyEntity(): List<GameRowEntity.BodyType> {
+        return this.map { game -> GameRowEntity.BodyType(game) { handleInteraction(GameClicked(game)) } }
+    }
 }
 
-private fun List<Game>.toBodyEntity(): List<GameRowEntity.BodyType> {
-    return this.map { GameRowEntity.BodyType(it) }
-}
 
-sealed class GameRowEntity {
+internal sealed class GameRowEntity {
     data class HeaderType(val title: String) : GameRowEntity()
 
-    data class BodyType(val game: Game) : GameRowEntity()
+    data class BodyType(val game: Game, val clickAction: (interaction: GameInteraction) -> Unit) : GameRowEntity()
 }
