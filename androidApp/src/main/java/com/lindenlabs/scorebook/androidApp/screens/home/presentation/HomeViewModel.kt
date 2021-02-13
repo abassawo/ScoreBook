@@ -22,11 +22,11 @@ class HomeViewModel : ViewModel() {
     fun GameDataEntity.toViewState() : HomeViewState {
         val listOfEntities = mutableListOf<GameRowEntity>()
         if(openGames.isNotEmpty()) {
-            listOfEntities += GameRowEntity.HeaderType("Open Games")
+            listOfEntities += GameRowEntity.HeaderType("Open Games:")
             listOfEntities += openGames.toBodyEntity()
         }
         if (closedGames.isNotEmpty()) {
-            listOfEntities += GameRowEntity.HeaderType("Closed Games")
+            listOfEntities += GameRowEntity.HeaderType("Closed Games:")
             listOfEntities += closedGames.toBodyEntity()
         }
         return HomeViewState(listOfEntities)

@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.GameItemRowBinding
+import com.lindenlabs.scorebook.androidApp.databinding.HeaderItemRowBinding
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameRowEntity
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameRowEntity.*
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameViewHolder.BodyViewHolder
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameViewHolder.BodyViewHolder.Companion.BODY_LAYOUT
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameViewHolder.HeaderViewHolder
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameViewHolder.HeaderViewHolder.Companion.HEADER_LAYOUT
 
 class GameAdapter(private val rows: List<GameRowEntity>) :
     Adapter<GameViewHolder>() {
@@ -19,12 +19,15 @@ class GameAdapter(private val rows: List<GameRowEntity>) :
     companion object {
         const val HEADER_VIEW_TYPE = 11
         const val BODY_VIEW_TYPE = 22
+        const val HEADER_LAYOUT = R.layout.header_item_row
+        const val BODY_LAYOUT = R.layout.game_item_row
+
     }
 
     override fun getItemViewType(position: Int): Int {
         return when(rows[position]) {
-            is GameRowEntity.HeaderType -> HEADER_VIEW_TYPE
-            is GameRowEntity.BodyType -> BODY_VIEW_TYPE
+            is HeaderType -> HEADER_VIEW_TYPE
+            is BodyType -> BODY_VIEW_TYPE
         }
     }
 
@@ -38,8 +41,8 @@ class GameAdapter(private val rows: List<GameRowEntity>) :
     override fun onBindViewHolder(holder: GameViewHolder, position: Int) {
         val entity = rows[position]
         when(holder) {
-            is HeaderViewHolder -> if (entity is GameRowEntity.HeaderType ) holder.bind(entity)
-            is BodyViewHolder -> if (entity is GameRowEntity.BodyType ) holder.bind(entity)
+            is HeaderViewHolder -> if (entity is HeaderType ) holder.bind(entity)
+            is BodyViewHolder -> if (entity is BodyType ) holder.bind(entity)
         }
     }
 
@@ -53,24 +56,14 @@ private fun ViewGroup.inflate(layout: Int): View {
 abstract sealed class GameViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     class HeaderViewHolder(view: View) : GameViewHolder(view) {
-        private val binding: GameItemRowBinding by lazy { viewBinding() }
-        private fun viewBinding(): GameItemRowBinding = GameItemRowBinding.bind(itemView)
-
-        fun bind(row: GameRowEntity.HeaderType) = with(binding.text1) { text = row.title}
-
-        companion object {
-            const val HEADER_LAYOUT = R.layout.game_item_row
-        }
+        private val binding: HeaderItemRowBinding by lazy { viewBinding() }
+        private fun viewBinding(): HeaderItemRowBinding = HeaderItemRowBinding.bind(itemView)
+        fun bind(row: HeaderType) = with(binding.text1) { text = row.title}
     }
 
     class BodyViewHolder(view: View) : GameViewHolder(view) {
         private val binding: GameItemRowBinding by lazy { viewBinding() }
         private fun viewBinding(): GameItemRowBinding = GameItemRowBinding.bind(itemView)
-
-        fun bind(row: GameRowEntity.BodyType) = with(binding.text1) { text = row.game.name }
-
-        companion object {
-            const val BODY_LAYOUT = R.layout.game_item_row
-        }
+        fun bind(row: BodyType) = with(binding.text1) { text = row.game.name }
     }
 }
