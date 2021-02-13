@@ -7,8 +7,8 @@ typealias StalematePair = Pair<Player, Player>
 data class Game(
     val id: UUID = UUID.randomUUID(),
     val name: String,
-    val isInSession: Boolean,
-    val players: List<Player>,
+    val isClosed: Boolean = false,
+//    val players: List<Player>? = null,
     val outcome: GameOutcome? = null
 )
 

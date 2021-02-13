@@ -6,7 +6,7 @@ import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 import java.util.*
 
 class TestRepository : GameRepository() {
-    override fun getGames(): List<Game> = openGames + closedGames
+    override val games: MutableList<Game> = (openGames + closedGames).toMutableList()
 
     override fun getGameById(id: UUID): Game? = openGames.find { it.id == id }
 
@@ -14,9 +14,8 @@ class TestRepository : GameRepository() {
         private val player1 = Player("player1")
         private val player2 = Player("player2")
         private val players = listOf(player1, player2)
-        val openGames = listOf(Game(name = "Game1", isInSession = true, players = players))
-        val closedGames = listOf(Game(name = "Game2", isInSession = false, players = players, outcome = GameOutcome.WinnerAnnounced(
+        val openGames = listOf(Game(name = "Game1", isClosed = false))
+        val closedGames = listOf(Game(name = "Game2", isClosed = true, outcome = GameOutcome.WinnerAnnounced(
             player1)))
     }
-
 }

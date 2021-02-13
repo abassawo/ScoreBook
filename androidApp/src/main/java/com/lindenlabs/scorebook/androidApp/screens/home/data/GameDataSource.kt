@@ -4,6 +4,7 @@ import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import java.util.*
 
 interface GameDataSource {
-    fun getGames() : List<Game>
+    val games : List<Game>
     fun getGameById(id: UUID) : Game?
+    fun storeGame(game: Game)
 }
