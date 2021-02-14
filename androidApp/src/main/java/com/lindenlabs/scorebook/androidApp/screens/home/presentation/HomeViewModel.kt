@@ -18,7 +18,7 @@ internal class HomeViewModel : ViewModel() {
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
 
-    private val repository = TestRepository()
+    private val repository = GameRepository
 
     init {
         showGames()

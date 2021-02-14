@@ -1,14 +1,19 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.domain
 
+import com.lindenlabs.scorebook.androidApp.screens.home.data.GameDataSource
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.GameOutcome
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 import java.util.*
 
-class TestRepository : GameRepository() {
+class TestRepository : GameDataSource {
     override val games: MutableList<Game> = (openGames + closedGames).toMutableList()
 
     override fun getGameById(id: UUID): Game? = openGames.find { it.id == id }
+
+    override fun storeGame(game: Game) {
+        games += game
+    }
 
     companion object {
         private val player1 = Player("player1")

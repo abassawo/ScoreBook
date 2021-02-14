@@ -21,27 +21,31 @@ class GameDetailActivity : AppCompatActivity() {
         val rootView = findViewById<View>(R.id.game_detail_root)
         return GameDetailActivityBinding.bind(rootView)
     }
+
     private val viewModel: GameViewModel by lazy { viewModel() }
 
-    private fun viewModel() = ViewModelProvider( this).get(GameViewModel::class.java)
+    private fun viewModel() = ViewModelProvider(this).get(GameViewModel::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.game_detail_activity)
-        intent.extras?.get(GAME_ID_KEY)?.let { viewModel.launch(it as UUID) }
+        intent.extras?.get(GAME_ID_KEY)?.let {
+            viewModel.launch(it as UUID)
+        }
         viewModel.viewState.observe(this, ::showGame)
         viewModel.viewEvent.observe(this, ::processViewEvent)
-        if(savedInstanceState == null) {
-            binding.updateUi()
-        }
+//        if(savedInstanceState == null) {
+        binding.updateUi()
+//        }
     }
 
     private fun GameDetailActivityBinding.updateUi() {
+//        val uuid = intent.extras?.get(GAME_ID_KEY) as UUID
         this.addNewPlayerButton.setOnClickListener { viewModel.navigateToAddPlayerPage() }
     }
 
     private fun processViewEvent(event: GameViewEvent) {
-        when(event) {
+        when (event) {
             is GameViewEvent.AddPlayersClicked -> navigateToAddPlayers(event.game)
         }
     }
@@ -51,7 +55,7 @@ class GameDetailActivity : AppCompatActivity() {
     }
 
     private fun showGame(state: GameViewState) {
-        when(state) {
+        when (state) {
             GameViewState.EmptyState -> showEmptyState()
             is GameViewState.GameStarted -> showActiveGame(state)
         }
@@ -67,7 +71,7 @@ class GameDetailActivity : AppCompatActivity() {
 
     companion object {
         private const val GAME_ID_KEY = "Game ID key"
-        fun newIntent(context: Context, gameId: UUID) : Intent {
+        fun newIntent(context: Context, gameId: UUID): Intent {
             return Intent(context, GameDetailActivity::class.java)
                 .putExtra(GAME_ID_KEY, gameId)
         }
