@@ -13,7 +13,7 @@ import java.util.*
 class GameViewModel : ViewModel() {
     val viewState: MutableLiveData<GameViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<GameViewEvent> = MutableLiveData()
-    private val repository: GameDataSource = GameRepository()
+    private val repository: GameDataSource = GameRepository
 
     private var game: Game? = null
 
