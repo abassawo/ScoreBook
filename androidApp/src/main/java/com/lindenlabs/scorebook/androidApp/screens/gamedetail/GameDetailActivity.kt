@@ -12,7 +12,6 @@ import com.lindenlabs.scorebook.androidApp.screens.addplayers.AddPlayersActivity
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewState
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
 import java.util.*
 
 class GameDetailActivity : AppCompatActivity() {
@@ -24,13 +23,21 @@ class GameDetailActivity : AppCompatActivity() {
     }
     private val viewModel: GameViewModel by lazy { viewModel() }
 
-    private fun viewModel() = ViewModelProvider(this).get(GameViewModel::class.java)
+    private fun viewModel() = ViewModelProvider( this).get(GameViewModel::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.game_detail_activity)
+        intent.extras?.get(GAME_ID_KEY)?.let { viewModel.launch(it as UUID) }
         viewModel.viewState.observe(this, ::showGame)
         viewModel.viewEvent.observe(this, ::processViewEvent)
+        if(savedInstanceState == null) {
+            binding.updateUi()
+        }
+    }
+
+    private fun GameDetailActivityBinding.updateUi() {
+        this.addNewPlayerButton.setOnClickListener { viewModel.navigateToAddPlayerPage() }
     }
 
     private fun processViewEvent(event: GameViewEvent) {
@@ -46,7 +53,7 @@ class GameDetailActivity : AppCompatActivity() {
     private fun showGame(state: GameViewState) {
         when(state) {
             GameViewState.EmptyState -> showEmptyState()
-            is GameViewState.StartGame -> showActiveGame(state)
+            is GameViewState.GameStarted -> showActiveGame(state)
         }
     }
 
@@ -54,7 +61,7 @@ class GameDetailActivity : AppCompatActivity() {
         binding.emptyStateTextView.visibility = View.VISIBLE
     }
 
-    private fun showActiveGame(state: GameViewState.StartGame) {
+    private fun showActiveGame(state: GameViewState.GameStarted) {
         binding.emptyStateTextView.visibility = View.GONE
     }
 

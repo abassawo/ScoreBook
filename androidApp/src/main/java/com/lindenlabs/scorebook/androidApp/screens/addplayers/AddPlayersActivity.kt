@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersActivityBinding
+import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction.*
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 
 class AddPlayersActivity : AppCompatActivity() {
@@ -24,22 +25,18 @@ class AddPlayersActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.add_players_activity)
-//        viewModel.viewState.observe(this, ::updateViewState)
         viewModel.viewEvent.observe(this, ::processViewEvent)
     }
 
-    private fun updateViewState(viewState: AddPlayersViewState) {
-
-    }
-
     private fun processViewEvent(viewEvent: AddPlayersViewEvent) {
+        val text = binding.enterNewPlayerEditText.editableText.toString()
         when(viewEvent) {
-
+            is AddPlayersViewEvent.NewPlayerAdded -> viewModel.handleInteraction(NewPlayer(text))
         }
     }
 
     companion object {
-        const val GAME_ID_KEY = "gameIdKey"
+        private const val GAME_ID_KEY = "gameIdKey"
         fun newIntent(context: Context, game: Game) : Intent {
             return Intent(context, AddPlayersActivity::class.java)
                 .putExtra(GAME_ID_KEY, game.id)

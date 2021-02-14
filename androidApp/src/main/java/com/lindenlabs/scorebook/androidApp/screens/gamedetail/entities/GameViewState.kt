@@ -5,5 +5,5 @@ import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 
 sealed class GameViewState {
     object EmptyState : GameViewState()
-    data class StartGame(val game: Game, val player: Player) : GameViewState()
+    data class GameStarted(val game: Game, val players: List<Player>) : GameViewState()
 }
