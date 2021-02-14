@@ -1,9 +1,9 @@
 package com.lindenlabs.scorebook.androidApp.screens.addplayers.entities
 
-sealed class AddPlayerInteraction {
+sealed class AddPlayerInteraction(open val name: String) {
 
-    data class NewPlayer(val name: String) : AddPlayerInteraction()
+    data class NewPlayer(override val name: String) : AddPlayerInteraction(name)
 
-    data class AddAnotherPlayer(val previousEntries: List<String>): AddPlayerInteraction()
+    data class AddAnotherPlayer(override val name: String): AddPlayerInteraction(name)
 
 }

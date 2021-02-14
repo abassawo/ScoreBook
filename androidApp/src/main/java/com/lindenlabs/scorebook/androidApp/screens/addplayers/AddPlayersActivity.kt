@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewbinding.ViewBinding
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersActivityBinding
+import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction.*
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 
@@ -26,12 +28,24 @@ class AddPlayersActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.add_players_activity)
         viewModel.viewEvent.observe(this, ::processViewEvent)
+        binding.updateUI()
     }
 
     private fun processViewEvent(viewEvent: AddPlayersViewEvent) {
         val text = binding.enterNewPlayerEditText.editableText.toString()
         when(viewEvent) {
             is AddPlayersViewEvent.NewPlayerAdded -> viewModel.handleInteraction(NewPlayer(text))
+        }
+    }
+
+    private fun AddPlayersActivityBinding.updateUI() {
+        this.addPlayer.setOnClickListener {
+            val name = binding.enterNewPlayerEditText.text.toString()
+            viewModel.handleInteraction(NewPlayer(name)) // new player routes back to Game Detail Screen
+        }
+        this.addAnotherPlayer.setOnClickListener { // keeps screen on same screen
+            val name = binding.enterNewPlayerEditText.text.toString()
+            viewModel.handleInteraction(AddAnotherPlayer(name))
         }
     }
 
@@ -43,3 +57,4 @@ class AddPlayersActivity : AppCompatActivity() {
         }
     }
 }
+

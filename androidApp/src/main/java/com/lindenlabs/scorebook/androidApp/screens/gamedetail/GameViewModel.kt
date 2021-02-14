@@ -22,10 +22,10 @@ class GameViewModel : ViewModel() {
         game?.let {
             this.game = it
 
-            if(game.players == null) {
+            if(it.players.isNullOrEmpty()) {
                 viewState.postValue(GameViewState.EmptyState)
             } else {
-                viewState.postValue(GameViewState.GameStarted(it, it.players ?: emptyList()))
+                viewState.postValue(GameViewState.GameStarted(it, it.players))
             }
         }
     }
