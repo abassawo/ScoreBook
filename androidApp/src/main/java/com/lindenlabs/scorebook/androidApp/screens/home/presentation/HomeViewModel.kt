@@ -6,6 +6,7 @@ import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GameRepository
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetClosedGames
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetOpenGames
+import com.lindenlabs.scorebook.androidApp.screens.home.domain.TestRepository
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GamesWrapper
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.*
@@ -17,7 +18,7 @@ internal class HomeViewModel : ViewModel() {
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
 
-    private val repository = GameRepository()
+    private val repository = TestRepository()
 
     init {
         showGames()

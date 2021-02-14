@@ -11,4 +11,7 @@
     <string name="high_score">High Score</string>
     <string name="low_score">Low Score</string>
     <string name="add_new_players">Add new players</string>
+    <string name="current_players">Current players:</string>
+    <string name="add_another_player_text">Add Another Player</string>
+    <string name="add_player_text">Add Player</string>
 </resources>
