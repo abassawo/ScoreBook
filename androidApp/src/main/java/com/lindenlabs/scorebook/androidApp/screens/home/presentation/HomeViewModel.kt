@@ -3,10 +3,9 @@ package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
-import com.lindenlabs.scorebook.androidApp.screens.home.domain.GameRepository
+import com.lindenlabs.scorebook.androidApp.data.GameRepository
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetClosedGames
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetOpenGames
-import com.lindenlabs.scorebook.androidApp.screens.home.domain.TestRepository
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GamesWrapper
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.*

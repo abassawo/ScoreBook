@@ -8,7 +8,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailActivityBinding
-import com.lindenlabs.scorebook.androidApp.screens.addplayers.AddPlayersActivity
+import com.lindenlabs.scorebook.androidApp.screens.managegame.AddPlayersActivity
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewState
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
