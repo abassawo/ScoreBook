@@ -1,9 +1,15 @@
 package com.lindenlabs.scorebook.androidApp.screens.managegame.entities
 
-sealed class AddPlayerInteraction(open val playerName: String) {
+sealed class AddPlayerInteraction {
 
-    data class SavePlayerDataAndExit(override val playerName: String) : AddPlayerInteraction(playerName)
+    data class SavePlayerDataAndExit(val playerName: String) : AddPlayerInteraction()
 
-    data class AddAnotherPlayer(override val playerName: String): AddPlayerInteraction(playerName)
+    data class AddAnotherPlayer(val playerName: String) : AddPlayerInteraction()
+
+    object EmptyText : AddPlayerInteraction()
+
+    object TextEntered : AddPlayerInteraction()
+
+    object Typing : AddPlayerInteraction()
 
 }
