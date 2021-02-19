@@ -1,12 +1,15 @@
+
 plugins {
     id("com.android.application")
     kotlin("android")
     id("kotlin-android")
+    id("kotlin-kapt")
 //    id("com.squareup.anvil")
 }
 
 dependencies {
     implementation(project(":shared"))
+    implementation("androidx.core:core-ktx:1.3.2")
     implementation("com.google.android.material:material:1.2.1")
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.2")
@@ -14,6 +17,17 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
+
+//    def room_version = "2.2.6"
+
+    implementation("androidx.room:room-runtime:2.2.6")
+    kapt("androidx.room:room-compiler:2.2.6")
+
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation("androidx.room:room-ktx:2.2.6")
+
+    // optional - Test helpers
+    testImplementation("androidx.room:room-testing:2.2.6")
 }
 
 android {
