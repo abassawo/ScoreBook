@@ -5,16 +5,19 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailActivityBinding
 import com.lindenlabs.scorebook.androidApp.screens.managegame.AddPlayersActivity
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewState
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.showplayers.PlayerAdapter
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import java.util.*
 
 class GameDetailActivity : AppCompatActivity() {
+    private val adapter: PlayerAdapter = PlayerAdapter()
     private val binding: GameDetailActivityBinding by lazy { viewBinding() }
 
     private fun viewBinding(): GameDetailActivityBinding {
@@ -34,14 +37,20 @@ class GameDetailActivity : AppCompatActivity() {
         }
         viewModel.viewState.observe(this, ::showGame)
         viewModel.viewEvent.observe(this, ::processViewEvent)
-//        if(savedInstanceState == null) {
         binding.updateUi()
-//        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        intent.extras?.get(GAME_ID_KEY)?.let {
+            viewModel.launch(it as UUID)
+        }
     }
 
     private fun GameDetailActivityBinding.updateUi() {
-//        val uuid = intent.extras?.get(GAME_ID_KEY) as UUID
         this.addNewPlayerButton.setOnClickListener { viewModel.navigateToAddPlayerPage() }
+        this.gameParticipantsRv.adapter = adapter
+        this.toolbar.title = "Games"
     }
 
     private fun processViewEvent(event: GameViewEvent) {
@@ -56,17 +65,19 @@ class GameDetailActivity : AppCompatActivity() {
 
     private fun showGame(state: GameViewState) {
         when (state) {
-            GameViewState.EmptyState -> showEmptyState()
-            is GameViewState.GameStarted -> showActiveGame(state)
+            GameViewState.EmptyState -> binding.showEmptyState()
+            is GameViewState.PlayersAdded -> binding.showActiveGame(state)
         }
     }
 
-    private fun showEmptyState() {
-        binding.emptyStateTextView.visibility = View.VISIBLE
-    }
+    private fun GameDetailActivityBinding.showEmptyState() =
+        emptyStateTextView.run { this.visibility = View.VISIBLE }
 
-    private fun showActiveGame(state: GameViewState.GameStarted) {
-        binding.emptyStateTextView.visibility = View.GONE
+
+    private fun GameDetailActivityBinding.showActiveGame(state: GameViewState.PlayersAdded) {
+        emptyStateTextView.visibility = View.GONE
+        gameParticipantsRv.visibility = View.VISIBLE
+        adapter.setData(state.players)
     }
 
     companion object {

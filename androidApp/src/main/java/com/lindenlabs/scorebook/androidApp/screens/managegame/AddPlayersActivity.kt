@@ -38,7 +38,10 @@ class AddPlayersActivity : AppCompatActivity() {
     }
 
     private fun processViewState(viewState: AddPlayersViewState) = when(viewState) {
-        is AddPlayersViewState.UpdateCurrentPlayersText -> binding.playersText.text = viewState.playersText
+        is AddPlayersViewState.UpdateCurrentPlayersText -> {
+            binding.playersText.text = viewState.playersText
+            binding.enterNewPlayerEditText.setText("")
+        }
         AddPlayersViewState.TextEntryError -> binding.enterNewPlayerEditText.setError("Enter a valid name")
     }
 

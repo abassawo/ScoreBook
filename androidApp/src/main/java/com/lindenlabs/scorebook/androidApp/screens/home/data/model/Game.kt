@@ -8,7 +8,6 @@ data class Game(
     val id: UUID = UUID.randomUUID(),
     val name: String,
     val isClosed: Boolean = false,
-    val players: List<Player>? = null,
     val outcome: GameOutcome? = null
 )
 
