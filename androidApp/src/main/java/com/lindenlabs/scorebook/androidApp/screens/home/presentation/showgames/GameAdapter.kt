@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import androidx.viewbinding.ViewBinding
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.GameItemRowBinding
 import com.lindenlabs.scorebook.androidApp.databinding.HeaderItemRowBinding
@@ -34,10 +35,18 @@ internal class GameAdapter() :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameViewHolder =
-        when (viewType) {
-            HEADER_VIEW_TYPE -> HeaderViewHolder(parent.inflate(HEADER_LAYOUT))
-            BODY_VIEW_TYPE -> BodyViewHolder(parent.inflate(BODY_LAYOUT))
-            else -> throw IllegalStateException()
+        with(LayoutInflater.from(parent.context)) {
+            when (viewType) {
+                HEADER_VIEW_TYPE -> {
+                    val binding = HeaderItemRowBinding.inflate(this, parent, false)
+                    HeaderViewHolder(binding)
+                }
+                BODY_VIEW_TYPE -> {
+                    val binding = GameItemRowBinding.inflate(this, parent, false)
+                    BodyViewHolder(binding)
+                }
+                else -> throw IllegalStateException()
+            }
         }
 
     override fun onBindViewHolder(holder: GameViewHolder, position: Int) {
@@ -59,25 +68,20 @@ internal class GameAdapter() :
     }
 }
 
-private fun ViewGroup.inflate(layout: Int): View {
-    return LayoutInflater.from(context).inflate(layout, this, false)
-}
+abstract sealed class GameViewHolder(open val binding: ViewBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
-abstract sealed class GameViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    internal class HeaderViewHolder(override val binding: HeaderItemRowBinding) :
+        GameViewHolder(binding) {
 
-    internal class HeaderViewHolder(view: View) : GameViewHolder(view) {
-        private val binding: HeaderItemRowBinding by lazy { viewBinding() }
-        private fun viewBinding(): HeaderItemRowBinding = HeaderItemRowBinding.bind(itemView)
         fun bind(row: HeaderType) = with(binding.text1) { text = row.title }
     }
 
-    internal class BodyViewHolder(view: View) : GameViewHolder(view) {
-        private val binding: GameItemRowBinding by lazy { viewBinding() }
-        private fun viewBinding(): GameItemRowBinding = GameItemRowBinding.bind(itemView)
+    internal class BodyViewHolder(override val binding: GameItemRowBinding) :
+        GameViewHolder(binding) {
 
         fun bind(row: BodyType) {
             with(binding.text1) { text = row.game.name }
-
             itemView.setOnClickListener {
                 row.clickAction(GameInteraction.GameClicked(row.game))
             }

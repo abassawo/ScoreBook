@@ -58,10 +58,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun ActivityMainBinding.updateUi() {
         toolbar.setTitle(R.string.app_name)
-        binding.gamesRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = gameAdapter
-        }
+        gamesRecyclerView.adapter = gameAdapter
 
         fun IncludeHomeScreenBinding.bind() {
             gameRuleSwitch.textOff = getString(R.string.high_score)

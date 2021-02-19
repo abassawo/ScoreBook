@@ -18,6 +18,12 @@ class AddPlayersViewModel: ViewModel() {
 
     fun launch(gameId: UUID) {
         this.game = repository.getGameById(gameId)
+        game?.let {
+            val players = repository.getPlayers(it)
+            if(players.isNotEmpty()) {
+                viewState.postValue(AddPlayersViewState.UpdateCurrentPlayersText(players.toText()))
+            }
+        }
     }
 
     fun handleInteraction(interaction: AddPlayerInteraction) {
