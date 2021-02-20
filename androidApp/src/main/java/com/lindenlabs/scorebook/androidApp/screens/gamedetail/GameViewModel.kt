@@ -7,7 +7,9 @@ import com.lindenlabs.scorebook.androidApp.data.GameRepository
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewEvent.AddPlayersClicked
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewState
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.PlayerEntity
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
+import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 import java.util.*
 
 class GameViewModel : ViewModel() {
@@ -29,9 +31,10 @@ class GameViewModel : ViewModel() {
                 viewEvent.postValue(GameViewEvent.AddPlayersClicked(it)) // Bypass home screen, just add
             }
             else if(players.isNullOrEmpty()) {
-                viewState.postValue(GameViewState.EmptyState)
+                viewState.postValue(GameViewState.EmptyState(game.name))
             } else if (players.isNotEmpty()) {
-                viewState.postValue(GameViewState.PlayersAdded(players))
+                val playerEntities = players.map { it.toEntity() }
+                viewState.postValue(GameViewState.PlayersAdded(playerEntities, game.name))
             }
         }
     }
@@ -40,3 +43,5 @@ class GameViewModel : ViewModel() {
         game?.let { viewEvent.postValue(AddPlayersClicked(it)) }
     }
 }
+
+private fun Player.toEntity() = PlayerEntity(this)

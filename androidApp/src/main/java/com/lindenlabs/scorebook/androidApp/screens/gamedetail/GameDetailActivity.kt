@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailActivityBinding
 import com.lindenlabs.scorebook.androidApp.screens.managegame.AddPlayersActivity
@@ -50,6 +51,7 @@ class GameDetailActivity : AppCompatActivity() {
     private fun GameDetailActivityBinding.updateUi() {
         this.addNewPlayerButton.setOnClickListener { viewModel.navigateToAddPlayerPage() }
         this.gameParticipantsRv.adapter = adapter
+        this.gameParticipantsRv.addItemDecoration(DividerItemDecoration(this@GameDetailActivity, 1))
         this.toolbar.title = "Games"
     }
 
@@ -64,8 +66,9 @@ class GameDetailActivity : AppCompatActivity() {
     }
 
     private fun showGame(state: GameViewState) {
+        binding.toolbar.title = state.gameName
         when (state) {
-            GameViewState.EmptyState -> binding.showEmptyState()
+            is GameViewState.EmptyState -> binding.showEmptyState()
             is GameViewState.PlayersAdded -> binding.showActiveGame(state)
         }
     }
