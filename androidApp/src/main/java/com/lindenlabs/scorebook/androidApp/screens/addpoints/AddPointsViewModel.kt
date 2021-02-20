@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.lindenlabs.scorebook.androidApp.data.GameDataSource
 import com.lindenlabs.scorebook.androidApp.data.GameRepository
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
+import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 import java.util.*
 
 class AddPointsViewModel : ViewModel() {
@@ -12,14 +13,12 @@ class AddPointsViewModel : ViewModel() {
     val viewState: MutableLiveData<AddPointsViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<AddPointsViewEvent> = MutableLiveData()
     private var game: Game? = null
-//    private var playerEntity: PlayerEntity? = null
+    private lateinit var player: Player
 
     fun launch(gameId: UUID, playerId: UUID) {
-        val game = repository.getGameById(gameId)
-        game?.let { game ->
-            this.game = game
-//            playerEntity = repository.getPlayersForGame(game).find { it.player.id == playerId }
-        }
+        val game = repository.getGameById(gameId) as Game
+        player = repository.getPlayers(game).find { it.id == playerId } as Player
+        this.game = game
     }
 
     fun handleInteraction(interaction: AddPointsInteraction) {
@@ -29,7 +28,7 @@ class AddPointsViewModel : ViewModel() {
                     val score = interaction.newScore
                     val game = repository.getGameById(interaction.gameId)
                     game?.let {
-                        val player = repository.getPlayers(it).find { it.id == interaction.playerId }
+                        val player = repository.getPlayers(it).find { it.id == player.id }
                         player?.let { player ->
                             repository.updateGame(game, player, score)
                             viewEvent.postValue(AddPointsViewEvent.ScoreUpdated(player, game))

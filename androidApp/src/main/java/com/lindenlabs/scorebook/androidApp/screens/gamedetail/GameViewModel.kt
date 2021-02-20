@@ -7,7 +7,6 @@ import com.lindenlabs.scorebook.androidApp.data.GameRepository
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewEvent.AddPlayersClicked
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewState
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.PlayerEntity
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.PlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
@@ -35,13 +34,10 @@ class GameViewModel : ViewModel() {
             else if(players.isNullOrEmpty()) {
                 viewState.postValue(GameViewState.EmptyState(game.name))
             } else if (players.isNotEmpty()) {
-                val firstRoundPlayer = players.first()
-                val playerEntities = mapper.map(players, firstRoundPlayer) {
-                    handleInteraction(
-                        PlayerInteraction.PlayerClicked(firstRoundPlayer)
-                    )
+                val playerEntities = mapper.map(players) {
+                        interaction -> handleInteraction(interaction)
                 }
-                viewState.postValue(GameViewState.PlayersAdded(playerEntities, game.name))
+                viewState.postValue(GameViewState.ActiveGame(playerEntities, game.name))
             }
         }
     }
@@ -49,10 +45,14 @@ class GameViewModel : ViewModel() {
     private fun handleInteraction(interaction: PlayerInteraction) {
         when (interaction) {
             is PlayerInteraction.PlayerClicked -> {
-                viewEvent.postValue(GameViewEvent.EditScoreForPlayer(game!!, interaction.player))
+                game?.let {
+                    viewEvent.postValue(GameViewEvent.EditScoreForPlayer(it, interaction.player))
+                }
             }
         }
     }
+
+
     fun navigateToAddPlayerPage() {
         game?.let { viewEvent.postValue(AddPlayersClicked(it)) }
     }
