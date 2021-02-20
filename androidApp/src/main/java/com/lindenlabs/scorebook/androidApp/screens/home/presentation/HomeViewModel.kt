@@ -6,6 +6,7 @@ import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.data.GameRepository
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetClosedGames
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetOpenGames
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameStrategy.*
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GamesWrapper
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.*
@@ -32,11 +33,12 @@ internal class HomeViewModel : ViewModel() {
     }
 
     internal fun handleInteraction(interaction: GameInteraction) = when (interaction) {
-        is GameNameEntered -> {
+        is GameDetailsEntered -> {
             if (interaction.name.isNullOrEmpty()) {
                 showError()
             } else {
-                storeNewGame(interaction.name)
+                val strategy = if(interaction.lowestScoreWins) LowestScoreWins else HighestScoreWins
+                storeNewGame(interaction.name, strategy)
             }
         }
         is GameClicked -> viewEvent.postValue(ShowGameDetail(interaction.game))
@@ -44,8 +46,8 @@ internal class HomeViewModel : ViewModel() {
 
     private fun showError() = viewEvent.postValue(AlertNoTextEntered())
 
-    private fun storeNewGame(name: String) {
-        val game = Game(name = name)
+    private fun storeNewGame(name: String, strategy: GameStrategy) {
+        val game = Game(name = name, strategy = strategy)
         repository.storeGame(game)
         viewEvent.postValue(ShowGameDetail(game))
         showGames()

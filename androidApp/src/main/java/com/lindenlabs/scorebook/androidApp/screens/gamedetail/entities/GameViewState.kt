@@ -1,7 +1,5 @@
 package com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities
 
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.GameOutcome
-
 sealed class GameViewState(open val gameName: String) {
 
     data class EmptyState(override val gameName: String) : GameViewState(gameName)

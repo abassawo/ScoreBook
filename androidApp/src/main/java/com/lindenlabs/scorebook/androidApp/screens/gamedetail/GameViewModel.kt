@@ -10,7 +10,9 @@ import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewS
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.PlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.GameOutcome
+import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.StalematePair
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameStrategy
 import java.util.*
 
 class GameViewModel : ViewModel() {
@@ -64,7 +66,7 @@ class GameViewModel : ViewModel() {
 
 
     private fun GameOutcome.toText(): String {
-        return when(this) {
+        return when (this) {
             is GameOutcome.WinnerAnnounced -> this.player.name + " is the winner!"
             is GameOutcome.DrawAnnounced -> "Stalemate!"
         }
@@ -73,20 +75,31 @@ class GameViewModel : ViewModel() {
     private fun scoreGame(game: Game): GameOutcome {
         // if one max - winner
         val players = repository.getPlayers(game)
-        var max = 0
-        for (player in players) {
-            val score = player.scoreTotal
-            if (score > max) {
-                max = score
-            }
-        }
-        val winners = players.filter { it.scoreTotal == max }
+        val winners = players.getWinners(game.strategy)
+
         return when (winners.size) {
             1 -> GameOutcome.WinnerAnnounced(winners.first())
             else -> GameOutcome.DrawAnnounced(StalematePair(winners.first(), winners.last()))
         }
     }
 
+    private fun List<Player>.getWinners(strategy: GameStrategy): List<Player> {
+        var min = 0
+        var max = 0
+        return when (strategy) {
+            GameStrategy.HighestScoreWins -> {
+                for (player in this)
+                    if (player.scoreTotal > max) max = player.scoreTotal
+                this.filter { it.scoreTotal == max }
+            }
+
+            GameStrategy.LowestScoreWins -> {
+                for (player in this)
+                    if (player.scoreTotal < min) min = player.scoreTotal
+                this.filter { it.scoreTotal == min }
+            }
+        }
+    }
 
     fun navigateToAddPlayerPage() =
         game?.let { viewEvent.postValue(AddPlayersClicked(it)) }
