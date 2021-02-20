@@ -8,8 +8,7 @@ data class Game(
     val id: UUID = UUID.randomUUID(),
     val name: String,
     val isClosed: Boolean = false,
-    val outcome: GameOutcome? = null
-)
+    val outcome: GameOutcome? = null)
 
 sealed class GameOutcome {
     data class WinnerAnnounced(val player: Player) : GameOutcome()

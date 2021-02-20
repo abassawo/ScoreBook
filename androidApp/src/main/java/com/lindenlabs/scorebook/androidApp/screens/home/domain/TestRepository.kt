@@ -22,6 +22,9 @@ class TestRepository : GameDataSource {
 
     override fun storeGame(game: Game) = GameRepository.storeGame(game)
 
+    override fun updateGame(game: Game, lastPlayer: Player, newScore: Int) {
+    }
+
     override fun addPlayers(game: Game,  players: List<Player>): List<Player> {
         GameRepository.addPlayers(game, players)
         return getPlayers(game)
