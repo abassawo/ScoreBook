@@ -4,7 +4,6 @@ plugins {
     kotlin("android")
     id("kotlin-android")
     id("kotlin-kapt")
-//    id("com.squareup.anvil")
 }
 
 dependencies {

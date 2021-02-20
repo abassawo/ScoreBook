@@ -63,9 +63,10 @@ class MainActivity : AppCompatActivity() {
         fun IncludeHomeScreenBinding.bind() {
             gameRuleSwitch.textOff = getString(R.string.high_score)
             gameRuleSwitch.textOn = getString(R.string.low_score)
+
             newGameButton.setOnClickListener {
                 val enteredText =  enterNewGameEditText.text.toString()
-                viewModel.handleInteraction(GameNameEntered(enteredText))
+                viewModel.handleInteraction(GameDetailsEntered(enteredText, gameRuleSwitch.isChecked))
             }
         }
         gameBinding.bind()
