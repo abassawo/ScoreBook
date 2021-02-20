@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lindenlabs.scorebook.androidApp.databinding.PlayerRowItemBinding
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.PlayerEntity
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.PlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 
 class PlayerAdapter : RecyclerView.Adapter<PlayerViewHolder>() {
@@ -31,5 +32,12 @@ class PlayerViewHolder(val binding: PlayerRowItemBinding) : RecyclerView.ViewHol
         val player = playerEntity.player
         playerName.text = player.name
         playerScoreView.text = player.scoreTotal.toString()
+
+        if(playerEntity.isPlayersTurn) {
+            itemView.background = itemView.context.getDrawable(android.R.color.holo_green_light)
+            itemView.setOnClickListener { playerEntity.clickAction(PlayerInteraction.PlayerClicked(player)) }
+        } else {
+            itemView.setOnClickListener(null)
+        }
     }
 }

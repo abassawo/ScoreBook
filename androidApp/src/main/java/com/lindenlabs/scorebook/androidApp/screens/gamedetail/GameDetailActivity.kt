@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailActivityBinding
+import com.lindenlabs.scorebook.androidApp.screens.addpoints.AddPointsActivity
 import com.lindenlabs.scorebook.androidApp.screens.managegame.AddPlayersActivity
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewState
@@ -58,7 +59,12 @@ class GameDetailActivity : AppCompatActivity() {
     private fun processViewEvent(event: GameViewEvent) {
         when (event) {
             is GameViewEvent.AddPlayersClicked -> navigateToAddPlayers(event.game)
+            is GameViewEvent.EditScoreForPlayer -> navigateToAddScoreForPlayer(event)
         }
+    }
+
+    private fun navigateToAddScoreForPlayer(event: GameViewEvent.EditScoreForPlayer) {
+        startActivity(AddPointsActivity.newIntent(this, event.game, event.player))
     }
 
     private fun navigateToAddPlayers(game: Game) {

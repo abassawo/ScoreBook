@@ -43,7 +43,7 @@ class AddPlayersViewModel : ViewModel() {
                 if (interaction.playerName.isEmpty())
                     viewState.postValue(AddPlayersViewState.TextEntryError)
                 else {
-                    val player = Player(interaction.playerName)
+                    val player = Player(interaction.playerName,)
                     val players = repository.addPlayers(game!!, listOf(player))
                     val playersText = players.toText()
                     viewState.postValue(AddPlayersViewState.UpdateCurrentPlayersText(playersText))
