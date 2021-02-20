@@ -21,6 +21,9 @@ class TestRepository : GameDataSource {
         GameRepository.getGameById(id) ?: openGames.find { it.id == id }
 
     override fun storeGame(game: Game) = GameRepository.storeGame(game)
+    override fun updateGame(game: Game, lastPlayer: Player, newScore: Int) {
+        TODO("Not yet implemented")
+    }
 
     override fun addPlayers(game: Game,  players: List<Player>): List<Player> {
         GameRepository.addPlayers(game, players)
