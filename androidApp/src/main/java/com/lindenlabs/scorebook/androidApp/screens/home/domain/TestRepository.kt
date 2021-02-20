@@ -7,31 +7,16 @@ import com.lindenlabs.scorebook.androidApp.screens.home.data.model.GameOutcome
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 import java.util.*
 
-class TestRepository : GameDataSource {
+class TestRepository : GameDataSource by GameRepository {
     override val games: MutableList<Game> = GameRepository.games
 
     init {
         GameRepository.games += (openGames + closedGames).toMutableList()
         for (game in GameRepository.games) {
-            addPlayers(game, players)
+            updatePlayers(game, players)
         }
     }
 
-    override fun getGameById(id: UUID): Game? =
-        GameRepository.getGameById(id) ?: openGames.find { it.id == id }
-
-    override fun storeGame(game: Game) = GameRepository.storeGame(game)
-
-
-    override fun updateGame(game: Game, lastPlayer: Player, newScore: Int) {
-    }
-
-    override fun addPlayers(game: Game,  players: List<Player>): List<Player> {
-        GameRepository.addPlayers(game, players)
-        return getPlayers(game)
-    }
-
-    override fun getPlayers(game: Game): List<Player> = GameRepository.getPlayers(game)
 
     companion object {
         private val player1 = Player("player1",)

@@ -12,31 +12,23 @@ class AddPointsViewModel : ViewModel() {
     private val repository: GameDataSource = GameRepository
     val viewState: MutableLiveData<AddPointsViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<AddPointsViewEvent> = MutableLiveData()
-    private var game: Game? = null
+    private lateinit var game: Game
     private lateinit var player: Player
 
     fun launch(gameId: UUID, playerId: UUID) {
-        val game = repository.getGameById(gameId) as Game
-        player = repository.getPlayers(game).find { it.id == playerId } as Player
+        game = repository.getGameById(gameId) as Game
+        player = game.players.find { it.id == playerId } as Player
         this.game = game
     }
 
     fun handleInteraction(interaction: AddPointsInteraction) {
         when (interaction) {
             is AddPointsInteraction.AddScore -> {
-                game?.let {
-                    val score = interaction.newScore
-                    val game = repository.getGameById(interaction.gameId)
-                    game?.let {
-                        val player = repository.getPlayers(it).find { it.id == player.id }
-                        player?.let { player ->
-                            repository.updateGame(game, player, score)
-                            viewEvent.postValue(AddPointsViewEvent.ScoreUpdated(player, game))
-                        }
-                    }
-                }
+                val score = interaction.newScore
+                repository.updateGame(game, player, score)
+                viewEvent.postValue(AddPointsViewEvent.ScoreUpdated(player, game))
             }
-            is AddPointsInteraction.UndoLastScore -> TODO()
+            is AddPointsInteraction.UndoLastScore -> Unit
         }
     }
 

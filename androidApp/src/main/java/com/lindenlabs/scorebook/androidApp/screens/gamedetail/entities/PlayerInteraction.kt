@@ -5,5 +5,5 @@ import java.util.*
 
 sealed class PlayerInteraction {
     data class PlayerClicked(val player : Player) : PlayerInteraction()
-    data class EndGamerClicked(val playerId : UUID) : PlayerInteraction()
+    data class EndGameClicked(val playerId : UUID) : PlayerInteraction()
 }

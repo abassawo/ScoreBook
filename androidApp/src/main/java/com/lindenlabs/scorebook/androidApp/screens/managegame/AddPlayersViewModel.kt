@@ -14,24 +14,21 @@ class AddPlayersViewModel : ViewModel() {
     val viewState: MutableLiveData<AddPlayersViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<AddPlayersViewEvent> = MutableLiveData()
     private val repository: GameDataSource = GameRepository
-    private var game: Game? = null
+    private lateinit var game: Game
 
 
     fun launch(gameId: UUID) {
-        this.game = repository.getGameById(gameId)
-        game?.let {
-            val players = repository.getPlayers(it)
-            if (players.isNotEmpty()) {
-                viewState.postValue(AddPlayersViewState.UpdateCurrentPlayersText(players.toText()))
-            }
+        this.game = requireNotNull(repository.getGameById(gameId))
+        val players = game.players
+        if (players.isNotEmpty()) {
+            viewState.postValue(AddPlayersViewState.UpdateCurrentPlayersText(players.toText()))
         }
     }
 
     fun handleInteraction(interaction: AddPlayerInteraction) {
         when (interaction) {
             is SavePlayerDataAndExit -> {
-                val players = repository.getPlayers(game!!)
-                if (players.isEmpty()) {
+                if (game.players.isEmpty()) {
                     viewState.postValue(AddPlayersViewState.TextEntryError)
                 } else {
                     viewEvent.postValue(AddPlayersViewEvent.NavigateToGameDetail)
@@ -43,8 +40,8 @@ class AddPlayersViewModel : ViewModel() {
                 if (interaction.playerName.isEmpty())
                     viewState.postValue(AddPlayersViewState.TextEntryError)
                 else {
-                    val player = Player(interaction.playerName,)
-                    val players = repository.addPlayers(game!!, listOf(player))
+                    val player = Player(interaction.playerName)
+                    val players = repository.addPlayer(game, player)
                     val playersText = players.toText()
                     viewState.postValue(AddPlayersViewState.UpdateCurrentPlayersText(playersText))
                 }
@@ -54,7 +51,6 @@ class AddPlayersViewModel : ViewModel() {
             is Typing -> viewState.postValue(AddPlayersViewState.TypingState)
         }
     }
-
 
     private fun List<Player>.toText(): String {
         if (this.isEmpty()) return ""

@@ -73,8 +73,6 @@ class AddPlayersActivity : AppCompatActivity() {
             viewModel.handleInteraction(AddAnotherPlayer(name))
         }
 
-        fun CharSequence.toButtonEnabledState() = if(this.isEmpty()) EmptyText else TextEntered
-
         this.enterNewPlayerEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
                 Unit

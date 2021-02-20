@@ -8,31 +8,26 @@ import java.util.*
 
 object GameRepository : GameDataSource {
     override val games: MutableList<Game> = mutableListOf()
-    private val mapOfGameToPlayers = mutableMapOf<Game, MutableList<Player>>()
 
     override fun getGameById(id: UUID): Game? = games.find { it.id == id }
 
     override fun storeGame(game: Game) {
         games += game
-        mapOfGameToPlayers[game] = mutableListOf()
     }
 
     override fun updateGame(game: Game, lastPlayer: Player, addedScore: Int) {
-        val players = getPlayers(game)
-        if(!players.contains(lastPlayer)) throw IllegalStateException()
+        if(!game.players.contains(lastPlayer)) throw IllegalStateException()
         else {
             lastPlayer.scoreTotal += addedScore
             lastPlayer.rounds += Round(score = lastPlayer.scoreTotal)
         }
     }
 
-    override fun addPlayers(game: Game, players: List<Player>): List<Player> {
-        mapOfGameToPlayers[game] = (getPlayers(game) + players).toMutableList()
-        return getPlayers(game)
+    override fun updatePlayers(game: Game, players: List<Player>) : List<Player> {
+        games[games.indexOf(game)].players = players
+        return game.players
     }
 
-
-    override fun getPlayers(game: Game): MutableList<Player> {
-        return mapOfGameToPlayers[game] ?: mutableListOf()
-    }
+    override fun addPlayer(game: Game, player: Player): List<Player> =
+        updatePlayers(game, game.players + player)
 }
