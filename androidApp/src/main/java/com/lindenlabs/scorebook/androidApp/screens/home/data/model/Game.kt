@@ -15,5 +15,5 @@ sealed class GameOutcome {
 
     data class DrawAnnounced(val stalematePair: StalematePair) : GameOutcome()
 
-    object GameAbandoned : GameOutcome()
+//    object GameAbandoned : GameOutcome()
 }
