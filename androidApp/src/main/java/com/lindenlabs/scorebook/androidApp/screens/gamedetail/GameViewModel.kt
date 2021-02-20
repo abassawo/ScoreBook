@@ -9,7 +9,8 @@ import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewE
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewState
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.PlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
+import com.lindenlabs.scorebook.androidApp.screens.home.data.model.GameOutcome
+import com.lindenlabs.scorebook.androidApp.screens.home.data.model.StalematePair
 import java.util.*
 
 class GameViewModel : ViewModel() {
@@ -30,30 +31,64 @@ class GameViewModel : ViewModel() {
             if (isFirstRun && players.isNullOrEmpty()) {
                 isFirstRun = false
                 viewEvent.postValue(AddPlayersClicked(it)) // Bypass home screen, just add
-            }
-            else if(players.isNullOrEmpty()) {
+            } else if (players.isNullOrEmpty()) {
                 viewState.postValue(GameViewState.EmptyState(game.name))
             } else if (players.isNotEmpty()) {
-                val playerEntities = mapper.map(players) {
-                        interaction -> handleInteraction(interaction)
+                val playerEntities = mapper.map(players) { interaction ->
+                    handleInteraction(interaction)
                 }
                 viewState.postValue(GameViewState.ActiveGame(playerEntities, game.name))
             }
         }
     }
 
-    private fun handleInteraction(interaction: PlayerInteraction) {
-        when (interaction) {
-            is PlayerInteraction.PlayerClicked -> {
-                game?.let {
-                    viewEvent.postValue(GameViewEvent.EditScoreForPlayer(it, interaction.player))
+    fun handleInteraction(interaction: PlayerInteraction) {
+        game?.let {
+            when (interaction) {
+                is PlayerInteraction.PlayerClicked -> {
+                    viewEvent.postValue(
+                        GameViewEvent.EditScoreForPlayer(
+                            it,
+                            interaction.player
+                        )
+                    )
+                }
+                is PlayerInteraction.EndGamerClicked -> {
+                    val outcome = scoreGame(it)
+                    val resultText = outcome.toText()
+                    viewState.postValue(GameViewState.GameOver(resultText, it.name))
                 }
             }
         }
     }
 
 
-    fun navigateToAddPlayerPage() {
-        game?.let { viewEvent.postValue(AddPlayersClicked(it)) }
+    private fun GameOutcome.toText(): String {
+        return when(this) {
+            is GameOutcome.WinnerAnnounced -> this.player.name + " is the winner!"
+            is GameOutcome.DrawAnnounced -> "Stalemate!"
+        }
     }
+
+    private fun scoreGame(game: Game): GameOutcome {
+        // if one max - winner
+        val players = repository.getPlayers(game)
+        var max = 0
+        for (player in players) {
+            val score = player.scoreTotal
+            if (score > max) {
+                max = score
+            }
+        }
+        val winners = players.filter { it.scoreTotal == max }
+        return when (winners.size) {
+            1 -> GameOutcome.WinnerAnnounced(winners.first())
+            else -> GameOutcome.DrawAnnounced(StalematePair(winners.first(), winners.last()))
+        }
+    }
+
+
+    fun navigateToAddPlayerPage() =
+        game?.let { viewEvent.postValue(AddPlayersClicked(it)) }
+
 }
