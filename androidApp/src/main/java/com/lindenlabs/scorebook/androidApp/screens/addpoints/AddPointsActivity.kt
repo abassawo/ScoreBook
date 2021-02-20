@@ -11,6 +11,7 @@ import com.lindenlabs.scorebook.androidApp.databinding.AddPointsActivityBinding
 import com.lindenlabs.scorebook.androidApp.screens.addpoints.AddPointsViewModel.*
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
+import java.util.*
 
 class AddPointsActivity  : AppCompatActivity() {
     private val binding: AddPointsActivityBinding by lazy { viewBinding() }
@@ -30,11 +31,17 @@ class AddPointsActivity  : AppCompatActivity() {
         viewModel.viewState.observe(this, ::processState)
         viewModel.viewEvent.observe(this, ::processEvent)
 
-        binding.addPointsRoot.setOnClickListener {
+        val extras = intent.extras ?: Bundle()
+
+        if(extras.containsKey(GAME_ID_KEY) && extras.containsKey(PLAYER_ID_KEY)) {
+            viewModel.launch(extras[GAME_ID_KEY] as UUID, extras[PLAYER_ID_KEY] as UUID)
+        }
+
+        binding.doneButton.setOnClickListener {
             val points = Integer.parseInt(binding.pointsEditText.text.toString())
-            val player = intent.extras?.get(PLAYER_ID_KEY) as Player
-            val game = intent.extras?.get(GAME_ID_KEY)
-            viewModel.handleInteraction(AddPointsInteraction.AddScore(points))
+            val playerId = intent.extras?.get(PLAYER_ID_KEY) as UUID
+            val gameId = intent.extras?.get(GAME_ID_KEY) as UUID
+            viewModel.handleInteraction(AddPointsInteraction.AddScore(points, playerId, gameId))
         }
     }
 
@@ -44,8 +51,10 @@ class AddPointsActivity  : AppCompatActivity() {
         }
     }
 
-    private fun processState(addPointsViewState: AddPointsViewState?) {
-        
+    private fun processState(viewState: AddPointsViewState?) {
+        when(viewState) {
+            is AddPointsViewState.ScreenOpened -> binding.toolbar.title = viewState.player.name
+        }
     }
 
     companion object {

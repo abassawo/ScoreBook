@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.lindenlabs.scorebook.androidApp.data.GameDataSource
 import com.lindenlabs.scorebook.androidApp.data.GameRepository
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
+import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 import java.util.*
 
 class AddPointsViewModel : ViewModel() {
@@ -12,14 +13,12 @@ class AddPointsViewModel : ViewModel() {
     val viewState: MutableLiveData<AddPointsViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<AddPointsViewEvent> = MutableLiveData()
     private var game: Game? = null
-//    private var playerEntity: PlayerEntity? = null
+    private lateinit var player: Player
 
     fun launch(gameId: UUID, playerId: UUID) {
-        val game = repository.getGameById(gameId)
-        game?.let { game ->
-            this.game = game
-//            playerEntity = repository.getPlayersForGame(game).find { it.player.id == playerId }
-        }
+        val game = repository.getGameById(gameId) as Game
+        player = repository.getPlayers(game).find { it.id == playerId } as Player
+        this.game = game
     }
 
     fun handleInteraction(interaction: AddPointsInteraction) {
@@ -27,23 +26,14 @@ class AddPointsViewModel : ViewModel() {
             is AddPointsInteraction.AddScore -> {
                 game?.let {
                     val score = interaction.newScore
-                    val players = repository.getPlayers(it)
-//                    val indexOfPlayers = players.indexOf(playerEntity)
-//                    val playerData = players[indexOfPlayers]
-
-//                    val playerWithUpdatedScore = playerData.copy(scoreTotal = score + playerData.scoreTotal)
-//                    players[indexOfPlayers] = PlayerEntity(playerWithUpdatedScore, isPlayersTurn = false) {
-//                        handleInteraction(AddPointsInteraction.AddScore(interaction.newScore))
-//                    }
-//
-//                    if (indexOfPlayers + 1 >= players.size) {
-//                        val nextPlayer = players[indexOfPlayers + 1].copy(isPlayersTurn = true)
-//                        players[indexOfPlayers + 1] = nextPlayer
-//                    } else {
-//                        val nextPlayer = players[0].copy(isPlayersTurn = true)
-//                        players[0] = nextPlayer
-//                    }
-//                    repository.storeGame(it, players)
+                    val game = repository.getGameById(interaction.gameId)
+                    game?.let {
+                        val player = repository.getPlayers(it).find { it.id == player.id }
+                        player?.let { player ->
+                            repository.updateGame(game, player, score)
+                            viewEvent.postValue(AddPointsViewEvent.ScoreUpdated(player, game))
+                        }
+                    }
                 }
             }
             is AddPointsInteraction.UndoLastScore -> TODO()
@@ -51,7 +41,11 @@ class AddPointsViewModel : ViewModel() {
     }
 
     sealed class AddPointsInteraction {
-        data class AddScore(val newScore: Int, val scoreHistory: List<Int> = emptyList()) :
+        data class AddScore(
+            val newScore: Int,
+            val playerId: UUID,
+            val gameId: UUID
+        ) :
             AddPointsInteraction()
 
         data class UndoLastScore(val scoreHistory: List<Int>) : AddPointsInteraction()

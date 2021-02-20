@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.lindenlabs.scorebook.androidApp.R
@@ -75,7 +74,7 @@ class GameDetailActivity : AppCompatActivity() {
         binding.toolbar.title = state.gameName
         when (state) {
             is GameViewState.EmptyState -> binding.showEmptyState()
-            is GameViewState.PlayersAdded -> binding.showActiveGame(state)
+            is GameViewState.ActiveGame -> binding.showActiveGame(state)
         }
     }
 
@@ -83,7 +82,7 @@ class GameDetailActivity : AppCompatActivity() {
         emptyStateTextView.run { this.visibility = View.VISIBLE }
 
 
-    private fun GameDetailActivityBinding.showActiveGame(state: GameViewState.PlayersAdded) {
+    private fun GameDetailActivityBinding.showActiveGame(state: GameViewState.ActiveGame) {
         emptyStateTextView.visibility = View.GONE
         gameParticipantsRv.visibility = View.VISIBLE
         adapter.setData(state.players)

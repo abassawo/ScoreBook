@@ -33,11 +33,13 @@ class PlayerViewHolder(val binding: PlayerRowItemBinding) : RecyclerView.ViewHol
         playerName.text = player.name
         playerScoreView.text = player.scoreTotal.toString()
 
-        if(playerEntity.isPlayersTurn) {
-            itemView.background = itemView.context.getDrawable(android.R.color.holo_green_light)
-            itemView.setOnClickListener { playerEntity.clickAction(PlayerInteraction.PlayerClicked(player)) }
-        } else {
-            itemView.setOnClickListener(null)
-        }
+//        if(playerEntity.isPlayersTurn) {
+//            itemView.background = itemView.context.getDrawable(android.R.color.holo_green_light)
+//            itemView.setOnClickListener { playerEntity.clickAction(PlayerInteraction.PlayerClicked(player)) }
+//        } else {
+//            itemView.setOnClickListener(null)
+//        }
+
+        itemView.setOnClickListener { playerEntity.clickAction(PlayerInteraction.PlayerClicked(player)) }
     }
 }
