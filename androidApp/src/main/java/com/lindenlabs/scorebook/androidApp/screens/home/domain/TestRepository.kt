@@ -30,8 +30,8 @@ class TestRepository : GameDataSource {
     override fun getPlayers(game: Game): List<Player> = GameRepository.getPlayers(game)
 
     companion object {
-        private val player1 = Player("player1")
-        private val player2 = Player("player2")
+        private val player1 = Player("player1",)
+        private val player2 = Player("player2",)
         private val players = listOf(player1, player2)
         val openGames = listOf(Game(name = "Game1", isClosed = false))
         val closedGames = listOf(

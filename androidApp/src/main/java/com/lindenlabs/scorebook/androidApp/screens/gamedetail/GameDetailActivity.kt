@@ -7,8 +7,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailActivityBinding
+import com.lindenlabs.scorebook.androidApp.screens.addpoints.AddPointsActivity
 import com.lindenlabs.scorebook.androidApp.screens.managegame.AddPlayersActivity
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewState
@@ -50,13 +52,19 @@ class GameDetailActivity : AppCompatActivity() {
     private fun GameDetailActivityBinding.updateUi() {
         this.addNewPlayerButton.setOnClickListener { viewModel.navigateToAddPlayerPage() }
         this.gameParticipantsRv.adapter = adapter
+        this.gameParticipantsRv.addItemDecoration(DividerItemDecoration(this@GameDetailActivity, 1))
         this.toolbar.title = "Games"
     }
 
     private fun processViewEvent(event: GameViewEvent) {
         when (event) {
             is GameViewEvent.AddPlayersClicked -> navigateToAddPlayers(event.game)
+            is GameViewEvent.EditScoreForPlayer -> navigateToAddScoreForPlayer(event)
         }
+    }
+
+    private fun navigateToAddScoreForPlayer(event: GameViewEvent.EditScoreForPlayer) {
+        startActivity(AddPointsActivity.newIntent(this, event.game, event.player))
     }
 
     private fun navigateToAddPlayers(game: Game) {
@@ -64,8 +72,9 @@ class GameDetailActivity : AppCompatActivity() {
     }
 
     private fun showGame(state: GameViewState) {
+        binding.toolbar.title = state.gameName
         when (state) {
-            GameViewState.EmptyState -> binding.showEmptyState()
+            is GameViewState.EmptyState -> binding.showEmptyState()
             is GameViewState.PlayersAdded -> binding.showActiveGame(state)
         }
     }
