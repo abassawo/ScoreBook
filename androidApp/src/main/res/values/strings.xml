@@ -16,4 +16,5 @@
     <string name="add_another_player_text">Add Another Player</string>
     <string name="done_text">Done</string>
     <string name="add_points">Add points</string>
+    <string name="end_game">End Game</string>
 </resources>
