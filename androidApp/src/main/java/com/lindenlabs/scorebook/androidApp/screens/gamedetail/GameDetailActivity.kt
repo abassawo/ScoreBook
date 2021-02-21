@@ -17,7 +17,6 @@ import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameViewS
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.PlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.showplayers.PlayerAdapter
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.GameOutcome
 import java.util.*
 
 class GameDetailActivity : AppCompatActivity() {
@@ -58,11 +57,11 @@ class GameDetailActivity : AppCompatActivity() {
         this.toolbar.title = "Games"
         this.bottomAppbar.setNavigationOnClickListener {
             val gameId = intent.extras?.get(GAME_ID_KEY) as UUID
-            viewModel.handleInteraction(PlayerInteraction.EndGamerClicked(gameId))
+            viewModel.handleInteraction(PlayerInteraction.EndGameClicked(gameId))
         }
         this.bottomAppbar.setOnMenuItemClickListener {
             val gameId = intent.extras?.get(GAME_ID_KEY) as UUID
-            viewModel.handleInteraction(PlayerInteraction.EndGamerClicked(gameId))
+            viewModel.handleInteraction(PlayerInteraction.EndGameClicked(gameId))
             true
         }
     }
@@ -71,6 +70,7 @@ class GameDetailActivity : AppCompatActivity() {
         when (event) {
             is GameViewEvent.AddPlayersClicked -> navigateToAddPlayers(event.game)
             is GameViewEvent.EditScoreForPlayer -> navigateToAddScoreForPlayer(event)
+            GameViewEvent.GoBackHome -> onBackPressed()
         }
     }
 

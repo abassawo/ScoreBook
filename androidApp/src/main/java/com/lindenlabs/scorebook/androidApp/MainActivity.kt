@@ -43,6 +43,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.refresh()
+    }
+
     private fun processViewEvent(event: HomeViewEvent) = when(event){
         is AlertNoTextEntered -> showError(event)
         is ShowGameDetail -> showGameDetail(event.game)
@@ -60,15 +65,17 @@ class MainActivity : AppCompatActivity() {
         toolbar.setTitle(R.string.app_name)
         gamesRecyclerView.adapter = gameAdapter
 
-        fun IncludeHomeScreenBinding.bind() {
-            gameRuleSwitch.textOff = getString(R.string.high_score)
-            gameRuleSwitch.textOn = getString(R.string.low_score)
-
-            newGameButton.setOnClickListener {
-                val enteredText =  enterNewGameEditText.text.toString()
-                viewModel.handleInteraction(GameDetailsEntered(enteredText, gameRuleSwitch.isChecked))
+        fun IncludeHomeScreenBinding.bind() =
+            with(gameRuleSwitch) {
+                textOff = getString(R.string.high_score)
+                textOn = getString(R.string.low_score)
+                newGameButton.setOnClickListener {
+                    val enteredText = enterNewGameEditText.text.toString()
+                    viewModel.handleInteraction(GameDetailsEntered(enteredText, isChecked))
+                    enterNewGameEditText.setText("")
+                }
             }
-        }
+
         gameBinding.bind()
     }
 

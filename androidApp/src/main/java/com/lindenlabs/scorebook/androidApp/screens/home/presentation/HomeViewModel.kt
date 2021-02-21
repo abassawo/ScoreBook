@@ -2,6 +2,7 @@ package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.lindenlabs.scorebook.androidApp.base.GameEngine
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.data.GameRepository
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetClosedGames
@@ -17,12 +18,14 @@ import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.Ho
 internal class HomeViewModel : ViewModel() {
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
-
+    private val gameEngine: GameEngine = GameEngine()
     private val repository = GameRepository
 
     init {
-        showGames()
+        refresh()
     }
+
+    fun refresh() = showGames()
 
     private fun showGames() {
         val viewEntity = GamesWrapper(
@@ -49,8 +52,8 @@ internal class HomeViewModel : ViewModel() {
     private fun storeNewGame(name: String, strategy: GameStrategy) {
         val game = Game(name = name, strategy = strategy)
         repository.storeGame(game)
+        gameEngine.startGame(game)
         viewEvent.postValue(ShowGameDetail(game))
-        showGames()
     }
 
     private fun GamesWrapper.toViewState(): HomeViewState {
