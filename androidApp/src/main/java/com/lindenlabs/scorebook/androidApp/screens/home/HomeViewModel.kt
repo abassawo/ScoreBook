@@ -1,22 +1,17 @@
-package com.lindenlabs.scorebook.androidApp.screens.home.presentation
+package com.lindenlabs.scorebook.androidApp.screens.home
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.lindenlabs.scorebook.androidApp.ScoreBookApplication
 import com.lindenlabs.scorebook.androidApp.base.GameEngine
 import com.lindenlabs.scorebook.androidApp.data.GameDataSource
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
-import com.lindenlabs.scorebook.androidApp.data.GameRepository
 import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
-import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetClosedGames
-import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetOpenGames
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameStrategy.*
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GamesWrapper
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.*
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent.*
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewState
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.*
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction.*
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameStrategy.*
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent.*
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewState
 
 internal class HomeViewModel : ViewModel() {
     private lateinit var repository: GameDataSource

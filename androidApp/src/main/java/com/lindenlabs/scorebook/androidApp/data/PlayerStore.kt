@@ -3,7 +3,8 @@ package com.lindenlabs.scorebook.androidApp.data
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
+import com.lindenlabs.scorebook.androidApp.data.model.Player
+
 
 /**
  * Data access object to query the database.

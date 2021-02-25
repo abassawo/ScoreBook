@@ -2,9 +2,9 @@ package com.lindenlabs.scorebook.androidApp.base
 
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.GameOutcome
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
+import com.lindenlabs.scorebook.androidApp.data.model.Player
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.StalematePair
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameStrategy
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameStrategy
 
 class GameEngine {
 

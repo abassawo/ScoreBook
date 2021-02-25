@@ -19,6 +19,8 @@ class GamesLocalStorage(private val gameStore: GameStore) {
 
     fun addGame(game: GameModelRaw) = invoke { gameStore.insertAll(game) }
 
+    fun updateGame(game: GameModelRaw) = invoke { gameStore.update(game) }
+
     fun getAllGames(callback: (List<GameModelRaw>) -> Unit) {
         executorService.execute {
             val games = gameStore.getAll()

@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.screens.home.data.model
+package com.lindenlabs.scorebook.androidApp.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

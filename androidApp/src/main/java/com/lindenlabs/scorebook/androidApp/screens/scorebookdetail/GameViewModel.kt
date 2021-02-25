@@ -3,6 +3,7 @@ package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lindenlabs.scorebook.androidApp.base.GameEngine
+import com.lindenlabs.scorebook.androidApp.data.GameDataSource
 import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
 import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator.AppBundle.*
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent
@@ -20,10 +21,12 @@ class GameViewModel : ViewModel() {
     private val mapper: GameViewEntityMapper = GameViewEntityMapper()
     private val gameEngine: GameEngine = GameEngine()
     private lateinit var game: Game
+    private lateinit var gamesDataSource: GameDataSource
 
     private var isFirstRun: Boolean = true
 
     fun launch(appNavigator: AppNavigator) {
+        this.gamesDataSource = appNavigator.gamesDataSource
         val destination = (appNavigator.appBundle as GameDetailBundle)
         game = destination.game
 
@@ -38,6 +41,7 @@ class GameViewModel : ViewModel() {
                 handleInteraction(interaction)
             }
             viewState.postValue(ScoreBookViewState.ActiveGame(playerEntities, game.name))
+            gamesDataSource.storeGame(game.copy(players = players))
         }
     }
 

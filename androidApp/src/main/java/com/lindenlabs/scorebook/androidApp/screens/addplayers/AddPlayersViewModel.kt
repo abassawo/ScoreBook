@@ -3,18 +3,18 @@ package com.lindenlabs.scorebook.androidApp.screens.addplayers
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lindenlabs.scorebook.androidApp.data.GameDataSource
-import com.lindenlabs.scorebook.androidApp.data.GameRepository
+import com.lindenlabs.scorebook.androidApp.data.PlayerRepository
 import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
+import com.lindenlabs.scorebook.androidApp.data.model.Player
 import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction.*
-import java.util.*
 
 class AddPlayersViewModel : ViewModel() {
     val viewState: MutableLiveData<AddPlayersViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<AddPlayersViewEvent> = MutableLiveData()
     private lateinit var repository: GameDataSource
+    private lateinit var playerRepository: PlayerRepository
     private lateinit var game: Game
 
 
@@ -36,6 +36,7 @@ class AddPlayersViewModel : ViewModel() {
                 } else {
                     viewEvent.postValue(AddPlayersViewEvent.NavigateToGameDetail(game))
                 }
+                repository.storeGame(game)
                 // navigate to Game Detail screen
             }
             is AddAnotherPlayer -> {

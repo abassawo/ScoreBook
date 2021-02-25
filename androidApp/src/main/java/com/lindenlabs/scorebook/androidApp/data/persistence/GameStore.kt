@@ -3,6 +3,7 @@ package com.lindenlabs.scorebook.androidApp.data.persistence
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 
 /**
  * Data access object to query the database.
@@ -15,6 +16,9 @@ interface GameStore {
 
     @Insert
     fun insertAll(vararg games: GameModelRaw)
+
+    @Update
+    fun update(vararg games: GameModelRaw)
 
     @Query("DELETE FROM games")
     fun clearTable()

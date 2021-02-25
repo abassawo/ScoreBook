@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.screens.home.presentation
+package com.lindenlabs.scorebook.androidApp.screens.home.entities
 
 sealed class GameStrategy {
     object HighestScoreWins : GameStrategy()

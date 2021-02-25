@@ -3,12 +3,10 @@ package com.lindenlabs.scorebook.androidApp.screens.updatepoints
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lindenlabs.scorebook.androidApp.data.GameDataSource
-import com.lindenlabs.scorebook.androidApp.data.GameRepository
 import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
-import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator.*
 import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator.AppBundle.*
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
+import com.lindenlabs.scorebook.androidApp.data.model.Player
 
 class UpdatePointsViewModel : ViewModel() {
     private lateinit var repository: GameDataSource

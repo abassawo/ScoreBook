@@ -10,8 +10,8 @@ import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator.AppBundle.*
 import com.lindenlabs.scorebook.androidApp.screens.addplayers.AddPlayersActivity
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailActivity
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsActivity
+import com.lindenlabs.scorebook.androidApp.data.model.Player
 
 class AppNavigator(val gamesDataSource: GameDataSource, val playerDataSource: PlayerDataSource) {
     var appBundle: AppBundle? = null

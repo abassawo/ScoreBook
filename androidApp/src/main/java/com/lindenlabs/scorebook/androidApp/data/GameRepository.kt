@@ -1,9 +1,8 @@
 package com.lindenlabs.scorebook.androidApp.data
 
+import com.lindenlabs.scorebook.androidApp.data.model.Player
 import com.lindenlabs.scorebook.androidApp.data.persistence.GamesLocalStorage
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Round
 import java.lang.IllegalStateException
 
 class GameRepository(private val gameLocalStorage: GamesLocalStorage) : GameDataSource {
@@ -34,6 +33,7 @@ class GameRepository(private val gameLocalStorage: GamesLocalStorage) : GameData
             lastPlayer.scoreTotal += addedScore
 //            lastPlayer.rounds += Round(score = lastPlayer.scoreTotal)
         }
+        gameLocalStorage.updateGame(game.toRaw())
     }
 
     override fun updatePlayers(game: Game, players: List<Player>): List<Player> {

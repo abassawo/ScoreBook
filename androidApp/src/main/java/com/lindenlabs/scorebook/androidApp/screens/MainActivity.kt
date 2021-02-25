@@ -9,12 +9,12 @@ import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
 import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
 import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.*
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent.*
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewState
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameAdapter
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction.*
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent.*
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewState
+import com.lindenlabs.scorebook.androidApp.screens.home.HomeViewModel
+import com.lindenlabs.scorebook.androidApp.screens.home.showgames.GameAdapter
 
 class MainActivity : BaseActivity() {
     private val binding: ActivityMainBinding by lazy { viewBinding() }
@@ -59,7 +59,7 @@ class MainActivity : BaseActivity() {
         appNavigator.navigate(this, Destination.GameDetail(bundle))
     }
 
-    private fun showError(event: HomeViewEvent.AlertNoTextEntered) {
+    private fun showError(event: AlertNoTextEntered) {
         val errorPair = event.errorText to  getDrawable(android.R.drawable.stat_notify_error)
         gameBinding.enterNewGameEditText.setError(errorPair.first, errorPair.second)
     }

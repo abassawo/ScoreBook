@@ -1,6 +1,8 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.data.model
 
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameStrategy
+import com.lindenlabs.scorebook.androidApp.data.model.Player
+import com.lindenlabs.scorebook.androidApp.data.persistence.GameModelRaw
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameStrategy
 
 typealias StalematePair = Pair<Player, Player>
 
@@ -10,7 +12,10 @@ data class Game(
     var isClosed: Boolean = false,
     var players: List<Player> = mutableListOf(),
     val strategy: GameStrategy = GameStrategy.HighestScoreWins,
-    val outcome: GameOutcome? = null)
+    val outcome: GameOutcome? = null) {
+
+    fun toRaw(): GameModelRaw = GameModelRaw(name, isClosed)
+}
 
 sealed class GameOutcome {
     data class WinnerAnnounced(val player: Player) : GameOutcome()
