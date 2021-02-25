@@ -5,11 +5,10 @@ import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
 
 class ScoreBookApplication : Application() {
     private lateinit var serviceLocator: ServiceLocator
-    lateinit var appNavigator: AppNavigator
+    val appNavigator: AppNavigator by lazy { serviceLocator.appNavigator }
 
     override fun onCreate() {
         super.onCreate()
-        serviceLocator = ServiceLocator()
-        appNavigator = serviceLocator.appNavigator
+        serviceLocator = ServiceLocator(this)
     }
 }
