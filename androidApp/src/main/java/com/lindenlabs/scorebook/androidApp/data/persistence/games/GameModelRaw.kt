@@ -1,7 +1,8 @@
-package com.lindenlabs.scorebook.androidApp.data.persistence
+package com.lindenlabs.scorebook.androidApp.data.persistence.games
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.lindenlabs.scorebook.androidApp.data.model.Player
 
 @Entity(tableName = "games")
 data class GameModelRaw(

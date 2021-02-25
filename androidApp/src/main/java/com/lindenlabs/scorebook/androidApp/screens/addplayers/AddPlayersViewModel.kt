@@ -48,6 +48,7 @@ class AddPlayersViewModel : ViewModel() {
                     val players = repository.addPlayer(game, player)
                     val playersText = players.toText()
                     viewState.postValue(AddPlayersViewState.UpdateCurrentPlayersText(playersText))
+
                 }
             }
             is TextEntered -> viewState.postValue(AddPlayersViewState.ValidateTextForPlusButton(true))
