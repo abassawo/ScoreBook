@@ -7,6 +7,7 @@ import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Round
 import java.lang.IllegalStateException
 
 class GameRepository(private val gameLocalStorage: GamesLocalStorage) : GameDataSource {
+
     override val games: MutableList<Game> = mutableListOf()
 
     override fun getAllGames(action: (games: List<Game>) -> Unit) {
@@ -20,7 +21,6 @@ class GameRepository(private val gameLocalStorage: GamesLocalStorage) : GameData
             }
         }
     }
-
 
     override fun getGameById(id: Long): Game? = games.find { it.id == id }
 
