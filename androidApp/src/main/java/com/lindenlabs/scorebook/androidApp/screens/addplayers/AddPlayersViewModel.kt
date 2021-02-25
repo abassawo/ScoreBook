@@ -14,11 +14,12 @@ import java.util.*
 class AddPlayersViewModel : ViewModel() {
     val viewState: MutableLiveData<AddPlayersViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<AddPlayersViewEvent> = MutableLiveData()
-    private val repository: GameDataSource = GameRepository
+    private lateinit var repository: GameDataSource
     private lateinit var game: Game
 
 
     fun launch(appNavigator: AppNavigator) {
+        this.repository = appNavigator.gamesDataSource
         val bundle = (appNavigator.appBundle as AppNavigator.AppBundle.AddPlayersBundle)
         this.game = bundle.game
         val players = game.players

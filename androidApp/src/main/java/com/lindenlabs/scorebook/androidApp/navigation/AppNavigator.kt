@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import com.lindenlabs.scorebook.androidApp.MainActivity
+import com.lindenlabs.scorebook.androidApp.data.GameDataSource
+import com.lindenlabs.scorebook.androidApp.data.PlayerDataSource
 import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator.AppBundle.*
 import com.lindenlabs.scorebook.androidApp.screens.addplayers.AddPlayersActivity
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailActivity
@@ -11,7 +13,7 @@ import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsActivity
 
-class AppNavigator {
+class AppNavigator(val gamesDataSource: GameDataSource, val playerDataSource: PlayerDataSource) {
     var appBundle: AppBundle? = null
 
     sealed class AppBundle {

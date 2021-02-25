@@ -27,7 +27,6 @@ class AddPlayersActivity : BaseActivity() {
         return AddPlayersActivityBinding.bind(rootView)
     }
     private val viewModel: AddPlayersViewModel by lazy { viewModel() }
-    private val gameId: UUID by lazy { intent.extras?.get(GAME_ID_KEY) as UUID }
 
     private fun viewModel() = ViewModelProvider(this).get(AddPlayersViewModel::class.java)
 

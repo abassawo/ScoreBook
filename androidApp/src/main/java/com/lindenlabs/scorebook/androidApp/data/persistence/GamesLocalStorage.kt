@@ -1,16 +1,14 @@
-package com.lindenlabs.scorebook.androidApp
+package com.lindenlabs.scorebook.androidApp.data.persistence
 
 import android.os.Handler
 import android.os.Looper
-import com.lindenlabs.scorebook.androidApp.data.persistence.GameDao
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 /**
  * Data manager class that handles data manipulation between the database and the UI.
  */
-class GamesLocalDataSource(private val gameDao: GameDao) {
+class GamesLocalStorage(private val gameStore: GameStore) {
 
     private val executorService: ExecutorService = Executors.newFixedThreadPool(4)
     private val mainThreadHandler by lazy {
@@ -19,18 +17,18 @@ class GamesLocalDataSource(private val gameDao: GameDao) {
 
     operator fun invoke(action: () -> Unit) = executorService.execute { action() }
 
-    fun addGame(game: Game) = invoke { gameDao.insertAll(game) }
+    fun addGame(game: GameModelRaw) = invoke { gameStore.insertAll(game) }
 
-    fun getAllGames(callback: (List<Game>) -> Unit) {
+    fun getAllGames(callback: (List<GameModelRaw>) -> Unit) {
         executorService.execute {
-            val games = gameDao.getAll()
+            val games = gameStore.getAll()
             mainThreadHandler.post { callback(games) }
         }
     }
 
     fun removeGames() {
         executorService.execute {
-            gameDao.clearTable()
+            gameStore.clearTable()
         }
     }
 }

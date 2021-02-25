@@ -40,6 +40,7 @@ class MainActivity : BaseActivity() {
             binding.updateUi()
             viewModel.viewState.observe(this, ::showGames)
             viewModel.viewEvent.observe(this, ::processViewEvent)
+            viewModel.launch(appNavigator)
         }
     }
 

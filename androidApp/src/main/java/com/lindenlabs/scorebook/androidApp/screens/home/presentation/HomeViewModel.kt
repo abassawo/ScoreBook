@@ -2,9 +2,12 @@ package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.lindenlabs.scorebook.androidApp.ScoreBookApplication
 import com.lindenlabs.scorebook.androidApp.base.GameEngine
+import com.lindenlabs.scorebook.androidApp.data.GameDataSource
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.data.GameRepository
+import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetClosedGames
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetOpenGames
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameStrategy.*
@@ -16,31 +19,34 @@ import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.Ho
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewState
 
 internal class HomeViewModel : ViewModel() {
+    private lateinit var repository: GameDataSource
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
     private val gameEngine: GameEngine = GameEngine()
-    private val repository = GameRepository
 
-    init {
+    fun launch(appNavigator: AppNavigator) {
+        this.repository = appNavigator.gamesDataSource
         refresh()
     }
 
     fun refresh() = showGames()
 
-    private fun showGames() {
-        val viewEntity = GamesWrapper(
-            openGames = GetOpenGames(repository).invoke(),
-            closedGames = GetClosedGames(repository).invoke()
-        )
-        viewState.postValue(viewEntity.toViewState())
-    }
+
+    private fun showGames() =
+        repository.getAllGames { games ->
+            val gamesWrapper = GamesWrapper(
+                openGames = games.filter { !it.isClosed },
+                closedGames = games.filter { it.isClosed })
+            viewState.postValue(gamesWrapper.toViewState())
+        }
 
     internal fun handleInteraction(interaction: GameInteraction) = when (interaction) {
         is GameDetailsEntered -> {
             if (interaction.name.isNullOrEmpty()) {
                 showError()
             } else {
-                val strategy = if(interaction.lowestScoreWins) LowestScoreWins else HighestScoreWins
+                val strategy =
+                    if (interaction.lowestScoreWins) LowestScoreWins else HighestScoreWins
                 storeNewGame(interaction.name, strategy)
             }
         }
@@ -78,5 +84,6 @@ internal class HomeViewModel : ViewModel() {
 internal sealed class GameRowEntity {
     data class HeaderType(val title: String) : GameRowEntity()
 
-    data class BodyType(val game: Game, val clickAction: (interaction: GameInteraction) -> Unit) : GameRowEntity()
+    data class BodyType(val game: Game, val clickAction: (interaction: GameInteraction) -> Unit) :
+        GameRowEntity()
 }
