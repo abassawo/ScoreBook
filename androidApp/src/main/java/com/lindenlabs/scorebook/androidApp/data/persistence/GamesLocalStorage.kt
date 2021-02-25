@@ -33,4 +33,9 @@ class GamesLocalStorage(private val gameStore: GameStore) {
             gameStore.clearTable()
         }
     }
+
+    fun addGames(games: MutableList<Game>) {
+        for (game in games)
+            gameDao.insertAll(GameModelRaw(game.name, game.isClosed))
+    }
 }

@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "games")
 data class GameModelRaw(
     val name: String,
-    var isClosed: Boolean = false){
+    val isClosed: Boolean){
 
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
