@@ -27,23 +27,38 @@ dependencies {
 
     // optional - Test helpers
     testImplementation("androidx.room:room-testing:2.2.6")
-}
 
-android {
-    compileSdkVersion(29)
-    defaultConfig {
-        applicationId = "com.lindenlabs.scorebook.androidApp"
-        minSdkVersion(24)
-        targetSdkVersion(29)
-        versionCode = 1
-        versionName = "1.0"
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
+    // For Robolectric tests.
+    testImplementation("com.google.dagger:hilt-android-testing:2.28-alpha")
+    // ...with Kotlin.
+    kaptTest("com.google.dagger:hilt-android-compiler:2.28-alpha")
+    // ...with Java.
+    testAnnotationProcessor("com.google.dagger:hilt-android-compiler:2.28-alpha")
+
+
+    // For instrumented tests.
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.28-alpha")
+    // ...with Kotlin.
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.28-alpha")
+    // ...with Java.
+    androidTestAnnotationProcessor("com.google.dagger:hilt-android-compiler:2.28-alpha")
+
+    android {
+        compileSdkVersion(29)
+        defaultConfig {
+            applicationId = "com.lindenlabs.scorebook.androidApp"
+            minSdkVersion(24)
+            targetSdkVersion(29)
+            versionCode = 1
+            versionName = "1.0"
         }
-    }
-    buildFeatures {
-        viewBinding = true
+        buildTypes {
+            getByName("release") {
+                isMinifyEnabled = false
+            }
+        }
+        buildFeatures {
+            viewBinding = true
+        }
     }
 }
