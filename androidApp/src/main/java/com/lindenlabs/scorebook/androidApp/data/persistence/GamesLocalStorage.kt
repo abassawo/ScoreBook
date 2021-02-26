@@ -2,6 +2,7 @@ package com.lindenlabs.scorebook.androidApp.data.persistence
 
 import android.os.Handler
 import android.os.Looper
+import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -36,6 +37,6 @@ class GamesLocalStorage(private val gameStore: GameStore) {
 
     fun addGames(games: MutableList<Game>) {
         for (game in games)
-            gameDao.insertAll(GameModelRaw(game.name, game.isClosed))
+            gameStore.insertAll(GameModelRaw(game.name, game.isClosed))
     }
 }

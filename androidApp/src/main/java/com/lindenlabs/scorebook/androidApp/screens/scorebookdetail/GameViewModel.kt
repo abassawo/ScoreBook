@@ -41,7 +41,7 @@ class GameViewModel : ViewModel() {
                 handleInteraction(interaction)
             }
             viewState.postValue(ScoreBookViewState.ActiveGame(playerEntities, game.name))
-            gamesDataSource.storeGame(game.copy(players = players))
+//            gamesDataSource.storeGame(game.copy(players = players))
         }
     }
 
@@ -52,6 +52,7 @@ class GameViewModel : ViewModel() {
                 val resultText = gameEngine.endGame(game)
                 viewState.postValue(ScoreBookViewState.GameOver(resultText, game.name))
                 viewEvent.postValue(ScoreBookViewEvent.GoBackHome)
+                gamesDataSource.endGame(game)
             }
         }
     }

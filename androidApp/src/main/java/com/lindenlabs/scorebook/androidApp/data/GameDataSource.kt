@@ -11,4 +11,5 @@ interface GameDataSource {
     fun updateGame(game: Game, lastPlayer: Player, newScore: Int)
     fun updatePlayers(game: Game, player: List<Player>) : List<Player>
     fun addPlayer(game: Game, player: Player): List<Player>
+    fun endGame(game: Game)
 }

@@ -36,7 +36,6 @@ class AddPlayersViewModel : ViewModel() {
                 } else {
                     viewEvent.postValue(AddPlayersViewEvent.NavigateToGameDetail(game))
                 }
-                repository.storeGame(game)
                 // navigate to Game Detail screen
             }
             is AddAnotherPlayer -> {

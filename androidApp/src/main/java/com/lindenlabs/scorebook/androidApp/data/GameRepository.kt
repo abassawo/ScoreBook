@@ -21,10 +21,15 @@ class GameRepository(private val gameLocalStorage: GamesLocalStorage) : GameData
         }
     }
 
+    override fun endGame(game: Game) {
+        game.isClosed = true
+        gameLocalStorage.updateGame(game.toRaw())
+    }
+
     override fun getGameById(id: Long): Game? = games.find { it.id == id }
 
     override fun storeGame(game: Game) {
-        games += game
+        gameLocalStorage.addGame(game.toRaw())
     }
 
     override fun updateGame(game: Game, lastPlayer: Player, addedScore: Int) {
@@ -37,7 +42,8 @@ class GameRepository(private val gameLocalStorage: GamesLocalStorage) : GameData
     }
 
     override fun updatePlayers(game: Game, players: List<Player>): List<Player> {
-        games[games.indexOf(game)].players = players
+        game.players = players
+        gameLocalStorage.updateGame(game.toRaw())
         return game.players
     }
 

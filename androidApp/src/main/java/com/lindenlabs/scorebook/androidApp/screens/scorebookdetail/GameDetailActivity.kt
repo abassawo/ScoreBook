@@ -33,9 +33,9 @@ class GameDetailActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.game_detail_activity)
-        viewModel.launch(appNavigator)
         viewModel.viewState.observe(this, ::showGameState)
         viewModel.viewEvent.observe(this, ::processViewEvent)
+        viewModel.launch(appNavigator)
         binding.updateUi()
     }
 

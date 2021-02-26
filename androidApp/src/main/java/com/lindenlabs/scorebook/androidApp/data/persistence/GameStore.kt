@@ -11,7 +11,7 @@ import androidx.room.Update
 @Dao
 interface GameStore {
 
-    @Query("SELECT * FROM games ORDER BY id DESC")
+    @Query("SELECT * FROM games ORDER BY name DESC")
     fun getAll(): List<GameModelRaw>
 
     @Insert
