@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.screens.managegame
+package com.lindenlabs.scorebook.androidApp.screens.addplayers
 
 sealed class AddPlayersViewState {
     data class UpdateCurrentPlayersText(val playersText: String) : AddPlayersViewState()
