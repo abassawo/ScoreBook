@@ -1,13 +1,14 @@
-package com.lindenlabs.scorebook.androidApp.screens.managegame
+package com.lindenlabs.scorebook.androidApp.screens.addplayers
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lindenlabs.scorebook.androidApp.data.GameDataSource
 import com.lindenlabs.scorebook.androidApp.data.GameRepository
+import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
-import com.lindenlabs.scorebook.androidApp.screens.managegame.entities.AddPlayerInteraction
+import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
-import com.lindenlabs.scorebook.androidApp.screens.managegame.entities.AddPlayerInteraction.*
+import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction.*
 import java.util.*
 
 class AddPlayersViewModel : ViewModel() {
@@ -17,8 +18,9 @@ class AddPlayersViewModel : ViewModel() {
     private lateinit var game: Game
 
 
-    fun launch(gameId: UUID) {
-        this.game = requireNotNull(repository.getGameById(gameId))
+    fun launch(appNavigator: AppNavigator) {
+        val bundle = (appNavigator.appBundle as AppNavigator.AppBundle.AddPlayersBundle)
+        this.game = bundle.game
         val players = game.players
         if (players.isNotEmpty()) {
             viewState.postValue(AddPlayersViewState.UpdateCurrentPlayersText(players.toText()))
@@ -31,7 +33,7 @@ class AddPlayersViewModel : ViewModel() {
                 if (game.players.isEmpty()) {
                     viewState.postValue(AddPlayersViewState.TextEntryError)
                 } else {
-                    viewEvent.postValue(AddPlayersViewEvent.NavigateToGameDetail)
+                    viewEvent.postValue(AddPlayersViewEvent.NavigateToGameDetail(game))
                 }
                 // navigate to Game Detail screen
             }

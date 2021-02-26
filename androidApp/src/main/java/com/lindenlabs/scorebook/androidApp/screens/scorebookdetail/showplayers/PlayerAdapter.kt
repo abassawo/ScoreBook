@@ -1,35 +1,34 @@
-package com.lindenlabs.scorebook.androidApp.screens.gamedetail.showplayers
+package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.showplayers
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lindenlabs.scorebook.androidApp.databinding.PlayerRowItemBinding
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.PlayerEntity
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.PlayerInteraction
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
+import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookEntity
+import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction
 
 class PlayerAdapter : RecyclerView.Adapter<PlayerViewHolder>() {
-    private val players: MutableList<PlayerEntity> = mutableListOf()
+    private val scoreBooks: MutableList<ScoreBookEntity> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder =
         PlayerViewHolder(binding = PlayerRowItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
     override fun onBindViewHolder(holder: PlayerViewHolder, position: Int) =
-        holder.bind(players[position])
+        holder.bind(scoreBooks[position])
 
-    override fun getItemCount(): Int = players.size
+    override fun getItemCount(): Int = scoreBooks.size
 
-    fun setData(players: List<PlayerEntity>) {
-        this.players.clear()
-        this.players.addAll(players)
+    fun setData(scoreBooks: List<ScoreBookEntity>) {
+        this.scoreBooks.clear()
+        this.scoreBooks.addAll(scoreBooks)
         notifyDataSetChanged()
     }
 }
 
 class PlayerViewHolder(val binding: PlayerRowItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(playerEntity: PlayerEntity) = binding.run {
-        val player = playerEntity.player
+    fun bind(scoreBookEntity: ScoreBookEntity) = binding.run {
+        val player = scoreBookEntity.player
         playerName.text = player.name
         playerScoreView.text = player.scoreTotal.toString()
 
@@ -40,6 +39,6 @@ class PlayerViewHolder(val binding: PlayerRowItemBinding) : RecyclerView.ViewHol
 //            itemView.setOnClickListener(null)
 //        }
 
-        itemView.setOnClickListener { playerEntity.clickAction(PlayerInteraction.PlayerClicked(player)) }
+        itemView.setOnClickListener { scoreBookEntity.clickAction(ScoreBookInteraction.PlayerClicked(player)) }
     }
 }

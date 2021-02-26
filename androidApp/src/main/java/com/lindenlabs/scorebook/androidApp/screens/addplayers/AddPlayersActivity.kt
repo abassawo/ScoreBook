@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.screens.managegame
+package com.lindenlabs.scorebook.androidApp.screens.addplayers
 
 import android.content.Context
 import android.content.Intent
@@ -10,14 +10,16 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.lindenlabs.scorebook.androidApp.R
+import com.lindenlabs.scorebook.androidApp.base.BaseActivity
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersActivityBinding
-import com.lindenlabs.scorebook.androidApp.screens.managegame.entities.AddPlayerInteraction.*
+import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
+import com.lindenlabs.scorebook.androidApp.navigation.Destination
+import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction.*
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
-import com.lindenlabs.scorebook.androidApp.screens.managegame.AddPlayersViewState.*
-import com.lindenlabs.scorebook.androidApp.screens.managegame.entities.AddPlayerInteraction
+import com.lindenlabs.scorebook.androidApp.screens.addplayers.AddPlayersViewState.*
 import java.util.*
 
-class AddPlayersActivity : AppCompatActivity() {
+class AddPlayersActivity : BaseActivity() {
     private val binding: AddPlayersActivityBinding by lazy { viewBinding() }
 
     private fun viewBinding(): AddPlayersActivityBinding {
@@ -35,7 +37,7 @@ class AddPlayersActivity : AppCompatActivity() {
         viewModel.run {
             viewState.observe(this@AddPlayersActivity, ::processViewState)
             viewEvent.observe(this@AddPlayersActivity, ::processViewEvent)
-            launch(gameId)
+            launch(appNavigator)
         }
         binding.updateUI()
     }
@@ -59,7 +61,10 @@ class AddPlayersActivity : AppCompatActivity() {
     private fun processViewEvent(viewEvent: AddPlayersViewEvent) {
         Log.d("APA", "Viewevent processed")
         when(viewEvent) {
-            is AddPlayersViewEvent.NavigateToGameDetail -> onBackPressed()
+            is AddPlayersViewEvent.NavigateToGameDetail -> {
+                val bundle = AppNavigator.AppBundle.GameDetailBundle(viewEvent.game)
+                appNavigator.navigate(this, Destination.GameDetail(bundle))
+            }
         }
     }
 

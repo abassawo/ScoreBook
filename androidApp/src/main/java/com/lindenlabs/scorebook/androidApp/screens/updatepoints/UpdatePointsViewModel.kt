@@ -1,44 +1,39 @@
-package com.lindenlabs.scorebook.androidApp.screens.addpoints
+package com.lindenlabs.scorebook.androidApp.screens.updatepoints
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lindenlabs.scorebook.androidApp.data.GameDataSource
 import com.lindenlabs.scorebook.androidApp.data.GameRepository
+import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
-import java.util.*
 
-class AddPointsViewModel : ViewModel() {
+class UpdatePointsViewModel : ViewModel() {
     private val repository: GameDataSource = GameRepository
-    val viewState: MutableLiveData<AddPointsViewState> = MutableLiveData()
-    val viewEvent: MutableLiveData<AddPointsViewEvent> = MutableLiveData()
+    val viewState: MutableLiveData<UpdatePointsViewState> = MutableLiveData()
+    val viewEvent: MutableLiveData<UpdatePointsViewEvent> = MutableLiveData()
     private lateinit var game: Game
     private lateinit var player: Player
 
-    fun launch(gameId: UUID, playerId: UUID) {
-        game = repository.getGameById(gameId) as Game
-        player = game.players.find { it.id == playerId } as Player
+    fun launch(appNavigator: AppNavigator) {
+        val (game, player) = (appNavigator.appBundle as AppNavigator.AppBundle.UpdatePointsBundle)
         this.game = game
+        this.player = player
     }
 
     fun handleInteraction(interaction: AddPointsInteraction) {
         when (interaction) {
             is AddPointsInteraction.AddScore -> {
-                val score = interaction.newScore
+                val score = interaction.point
                 repository.updateGame(game, player, score)
-                viewEvent.postValue(AddPointsViewEvent.ScoreUpdated(player, game))
+                viewEvent.postValue(UpdatePointsViewEvent.ScoreUpdated(player, game))
             }
             is AddPointsInteraction.UndoLastScore -> Unit
         }
     }
 
     sealed class AddPointsInteraction {
-        data class AddScore(
-            val newScore: Int,
-            val playerId: UUID,
-            val gameId: UUID
-        ) :
-            AddPointsInteraction()
+        data class AddScore(val point: Int) : AddPointsInteraction()
 
         data class UndoLastScore(val scoreHistory: List<Int>) : AddPointsInteraction()
     }

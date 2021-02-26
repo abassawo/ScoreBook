@@ -2,12 +2,12 @@ package com.lindenlabs.scorebook.androidApp
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.lindenlabs.scorebook.androidApp.base.BaseActivity
 import com.lindenlabs.scorebook.androidApp.databinding.ActivityMainBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.GameDetailActivity
+import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
+import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.*
@@ -16,7 +16,7 @@ import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.Ho
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewState
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameAdapter
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     private val binding: ActivityMainBinding by lazy { viewBinding() }
     private val gameBinding: IncludeHomeScreenBinding by lazy { homeScreenBinding()}
     private val gameAdapter = GameAdapter()
@@ -53,8 +53,10 @@ class MainActivity : AppCompatActivity() {
         is ShowGameDetail -> showGameDetail(event.game)
     }
 
-    private fun showGameDetail(game: Game) =
-        startActivity(GameDetailActivity.newIntent(this, game.id))
+    private fun showGameDetail(game: Game) {
+        val bundle = AppNavigator.AppBundle.GameDetailBundle(game)
+        appNavigator.navigate(this, Destination.GameDetail(bundle))
+    }
 
     private fun showError(event: HomeViewEvent.AlertNoTextEntered) {
         val errorPair = event.errorText to  getDrawable(android.R.drawable.stat_notify_error)

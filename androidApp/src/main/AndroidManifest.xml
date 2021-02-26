@@ -3,10 +3,10 @@
     package="com.lindenlabs.scorebook.androidApp">
 
     <application
+        android:name=".ScoreBookApplication"
         android:allowBackup="false"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".screens.gamedetail.GameDetailActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -14,15 +14,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".screens.managegame.AddPlayersActivity" />
-        <activity android:name=".screens.addpoints.AddPointsActivity" />
+        <activity android:name=".screens.scorebookdetail.GameDetailActivity"></activity>
+        <activity android:name=".screens.addplayers.AddPlayersActivity" />
+        <activity android:name=".screens.updatepoints.UpdatePointsActivity" />
     </application>
 
 </manifest>
