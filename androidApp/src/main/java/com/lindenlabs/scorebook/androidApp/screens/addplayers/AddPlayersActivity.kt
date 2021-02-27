@@ -9,11 +9,11 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.lindenlabs.scorebook.androidApp.Destination
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseActivity
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersActivityBinding
 import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
-import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction.*
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.addplayers.AddPlayersViewState.*
@@ -63,7 +63,7 @@ class AddPlayersActivity : BaseActivity() {
         when(viewEvent) {
             is AddPlayersViewEvent.NavigateToGameDetail -> {
                 val bundle = AppNavigator.AppBundle.GameDetailBundle(viewEvent.game)
-                appNavigator.navigate(this, Destination.GameDetail(bundle))
+//                appNavigator.navigate(this, Destination.GameDetail(bundle))
             }
         }
     }

@@ -20,6 +20,8 @@ dependencies {
 //    def room_version = "2.2.6"
 
     implementation("androidx.room:room-runtime:2.2.6")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.3.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.3.3")
     kapt("androidx.room:room-compiler:2.2.6")
 
     // optional - Kotlin Extensions and Coroutines support for Room

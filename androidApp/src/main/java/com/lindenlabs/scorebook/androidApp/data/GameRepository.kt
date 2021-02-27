@@ -6,7 +6,7 @@ import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Round
 import java.lang.IllegalStateException
 import java.util.*
 
-object GameRepository : GameDataSource {
+class GameRepository : GameDataSource {
     override val games: MutableList<Game> = mutableListOf()
 
     override fun getGameById(id: UUID): Game? = games.find { it.id == id }

@@ -14,7 +14,7 @@ import java.util.*
 class AddPlayersViewModel : ViewModel() {
     val viewState: MutableLiveData<AddPlayersViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<AddPlayersViewEvent> = MutableLiveData()
-    private val repository: GameDataSource = GameRepository
+    private val repository: GameDataSource = GameRepository()
     private lateinit var game: Game
 
 

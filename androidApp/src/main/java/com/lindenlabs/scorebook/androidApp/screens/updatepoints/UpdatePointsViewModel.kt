@@ -9,7 +9,7 @@ import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 
 class UpdatePointsViewModel : ViewModel() {
-    private val repository: GameDataSource = GameRepository
+    private val repository: GameDataSource = GameRepository()
     val viewState: MutableLiveData<UpdatePointsViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<UpdatePointsViewEvent> = MutableLiveData()
     private lateinit var game: Game

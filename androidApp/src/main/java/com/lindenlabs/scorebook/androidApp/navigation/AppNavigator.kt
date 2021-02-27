@@ -3,10 +3,10 @@ package com.lindenlabs.scorebook.androidApp.navigation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import com.lindenlabs.scorebook.androidApp.Destination
 import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator.AppBundle.*
 import com.lindenlabs.scorebook.androidApp.screens.addplayers.AddPlayersActivity
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailActivity
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsActivity
@@ -42,15 +42,8 @@ class AppNavigator {
     private fun Destination.toIntent(context: Context): Intent =
         when (this) {
             is Destination.HomeScreen -> Intent(context, MainActivity::class.java)
-            is Destination.GameDetail -> Intent(context, GameDetailActivity::class.java)
+            is Destination.GameDetail -> Intent(context, MainActivity::class.java) //todo - remove
             is Destination.AddPlayers -> Intent(context, AddPlayersActivity::class.java)
             is Destination.UpdatePoints -> Intent(context, UpdatePointsActivity::class.java)
         }
-}
-
-sealed class Destination {
-    object HomeScreen : Destination()
-    data class GameDetail(val gameBundle: GameDetailBundle) : Destination()
-    data class AddPlayers(val addPlayersBundle: AddPlayersBundle) : Destination()
-    data class UpdatePoints(val updatePointsBundle: UpdatePointsBundle) : Destination()
 }

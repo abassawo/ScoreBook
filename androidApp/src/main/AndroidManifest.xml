@@ -14,7 +14,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".screens.scorebookdetail.GameDetailActivity"></activity>
         <activity android:name=".screens.addplayers.AddPlayersActivity" />
         <activity android:name=".screens.updatepoints.UpdatePointsActivity" />
     </application>

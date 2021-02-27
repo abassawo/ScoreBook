@@ -3,13 +3,12 @@ package com.lindenlabs.scorebook.androidApp.screens.updatepoints
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
+import com.lindenlabs.scorebook.androidApp.Destination
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseActivity
 import com.lindenlabs.scorebook.androidApp.databinding.AddPointsActivityBinding
 import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator.*
 import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator.AppBundle.*
-import com.lindenlabs.scorebook.androidApp.navigation.Destination
-import com.lindenlabs.scorebook.androidApp.navigation.Destination.*
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsViewModel.*
@@ -47,7 +46,7 @@ class UpdatePointsActivity : BaseActivity() {
     }
 
     private fun Game.detailScreen(): Destination.GameDetail =
-        GameDetail(GameDetailBundle(this))
+        Destination.GameDetail(0, GameDetailBundle(this))
 
     private fun processState(viewState: UpdatePointsViewState?) {
         when (viewState) {
