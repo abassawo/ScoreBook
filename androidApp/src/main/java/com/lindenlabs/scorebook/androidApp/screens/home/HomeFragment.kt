@@ -5,10 +5,12 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.fragment.findNavController
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.SharedViewModel
 import com.lindenlabs.scorebook.androidApp.databinding.HomeFragmentBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
+import com.lindenlabs.scorebook.androidApp.screens.addplayers.AddPlayersFragmentDirections
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
@@ -18,7 +20,6 @@ import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.G
 
 class HomeFragment : Fragment(R.layout.home_fragment) {
     private lateinit var viewModel: HomeViewModel
-    private lateinit var sharedViewModel: SharedViewModel
     private lateinit var  binding: HomeFragmentBinding
     private lateinit var gameBinding: IncludeHomeScreenBinding
     private val gameAdapter = GameAdapter()
@@ -50,6 +51,8 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     }
 
     private fun showGameDetail(game: Game) {
+        val directions = AddPlayersFragmentDirections(game)
+        findNavController().navigate(directions)
 //        val bundle = AppNavigator.AppBundle.GameDetailBundle(game)
 //        sharedViewModel = sharedViewModel(this)
 //        sharedViewModel.processEvent(Destination.GameDetail(gameBundle = bundle))

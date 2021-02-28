@@ -16,9 +16,8 @@
             app:enterAnim="@anim/fragment_fade_exit">
 
             <argument
-                android:name="gameId"
-                android:defaultValue="1L"
-                app:argType="long" />
+                android:name="gameArg"
+                app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game"/>
 
         </action>
     </fragment>
@@ -43,7 +42,7 @@
 
     <fragment
         android:id="@+id/navScoreGame"
-        android:name="com.lindenlabs.scorebook.androidApp.screens.gamedetail.GameDetailFragment"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragment"
         tools:layout="@layout/game_detail_fragment">
 
         <action
