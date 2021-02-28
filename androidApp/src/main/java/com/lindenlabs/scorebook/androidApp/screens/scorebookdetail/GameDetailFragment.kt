@@ -6,27 +6,24 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.lindenlabs.scorebook.androidApp.R
-import com.lindenlabs.scorebook.androidApp.SharedViewModel
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailFragmentBinding
-import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator.AppBundle
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewState
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.showplayers.PlayerAdapter
-import com.lindenlabs.scorebook.androidApp.sharedViewModel
 
 class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
     private val adapter: PlayerAdapter = PlayerAdapter()
     private lateinit var binding: GameDetailFragmentBinding
 
-    private fun View.viewBinding(): GameDetailFragmentBinding {
-        val rootView = findViewById<View>(R.id.game_detail_root)
+    private fun iewBinding(): GameDetailFragmentBinding {
+        val rootView = requireView().findViewById<View>(R.id.game_detail_root)
         return GameDetailFragmentBinding.bind(rootView)
     }
 
     private val viewModel: GameViewModel by lazy { viewModel() }
-    private val sharedViewModel: SharedViewModel by lazy { sharedViewModel(this) }
+//    private val sharedViewModel: SharedViewModel by lazy { sharedViewModel(this) }
 
     private fun viewModel() = ViewModelProvider(this).get(GameViewModel::class.java)
 
@@ -69,12 +66,12 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
 //    private fun navigateHome() = appNavigator.navigate(this, Destination.HomeScreen)
 
     private fun navigateToAddScoreForPlayer(event: ScoreBookViewEvent.EditScoreForPlayer) {
-        val bundle = AppBundle.UpdatePointsBundle(event.game, event.player)
+//        val bundle = AppBundle.UpdatePointsBundle(event.game, event.player)
 //        appNavigator.navigate(this, Destination.UpdatePoints(bundle))
     }
 
     private fun navigateToAddPlayers(game: Game) {
-        val bundle = AppBundle.AddPlayersBundle(game)
+//        val bundle = AppBundle.AddPlayersBundle(game)
 //        appNavigator.navigate(this, Destination.AddPlayers(bundle))
     }
 

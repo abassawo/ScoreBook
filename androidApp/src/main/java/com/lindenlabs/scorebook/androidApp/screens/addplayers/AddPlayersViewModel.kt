@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lindenlabs.scorebook.androidApp.data.GameDataSource
 import com.lindenlabs.scorebook.androidApp.data.GameRepository
-import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
@@ -18,13 +17,13 @@ class AddPlayersViewModel : ViewModel() {
     private lateinit var game: Game
 
 
-    fun launch(appNavigator: AppNavigator) {
-        val bundle = (appNavigator.appBundle as AppNavigator.AppBundle.AddPlayersBundle)
-        this.game = bundle.game
-        val players = game.players
-        if (players.isNotEmpty()) {
-            viewState.postValue(AddPlayersViewState.UpdateCurrentPlayersText(players.toText()))
-        }
+    fun launch() {
+//        val bundle = (appNavigator.appBundle as AppNavigator.AppBundle.AddPlayersBundle)
+//        this.game = bundle.game
+//        val players = game.players
+//        if (players.isNotEmpty()) {
+//            viewState.postValue(AddPlayersViewState.UpdateCurrentPlayersText(players.toText()))
+//        }
     }
 
     fun handleInteraction(interaction: AddPlayerInteraction) {

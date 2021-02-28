@@ -2,25 +2,61 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/score_book_nav">
+    android:id="@+id/score_book_nav"
+    app:startDestination="@+id/navHomeFragment">
 
     <fragment
         android:id="@+id/navHomeFragment"
         android:name="com.lindenlabs.scorebook.androidApp.screens.home.HomeFragment"
-        tools:layout="@layout/home_fragment" />
+        tools:layout="@layout/home_fragment">
+
+        <action
+            android:id="@+id/action_navHomeFragment_to_navAddPlayers"
+            app:destination="@id/navAddPlayers"
+            app:enterAnim="@anim/fragment_fade_exit">
+
+            <argument
+                android:name="gameId"
+                android:defaultValue="1L"
+                app:argType="long" />
+
+        </action>
+    </fragment>
 
     <fragment
-        android:id="@+id/navGameDetail"
-        tools:layout="@layout/game_detail_fragment" />
+        android:id="@+id/navAddPlayers"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.addplayers.AddPlayersFragment"
+        tools:layout="@layout/add_players_fragment">
+        <action
+            android:id="@+id/action_navAddPlayers_to_navScoreGame"
+            app:destination="@id/navScoreGame" />
+    </fragment>
 
-<!--    <fragment-->
-<!--        android:id="@+id/navHomeFragment"-->
-<!--        android:name="com.lindenlabs.scorebook.androidApp.screens.home.HomeFragment"-->
-<!--        tools:layout="@layout/home_fragment" />-->
+    <fragment
+        android:id="@+id/navUpdatePoints"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsFragment"
+        tools:layout="@layout/update_points_fragment">
+        <action
+            android:id="@+id/action_navUpdatePoints_to_navScoreGame"
+            app:destination="@id/navScoreGame" />
+    </fragment>
 
-<!--    <fragment-->
-<!--        android:id="@+id/navHomeFragment"-->
-<!--        android:name="com.lindenlabs.scorebook.androidApp.screens.home.HomeFragment"-->
-<!--        tools:layout="@layout/home_fragment" />-->
+    <fragment
+        android:id="@+id/navScoreGame"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.gamedetail.GameDetailFragment"
+        tools:layout="@layout/game_detail_fragment">
+
+        <action
+            android:id="@+id/action_navScoreGame_to_addPlayers"
+            app:destination="@id/navAddPlayers" />
+
+        <action
+            android:id="@+id/action_navScoreGame_to_navUpdatePoints"
+            app:destination="@id/navUpdatePoints" />
+        <action
+            android:id="@+id/action_navScoreGame_to_navHomeFragment"
+            app:destination="@id/navHomeFragment" />
+    </fragment>
+
 
 </navigation>

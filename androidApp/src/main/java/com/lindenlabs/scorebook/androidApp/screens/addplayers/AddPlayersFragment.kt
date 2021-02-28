@@ -1,45 +1,39 @@
 package com.lindenlabs.scorebook.androidApp.screens.addplayers
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
-import com.lindenlabs.scorebook.androidApp.Destination
 import com.lindenlabs.scorebook.androidApp.R
-import com.lindenlabs.scorebook.androidApp.base.BaseActivity
-import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersActivityBinding
-import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
+import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
 import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction.*
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.addplayers.AddPlayersViewState.*
 import java.util.*
 
-class AddPlayersActivity : BaseActivity() {
-    private val binding: AddPlayersActivityBinding by lazy { viewBinding() }
+class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
+    private val binding: AddPlayersFragmentBinding by lazy { viewBinding() }
 
-    private fun viewBinding(): AddPlayersActivityBinding {
-        val rootView = findViewById<View>(R.id.addPlayersRoot)
-        return AddPlayersActivityBinding.bind(rootView)
+    private fun viewBinding(): AddPlayersFragmentBinding {
+        val rootView = requireView().findViewById<View>(R.id.addPlayersRoot)
+        return AddPlayersFragmentBinding.bind(rootView)
     }
     private val viewModel: AddPlayersViewModel by lazy { viewModel() }
-    private val gameId: UUID by lazy { intent.extras?.get(GAME_ID_KEY) as UUID }
+    private val gameId: UUID by lazy { requireArguments().get(GAME_ID_KEY) as UUID }
 
     private fun viewModel() = ViewModelProvider(this).get(AddPlayersViewModel::class.java)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.add_players_activity)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel.run {
-            viewState.observe(this@AddPlayersActivity, ::processViewState)
-            viewEvent.observe(this@AddPlayersActivity, ::processViewEvent)
-            launch(appNavigator)
+            viewState.observe(this as LifecycleOwner, ::processViewState)
+            viewEvent.observe(this as LifecycleOwner, ::processViewEvent)
         }
         binding.updateUI()
+
     }
 
     private fun processViewState(viewState: AddPlayersViewState) = when(viewState) {
@@ -62,13 +56,13 @@ class AddPlayersActivity : BaseActivity() {
         Log.d("APA", "Viewevent processed")
         when(viewEvent) {
             is AddPlayersViewEvent.NavigateToGameDetail -> {
-                val bundle = AppNavigator.AppBundle.GameDetailBundle(viewEvent.game)
+//                val bundle = AppNavigator.AppBundle.GameDetailBundle(viewEvent.game)
 //                appNavigator.navigate(this, Destination.GameDetail(bundle))
             }
         }
     }
 
-    private fun AddPlayersActivityBinding.updateUI() {
+    private fun AddPlayersFragmentBinding.updateUI() {
         this.doneButton.setOnClickListener {
             val name = binding.enterNewPlayerEditText.text.toString()
             viewModel.handleInteraction(SavePlayerDataAndExit(name)) // new player routes back to Game Detail Screen
@@ -95,10 +89,8 @@ class AddPlayersActivity : BaseActivity() {
 
     companion object {
         private const val GAME_ID_KEY = "gameIdKey"
-        fun newIntent(context: Context, game: Game) : Intent {
-            return Intent(context, AddPlayersActivity::class.java)
-                .putExtra(GAME_ID_KEY, game.id)
-        }
+
+        fun newIntent(arg: AddPlayersFragmentDirections) = Unit
     }
 }
 

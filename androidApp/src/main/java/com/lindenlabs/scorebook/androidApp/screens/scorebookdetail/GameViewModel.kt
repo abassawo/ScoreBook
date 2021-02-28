@@ -3,8 +3,6 @@ package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lindenlabs.scorebook.androidApp.base.GameEngine
-import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
-import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator.AppBundle.*
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent.AddPlayersClicked
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent.EditScoreForPlayer
@@ -23,22 +21,22 @@ class GameViewModel : ViewModel() {
 
     private var isFirstRun: Boolean = true
 
-    fun launch(appNavigator: AppNavigator) {
-        val destination = (appNavigator.appBundle as GameDetailBundle)
-        game = destination.game
+    fun launch() {
+//        val destination = (appNavigator.appBundle as GameDetailBundle)
+//        game = destination.game
 
-        val players = game.players
-        if (isFirstRun && players.isNullOrEmpty()) {
-            isFirstRun = false
-            viewEvent.postValue(AddPlayersClicked(game)) // Bypass home screen, just add
-        } else if (players.isNullOrEmpty())
-            viewState.postValue(ScoreBookViewState.EmptyState(game.name))
-        else if (players.isNotEmpty()) {
-            val playerEntities = mapper.map(players) { interaction ->
-                handleInteraction(interaction)
-            }
-            viewState.postValue(ScoreBookViewState.ActiveGame(playerEntities, game.name))
-        }
+//        val players = game.players
+//        if (isFirstRun && players.isNullOrEmpty()) {
+//            isFirstRun = false
+//            viewEvent.postValue(AddPlayersClicked(game)) // Bypass home screen, just add
+//        } else if (players.isNullOrEmpty())
+//            viewState.postValue(ScoreBookViewState.EmptyState(game.name))
+//        else if (players.isNotEmpty()) {
+//            val playerEntities = mapper.map(players) { interaction ->
+//                handleInteraction(interaction)
+//            }
+//            viewState.postValue(ScoreBookViewState.ActiveGame(playerEntities, game.name))
+//        }
     }
 
     fun handleInteraction(interaction: ScoreBookInteraction) {

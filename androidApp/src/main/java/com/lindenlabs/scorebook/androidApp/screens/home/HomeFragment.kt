@@ -5,19 +5,16 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
-import com.lindenlabs.scorebook.androidApp.Destination
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.SharedViewModel
 import com.lindenlabs.scorebook.androidApp.databinding.HomeFragmentBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
-import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewState
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameAdapter
-import com.lindenlabs.scorebook.androidApp.sharedViewModel
 
 class HomeFragment : Fragment(R.layout.home_fragment) {
     private lateinit var viewModel: HomeViewModel
@@ -53,9 +50,9 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     }
 
     private fun showGameDetail(game: Game) {
-        val bundle = AppNavigator.AppBundle.GameDetailBundle(game)
-        sharedViewModel = sharedViewModel(this)
-        sharedViewModel.processEvent(Destination.GameDetail(gameBundle = bundle))
+//        val bundle = AppNavigator.AppBundle.GameDetailBundle(game)
+//        sharedViewModel = sharedViewModel(this)
+//        sharedViewModel.processEvent(Destination.GameDetail(gameBundle = bundle))
 //        appNavigator.navigate(this, Destination.GameDetail(bundle))
     }
 

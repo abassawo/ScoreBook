@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lindenlabs.scorebook.androidApp.data.GameDataSource
 import com.lindenlabs.scorebook.androidApp.data.GameRepository
-import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 
@@ -15,10 +14,10 @@ class UpdatePointsViewModel : ViewModel() {
     private lateinit var game: Game
     private lateinit var player: Player
 
-    fun launch(appNavigator: AppNavigator) {
-        val (game, player) = (appNavigator.appBundle as AppNavigator.AppBundle.UpdatePointsBundle)
-        this.game = game
-        this.player = player
+    fun launch() {
+//        val (game, player) = (appNavigator.appBundle as AppNavigator.AppBundle.UpdatePointsBundle)
+//        this.game = game
+//        this.player = player
     }
 
     fun handleInteraction(interaction: AddPointsInteraction) {
