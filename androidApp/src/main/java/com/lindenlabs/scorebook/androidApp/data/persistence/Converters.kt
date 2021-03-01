@@ -16,13 +16,12 @@ import java.util.*
 
 fun JSONObject.toPlayer(): Player {
     Timber.d("Converter player $this")
-    return Player(name = this.optString("name"))
+    return Gson().fromJson(this.toString(), Player::class.java)
 }
 
-fun <T> getList(jsonArray: String?, clazz: Class<T>?): List<T> {
-    val typeOfT = TypeToken.getParameterized(MutableList::class.java, clazz).type
-    return Gson().fromJson(jsonArray, typeOfT)
-}
+internal inline fun <reified T> Gson.fromJsonAsList(json: String) =
+    fromJson<T>(json, object : TypeToken<T>() {}.type)
+
 
 interface Converters {
 
