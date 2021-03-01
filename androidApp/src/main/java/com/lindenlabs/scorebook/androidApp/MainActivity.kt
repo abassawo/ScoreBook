@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -18,17 +19,26 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.lindenlabs.scorebook.androidApp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 //    private lateinit var appBarConfiguration : AppBarConfiguration
+    private val binding: ActivityMainBinding by lazy { viewBinding() }
 
     fun sharedViewModel(activity: FragmentActivity) =
         ViewModelProvider(activity).get(SharedViewModel::class.java)
+
+    fun viewBinding(): ActivityMainBinding {
+        val view: View = findViewById(R.id.drawer_layout)
+        return ActivityMainBinding.bind(view)
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        binding.toolbar.setTitle("Score Book")
+
         val sharedViewModel = sharedViewModel(this)
         val appData = (applicationContext as ScoreBookApplication).appData
         sharedViewModel.launch(appData)

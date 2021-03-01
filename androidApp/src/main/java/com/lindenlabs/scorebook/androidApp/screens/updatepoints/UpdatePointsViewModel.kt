@@ -6,26 +6,24 @@ import com.lindenlabs.scorebook.androidApp.data.GameDataSource
 import com.lindenlabs.scorebook.androidApp.data.GameRepository
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
+import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Round
 
 class UpdatePointsViewModel : ViewModel() {
-    private val repository: GameDataSource = GameRepository()
-    val viewState: MutableLiveData<UpdatePointsViewState> = MutableLiveData()
-    val viewEvent: MutableLiveData<UpdatePointsViewEvent> = MutableLiveData()
     private lateinit var game: Game
     private lateinit var player: Player
+    val viewState: MutableLiveData<UpdatePointsViewState> = MutableLiveData()
+    val viewEvent: MutableLiveData<UpdatePointsViewEvent> = MutableLiveData()
 
-    fun launch() {
-//        val (game, player) = (appNavigator.appBundle as AppNavigator.AppBundle.UpdatePointsBundle)
-//        this.game = game
-//        this.player = player
+    fun launch(args: UpdatePointsFragmentArgs) {
+        this.game = args.gameArg
+        this.player = args.playerArg
     }
 
     fun handleInteraction(interaction: AddPointsInteraction) {
         when (interaction) {
             is AddPointsInteraction.AddScore -> {
                 val score = interaction.point
-                repository.updateGame(game, player, score)
-                viewEvent.postValue(UpdatePointsViewEvent.ScoreUpdated(player, game))
+                player.addToScore(score)
             }
             is AddPointsInteraction.UndoLastScore -> Unit
         }
@@ -36,5 +34,4 @@ class UpdatePointsViewModel : ViewModel() {
 
         data class UndoLastScore(val scoreHistory: List<Int>) : AddPointsInteraction()
     }
-
 }

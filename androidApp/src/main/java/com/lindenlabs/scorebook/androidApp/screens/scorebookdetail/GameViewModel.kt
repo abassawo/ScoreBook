@@ -21,22 +21,21 @@ class GameViewModel : ViewModel() {
 
     private var isFirstRun: Boolean = true
 
-    fun launch() {
-//        val destination = (appNavigator.appBundle as GameDetailBundle)
-//        game = destination.game
+    fun launch(args: GameDetailFragmentArgs) {
+        game = args.gameArg
 
-//        val players = game.players
-//        if (isFirstRun && players.isNullOrEmpty()) {
-//            isFirstRun = false
-//            viewEvent.postValue(AddPlayersClicked(game)) // Bypass home screen, just add
-//        } else if (players.isNullOrEmpty())
-//            viewState.postValue(ScoreBookViewState.EmptyState(game.name))
-//        else if (players.isNotEmpty()) {
-//            val playerEntities = mapper.map(players) { interaction ->
-//                handleInteraction(interaction)
-//            }
-//            viewState.postValue(ScoreBookViewState.ActiveGame(playerEntities, game.name))
-//        }
+        val players = game.players
+        if (isFirstRun && players.isNullOrEmpty()) {
+            isFirstRun = false
+            viewEvent.postValue(AddPlayersClicked(game)) // Bypass home screen, just add
+        } else if (players.isNullOrEmpty())
+            viewState.postValue(ScoreBookViewState.EmptyState(game.name))
+        else if (players.isNotEmpty()) {
+            val playerEntities = mapper.map(players) { interaction ->
+                handleInteraction(interaction)
+            }
+            viewState.postValue(ScoreBookViewState.ActiveGame(playerEntities, game.name))
+        }
     }
 
     fun handleInteraction(interaction: ScoreBookInteraction) {

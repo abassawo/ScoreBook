@@ -17,13 +17,12 @@ class AddPlayersViewModel : ViewModel() {
     private lateinit var game: Game
 
 
-    fun launch() {
-//        val bundle = (appNavigator.appBundle as AppNavigator.AppBundle.AddPlayersBundle)
-//        this.game = bundle.game
-//        val players = game.players
-//        if (players.isNotEmpty()) {
-//            viewState.postValue(AddPlayersViewState.UpdateCurrentPlayersText(players.toText()))
-//        }
+    fun launch(args: AddPlayersFragmentArgs) {
+        this.game = args.gameArg
+        val players = game.players
+        if (players.isNotEmpty()) {
+            viewState.postValue(AddPlayersViewState.UpdateCurrentPlayersText(players.toText()))
+        }
     }
 
     fun handleInteraction(interaction: AddPlayerInteraction) {
@@ -42,8 +41,8 @@ class AddPlayersViewModel : ViewModel() {
                     viewState.postValue(AddPlayersViewState.TextEntryError)
                 else {
                     val player = Player(interaction.playerName)
-                    val players = repository.addPlayer(game, player)
-                    val playersText = players.toText()
+                    game.players += player
+                    val playersText = game.players.toText()
                     viewState.postValue(AddPlayersViewState.UpdateCurrentPlayersText(playersText))
                 }
             }

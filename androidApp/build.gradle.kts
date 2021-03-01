@@ -36,6 +36,9 @@ dependencies {
 
 android {
     compileSdkVersion(29)
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
     defaultConfig {
         applicationId = "com.lindenlabs.scorebook.androidApp"
         minSdkVersion(24)

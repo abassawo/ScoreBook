@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.SharedViewModel
@@ -47,17 +48,11 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
 
     private fun processViewEvent(event: HomeViewEvent) = when(event){
         is HomeViewEvent.AlertNoTextEntered -> showError(event)
-        is HomeViewEvent.ShowGameDetail -> showGameDetail(event.game)
+        is HomeViewEvent.ShowGameDetail -> findNavController().showGameDetail(event.game)
     }
 
-    private fun showGameDetail(game: Game) {
-        val directions = AddPlayersFragmentDirections(game)
-        findNavController().navigate(directions)
-//        val bundle = AppNavigator.AppBundle.GameDetailBundle(game)
-//        sharedViewModel = sharedViewModel(this)
-//        sharedViewModel.processEvent(Destination.GameDetail(gameBundle = bundle))
-//        appNavigator.navigate(this, Destination.GameDetail(bundle))
-    }
+    private fun NavController.showGameDetail(game: Game) =
+        navigate(HomeFragmentDirections.navigateToAddPlayersScreen(game))
 
     private fun showError(event: HomeViewEvent.AlertNoTextEntered) {
         val errorPair = event.errorText to  requireContext().getDrawable(android.R.drawable.stat_notify_error)
@@ -65,7 +60,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     }
 
     private fun HomeFragmentBinding.updateUi() {
-//        toolbar.setTitle(R.string.app_name)
         gamesRecyclerView.adapter = gameAdapter
 
         fun IncludeHomeScreenBinding.bind() =

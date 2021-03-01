@@ -8,6 +8,8 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
 import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction.*
@@ -16,24 +18,24 @@ import java.util.*
 
 class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
     private val binding: AddPlayersFragmentBinding by lazy { viewBinding() }
+    val args: AddPlayersFragmentArgs by navArgs()
 
     private fun viewBinding(): AddPlayersFragmentBinding {
         val rootView = requireView().findViewById<View>(R.id.addPlayersRoot)
         return AddPlayersFragmentBinding.bind(rootView)
     }
     private val viewModel: AddPlayersViewModel by lazy { viewModel() }
-    private val gameId: UUID by lazy { requireArguments().get(GAME_ID_KEY) as UUID }
 
     private fun viewModel() = ViewModelProvider(this).get(AddPlayersViewModel::class.java)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.run {
-            viewState.observe(this as LifecycleOwner, ::processViewState)
-            viewEvent.observe(this as LifecycleOwner, ::processViewEvent)
+            viewState.observe(viewLifecycleOwner, ::processViewState)
+            viewEvent.observe(viewLifecycleOwner, ::processViewEvent)
+            viewModel.launch(args)
         }
         binding.updateUI()
-
     }
 
     private fun processViewState(viewState: AddPlayersViewState) = when(viewState) {
@@ -56,8 +58,8 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
         Log.d("APA", "Viewevent processed")
         when(viewEvent) {
             is AddPlayersViewEvent.NavigateToGameDetail -> {
-//                val bundle = AppNavigator.AppBundle.GameDetailBundle(viewEvent.game)
-//                appNavigator.navigate(this, Destination.GameDetail(bundle))
+                val directions = AddPlayersFragmentDirections.navigateToScoreGameScreen(viewEvent.game)
+                findNavController().navigate(directions)
             }
         }
     }
