@@ -14,11 +14,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <AutoCompleteTextView
             android:id="@+id/enterNewPlayerEditText"
             android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox"
             android:hint="@string/enter_new_player_name" />
 
     </com.google.android.material.textfield.TextInputLayout>
