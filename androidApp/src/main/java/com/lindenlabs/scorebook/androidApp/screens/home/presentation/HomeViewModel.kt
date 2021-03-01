@@ -21,20 +21,19 @@ internal class HomeViewModel : ViewModel() {
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
 
-
     fun launch(appData: AppData) {
         this.appData = appData
         refresh()
     }
 
-    fun refresh() = showGames()
+    private fun refresh() = showGames()
 
     private fun showGames() {
-        val viewEntity = GamesWrapper(
-            openGames = GetOpenGames(appData.gameDataSource).invoke(),
-            closedGames = GetClosedGames(appData.gameDataSource).invoke()
-        )
-        viewState.postValue(viewEntity.toViewState())
+        appData.gameDataSource.load { pairOfOpenToClosedGames ->
+            val (openGames, closedGames) = pairOfOpenToClosedGames
+            val viewEntity = GamesWrapper(openGames, closedGames )
+            viewState.postValue(viewEntity.toViewState())
+        }
     }
 
     internal fun handleInteraction(interaction: GameInteraction) = when (interaction) {

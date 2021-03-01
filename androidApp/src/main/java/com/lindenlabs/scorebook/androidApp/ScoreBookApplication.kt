@@ -13,6 +13,7 @@ class ScoreBookApplication : Application() {
 
     private fun initPersistentGameRepo(): GameDataSource =
         PersistentGameRepository(gamesDatabase = initGameHandler())
+            .also { it.load {  } }
 
     private fun initGameHandler(): GameDatabaseHandler {
         return GameDatabaseHandler(initGamesDatabase().games())

@@ -1,8 +1,8 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.domain
 
-import com.lindenlabs.scorebook.androidApp.data.GameDataSource
+import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 
-class GetOpenGames(private val gameRepository: GameDataSource) {
-    operator fun invoke() = gameRepository.games.filterNot { it.isClosed }
+class GetOpenGames(private val games: List<Game>) {
+    operator fun invoke() = games.filterNot { it.isClosed }
 
 }

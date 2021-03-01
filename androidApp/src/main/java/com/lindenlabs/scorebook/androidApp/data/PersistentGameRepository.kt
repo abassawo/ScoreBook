@@ -2,47 +2,48 @@ package com.lindenlabs.scorebook.androidApp.data
 
 import android.os.Handler
 import android.os.Looper
+import androidx.lifecycle.MutableLiveData
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import com.lindenlabs.scorebook.androidApp.data.persistence.GameStore
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
+import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetClosedGames
+import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetOpenGames
 import java.util.*
 
 class PersistentGameRepository(
-    private val gameRepository: GameRepository = GameRepository(),
     private val gamesDatabase: GameDatabaseHandler
 ) : GameDataSource {
 
-    init {
-        gameRepository.clear()
+    var games: List<Game> = emptyList()
+
+    override fun load(callback: (PairOfOpenToClosedGames) -> Unit)  {
         gamesDatabase.getAllGames { games ->
-            games.forEach {it -> gameRepository.games += it }
+            this.games = games
         }
+
+        val openGames = GetOpenGames(games).invoke()
+        val closedGames = GetClosedGames(games).invoke()
+        callback(openGames to closedGames)
     }
 
-    override val games: List<Game> = gameRepository.games
-
-    override fun getGameById(id: UUID): Game? = gameRepository.getGameById(id)
+    override fun getGameById(id: UUID): Game? = games.find { it.id == id }
 
     override fun storeGame(game: Game) {
-        gameRepository.storeGame(game)
         gamesDatabase.addGame(game)
     }
 
-    override fun updateGame(game: Game, lastPlayer: Player, newScore: Int) =
-        gameRepository.updateGame(game, lastPlayer, newScore)
+    override fun updateGame(game: Game, lastPlayer: Player, newScore: Int) {
+        gamesDatabase.updateGame(game)
+    }
 
     override fun updatePlayers(game: Game, player: List<Player>): List<Player> {
-        gameRepository.updatePlayers(game, player)
         gamesDatabase.updateGame(game)
         return game.players
     }
 
-    override fun clear() {
-        gameRepository.clear()
-        // todo  - remove from database as well
-    }
+    override fun clear() = gamesDatabase.removeGames(*games.toTypedArray())
 }
 
 class GameDatabaseHandler(private val gameStore: GameStore) {

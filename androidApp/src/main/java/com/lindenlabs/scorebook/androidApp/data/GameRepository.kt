@@ -3,16 +3,24 @@ package com.lindenlabs.scorebook.androidApp.data
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Round
+import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetClosedGames
+import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetOpenGames
 import java.lang.IllegalStateException
 import java.util.*
 
 class GameRepository : GameDataSource {
-    override val games: MutableList<Game> = mutableListOf()
+    var games: MutableList<Game> = mutableListOf()
+
+    override fun load(callback: (PairOfOpenToClosedGames) -> Unit) {
+        val openGames = GetOpenGames(games).invoke()
+        val closedGames = GetClosedGames(games).invoke()
+        callback(openGames to closedGames)
+    }
 
     override fun getGameById(id: UUID): Game? = games.find { it.id == id }
 
     override fun storeGame(game: Game) {
-        games += game
+        games = games.plus(game).toMutableList()
     }
 
     override fun updateGame(game: Game, lastPlayer: Player, addedScore: Int) {
