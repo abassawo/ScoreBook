@@ -22,7 +22,7 @@ import com.google.android.material.navigation.NavigationView
 import com.lindenlabs.scorebook.androidApp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-//    private lateinit var appBarConfiguration : AppBarConfiguration
+    private lateinit var  appBarConfiguration : AppBarConfiguration
     private val binding: ActivityMainBinding by lazy { viewBinding() }
 
     fun sharedViewModel(activity: FragmentActivity) =
@@ -49,12 +49,10 @@ class MainActivity : AppCompatActivity() {
         // Set up Action Bar
         val navController = host.navController
 
-//        appBarConfiguration = AppBarConfiguration(navController.graph)
+        appBarConfiguration = AppBarConfiguration(navController.graph)
 
 
-
-
-//        setupActionBar(navController, appBarConfiguration)
+        setupActionBar(navController, appBarConfiguration)
 
         setupNavigationMenu(navController)
 
@@ -125,10 +123,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     // TODO STEP 9.7 - Have NavigationUI handle up behavior in the ActionBar
-//    override fun onSupportNavigateUp(): Boolean {
-//        // Allows NavigationUI to support proper up navigation or the drawer layout
-//        // drawer menu, depending on the situation
-//        return findNavController(R.id.my_nav_host_fragment).navigateUp(appBarConfiguration)
-//    }
+    override fun onSupportNavigateUp(): Boolean {
+        // Allows NavigationUI to support proper up navigation or the drawer layout
+        // drawer menu, depending on the situation
+        return findNavController(R.id.content).navigateUp()
+    }
     // TODO END STEP 9.7
 }

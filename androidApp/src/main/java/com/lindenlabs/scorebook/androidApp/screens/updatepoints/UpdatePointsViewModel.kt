@@ -24,6 +24,7 @@ class UpdatePointsViewModel : ViewModel() {
             is AddPointsInteraction.AddScore -> {
                 val score = interaction.point
                 player.addToScore(score)
+                viewEvent.postValue(UpdatePointsViewEvent.ScoreUpdated(player, game))
             }
             is AddPointsInteraction.UndoLastScore -> Unit
         }

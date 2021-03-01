@@ -5,6 +5,8 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.UpdatePointsFragmentBinding
@@ -30,7 +32,7 @@ class UpdatePointsFragment : Fragment(R.layout.update_points_fragment) {
         viewModel.viewState.observe(this as LifecycleOwner, ::processState)
         viewModel.viewEvent.observe(this as LifecycleOwner, ::processEvent)
         viewModel.launch(args)
-        binding.doneButton.setOnClickListener {
+        binding.updatePointsButton.setOnClickListener {
             val points = Integer.parseInt(binding.pointsEditText.text.toString())
             viewModel.handleInteraction(AddPointsInteraction.AddScore(points))
         }
@@ -40,17 +42,13 @@ class UpdatePointsFragment : Fragment(R.layout.update_points_fragment) {
     private fun processEvent(viewEvent: UpdatePointsViewEvent?) {
         with(viewEvent) {
             when (this) {
-                is ScoreUpdated -> navigateBackToDetailScreen(this.game)
+                is ScoreUpdated -> findNavController().navigateBackToDetailScreen(this.game)
             }
         }
     }
 
-    private fun navigateBackToDetailScreen(game: Game) {
-        val directions = UpdatePointsFragmentDirections.navigateBackToGameDetail(game)
-    }
-
-//    private fun Game.detailScreen(): Destination.GameDetail =
-//        Destination.GameDetail(0, GameDetailBundle(this))
+    private fun NavController.navigateBackToDetailScreen(game: Game) =
+        navigate(UpdatePointsFragmentDirections.navigateBackToGameDetail(game))
 
     private fun processState(viewState: UpdatePointsViewState?) {
         when (viewState) {

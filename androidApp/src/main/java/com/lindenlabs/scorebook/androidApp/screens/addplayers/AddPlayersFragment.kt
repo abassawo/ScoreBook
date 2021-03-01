@@ -41,7 +41,7 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
     private fun processViewState(viewState: AddPlayersViewState) = when(viewState) {
         is TextEntryError -> binding.enterNewPlayerEditText.setError("Enter a valid name")
         is UpdateCurrentPlayersText -> {
-            binding.doneButton.visibility = View.VISIBLE
+            binding.updatePointsButton.visibility = View.VISIBLE
             binding.playersText.text = viewState.playersText
             binding.enterNewPlayerEditText.setText("")
         }
@@ -51,7 +51,7 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
                 visibility = if (isEnabled) View.VISIBLE else View.GONE
             }
         }
-        TypingState -> binding.doneButton.visibility = View.GONE
+        TypingState -> binding.updatePointsButton.visibility = View.GONE
     }
 
     private fun processViewEvent(viewEvent: AddPlayersViewEvent) {
@@ -65,7 +65,7 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
     }
 
     private fun AddPlayersFragmentBinding.updateUI() {
-        this.doneButton.setOnClickListener {
+        this.updatePointsButton.setOnClickListener {
             val name = binding.enterNewPlayerEditText.text.toString()
             viewModel.handleInteraction(SavePlayerDataAndExit(name)) // new player routes back to Game Detail Screen
         }
