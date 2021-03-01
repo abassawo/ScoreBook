@@ -16,14 +16,14 @@ import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.Ho
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewState
 
 internal class HomeViewModel : ViewModel() {
+    private val gameEngine = GameEngine()
     private lateinit var appData: AppData
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
-    private lateinit var gameEngine: GameEngine
+
 
     fun launch(appData: AppData) {
         this.appData = appData
-        this.gameEngine = appData.gameEngine
         refresh()
     }
 

@@ -24,7 +24,8 @@ class GameRepository : GameDataSource {
     }
 
     override fun updatePlayers(game: Game, players: List<Player>) : List<Player> {
-        games[games.indexOf(game)].players = players
+        game.players = players
+        games[games.indexOf(game)] = game
         return game.players
     }
 

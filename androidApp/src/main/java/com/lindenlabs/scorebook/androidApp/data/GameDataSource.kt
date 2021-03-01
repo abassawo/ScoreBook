@@ -12,3 +12,8 @@ interface GameDataSource {
     fun updatePlayers(game: Game, player: List<Player>) : List<Player>
     fun addPlayer(game: Game, player: Player): List<Player>
 }
+
+interface PlayerDataSource {
+    val players: List<Player>
+    fun addPlayer(player: Player)
+}
