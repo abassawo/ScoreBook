@@ -1,11 +1,9 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.domain
 
-import com.lindenlabs.scorebook.androidApp.data.GameDataSource
-import com.lindenlabs.scorebook.androidApp.data.GameRepository
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 
-class GetClosedGames(private val gameRepository: GameDataSource) {
+class GetClosedGames(private val games: List<Game>) {
     operator fun invoke(): List<Game> {
-        return gameRepository.games.filter { it.isClosed }
+        return games.filter { it.isClosed }
     }
 }

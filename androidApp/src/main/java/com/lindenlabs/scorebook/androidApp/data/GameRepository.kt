@@ -3,19 +3,27 @@ package com.lindenlabs.scorebook.androidApp.data
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Round
+import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetClosedGames
+import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetOpenGames
 import java.lang.IllegalStateException
 import java.util.*
 
 class GameRepository : GameDataSource {
-    override val games: MutableList<Game> = mutableListOf()
+    var games: MutableList<Game> = mutableListOf()
+
+    override fun load(callback: (PairOfOpenToClosedGames) -> Unit) {
+        val openGames = GetOpenGames(games).invoke()
+        val closedGames = GetClosedGames(games).invoke()
+        callback(openGames to closedGames)
+    }
 
     override fun getGameById(id: UUID): Game? = games.find { it.id == id }
 
     override fun storeGame(game: Game) {
-        games += game
+        games = games.plus(game).toMutableList()
     }
 
-    override fun updateGame(game: Game, lastPlayer: Player, addedScore: Int) {
+    override fun roundPlayed(game: Game, lastPlayer: Player, addedScore: Int) {
         if(!game.players.contains(lastPlayer)) throw IllegalStateException()
         else {
             lastPlayer.scoreTotal += addedScore
@@ -23,11 +31,15 @@ class GameRepository : GameDataSource {
         }
     }
 
-    override fun updatePlayers(game: Game, players: List<Player>) : List<Player> {
-        games[games.indexOf(game)].players = players
-        return game.players
+//    override fun updatePlayers(game: Game, players: List<Player>) : List<Player> {
+//        game.players = players
+//        updateGame(game)
+//        return game.players
+//    }
+
+    override fun updateGame(game: Game) {
+        games[games.indexOf(game)] = game
     }
 
-    override fun addPlayer(game: Game, player: Player): List<Player> =
-        updatePlayers(game, game.players + player)
+    override fun clear() = games.clear()
 }

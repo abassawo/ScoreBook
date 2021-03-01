@@ -33,7 +33,6 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
     }
 
     private val viewModel: GameViewModel by lazy { viewModel() }
-//    private val sharedViewModel: SharedViewModel by lazy { sharedViewModel(this) }
 
     private fun viewModel() = ViewModelProvider(this).get(GameViewModel::class.java)
 
@@ -56,6 +55,7 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
             launch(args)
         }
         binding.updateUi()
+
     }
 
     private fun GameDetailFragmentBinding.updateUi() {

@@ -46,9 +46,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         binding.updateUi()
         viewModel.viewState.observe(this as LifecycleOwner, this::showGames)
         viewModel.viewEvent.observe(this as LifecycleOwner, this::processViewEvent)
-
-        val appData = (requireActivity().applicationContext as ScoreBookApplication).appData
-        viewModel.launch(appData)
     }
 
 
