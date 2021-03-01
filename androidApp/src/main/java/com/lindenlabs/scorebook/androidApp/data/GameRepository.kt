@@ -29,6 +29,5 @@ class GameRepository : GameDataSource {
         return game.players
     }
 
-    override fun addPlayer(game: Game, player: Player): List<Player> =
-        updatePlayers(game, game.players + player)
+    override fun clear() = games.clear()
 }
