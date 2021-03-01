@@ -39,6 +39,10 @@ class MainActivity : AppCompatActivity() {
         setupBottomNavMenu(navController)
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
+
     private fun setupBottomNavMenu(navController: NavController) =
         binding.bottomNavView.setupWithNavController(navController)
 

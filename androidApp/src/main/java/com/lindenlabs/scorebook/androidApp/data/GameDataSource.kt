@@ -11,8 +11,9 @@ interface GameDataSource {
     fun load(callback: (PairOfOpenToClosedGames) -> Unit)
     fun getGameById(id: UUID) : Game?
     fun storeGame(game: Game)
-    fun updateGame(game: Game, lastPlayer: Player, newScore: Int)
-    fun updatePlayers(game: Game, players: List<Player>) : List<Player>
+    fun roundPlayed(game: Game, lastPlayer: Player, newScore: Int)
+//    fun updatePlayers(game: Game, players: List<Player>) : List<Player>
+    fun updateGame(game: Game)
     fun clear()
 }
 

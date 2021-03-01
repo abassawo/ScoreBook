@@ -14,7 +14,7 @@ typealias StalematePair = Pair<Player, Player>
 
 @Parcelize
 @Entity(tableName = "games")
-@TypeConverters(UUIDConverter::class, PlayerListConverter::class, OutcomeConverter::class, StrategyConverter::class)
+@TypeConverters(UUIDConverter::class, PlayerConverter::class, OutcomeConverter::class, StrategyConverter::class)
 data class Game(
     @PrimaryKey
     @ColumnInfo(name="id")
@@ -23,17 +23,7 @@ data class Game(
     var isClosed: Boolean = false,
     var strategy: GameStrategy = GameStrategy.HighestScoreWins,
     var players: List<Player> = mutableListOf()
-//    var outcome: GameOutcome? = null
-) : Parcelable {
-
-//    fun outcome(): GameOutcome? [
-//        if(isClosed) {
-//            return GameOutcome.WinnerAnnounced(Player(name ="Abass"))
-//        } else {
-//            throw IllegalStateException()
-//        }
-//    ]
-}
+) : Parcelable
 
 sealed class GameOutcome : Parcelable {
 

@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 
 @Database(entities = [Game::class], version = 1, exportSchema = false)
-@TypeConverters(Converters.UUIDConverter::class, Converters.PlayerConverter::class)
+@TypeConverters(Converters.UUIDConverter::class, Converters.PlayerListConverter::class,  Converters.PlayerConverter::class)
 abstract class GamesDatabase : RoomDatabase() {
     abstract fun games(): GameStore
 

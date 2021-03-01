@@ -1,35 +1,38 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.lindenlabs.scorebook.androidApp.base.AppData
+import androidx.lifecycle.viewModelScope
 import com.lindenlabs.scorebook.androidApp.base.GameEngine
+import com.lindenlabs.scorebook.androidApp.data.GameDataSource
+import com.lindenlabs.scorebook.androidApp.data.PersistentGameRepository
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
-import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetClosedGames
-import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetOpenGames
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameStrategy.*
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GamesWrapper
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameStrategy.HighestScoreWins
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameStrategy.LowestScoreWins
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.*
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.GameClicked
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.GameDetailsEntered
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GamesWrapper
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewState
+import kotlinx.coroutines.launch
 
-internal class HomeViewModel : ViewModel() {
+internal class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val gameEngine = GameEngine()
-    private lateinit var appData: AppData
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
+    private val gamesRepo: GameDataSource = PersistentGameRepository.getInstance(application)
 
-    fun launch(appData: AppData) {
-        this.appData = appData
+    init {
         refresh()
     }
 
     private fun refresh() = showGames()
 
     private fun showGames() {
-        appData.gameDataSource.load { pairOfOpenToClosedGames ->
+        gamesRepo.load { pairOfOpenToClosedGames ->
             val (openGames, closedGames) = pairOfOpenToClosedGames
             val viewEntity = GamesWrapper(openGames, closedGames )
             viewState.postValue(viewEntity.toViewState())
@@ -54,7 +57,9 @@ internal class HomeViewModel : ViewModel() {
     private fun storeNewGame(name: String, strategy: GameStrategy): Game {
         return Game(name = name, strategy = strategy).also { game ->
             gameEngine.startGame(game)
-            appData.gameDataSource.storeGame(game)
+            viewModelScope.launch {
+                gamesRepo.storeGame(game)
+            }
         }
 
     }

@@ -18,7 +18,7 @@ data class Player(
 ): Parcelable {
 
     fun addToScore(score: Int) {
-        this.rounds += Round(score = score) // todo - keep numerical track too
+        this.rounds += Round(score = score)
         this.scoreTotal += score
     }
 }

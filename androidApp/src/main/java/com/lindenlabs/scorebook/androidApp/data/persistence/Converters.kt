@@ -3,14 +3,27 @@ package com.lindenlabs.scorebook.androidApp.data.persistence
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.google.gson.Gson
-import com.google.gson.JsonObject
-import com.google.gson.reflect.TypeToken
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.GameOutcome
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameStrategy
+import org.json.JSONArray
+import org.json.JSONObject
+import timber.log.Timber
 import java.util.*
-import kotlin.collections.ArrayList
 
+fun JSONObject.toPlayer(): Player {
+    Timber.d("Converter player $this")
+    return Player(name = this.optString("name"))
+}
+
+private fun JSONArray.toPlayer(): List<Player> {
+    val players = mutableListOf<Player>()
+    for (i in 0 until length()) {
+        val jsonObj = this.getJSONObject(i)
+        players += jsonObj.toPlayer()
+    }
+    return players
+}
 
 interface Converters {
 
@@ -42,21 +55,25 @@ interface Converters {
 
         @TypeConverter
         fun stringToPlayer(playerString: String): Player {
-            val myType = object : TypeToken<List<JsonObject>>() {}.type
-            return Gson().fromJson(playerString, Player::class.java)
+            val jsonObject = JSONObject(playerString)
+            return jsonObject.toPlayer()
         }
     }
+
 
     @TypeConverters
     class PlayerListConverter {
 
         @TypeConverter
-        fun playerToString(player: List<Player>): String = Gson().toJson(player)
+        fun playerToString(players: List<Player>): String = buildString {
+            players.forEach { player ->
+                append(Gson().toJson(player))
+            }
+        }
 
         @TypeConverter
         fun stringToPlayer(playerString: String): List<Player> {
-            val myType = object : TypeToken<List<JsonObject>>() {}.type
-            return Gson().fromJson<List<JsonObject>>(playerString, myType) as ArrayList<Player>
+            return JSONArray(playerString).toPlayer()
         }
     }
 

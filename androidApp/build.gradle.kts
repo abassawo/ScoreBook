@@ -19,6 +19,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
 
+    implementation("com.facebook.stetho:stetho:1.5.1")
+
 //    def room_version = "2.2.6"
 
     implementation("androidx.room:room-runtime:2.2.6")

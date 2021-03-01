@@ -23,7 +23,7 @@ class GameRepository : GameDataSource {
         games = games.plus(game).toMutableList()
     }
 
-    override fun updateGame(game: Game, lastPlayer: Player, addedScore: Int) {
+    override fun roundPlayed(game: Game, lastPlayer: Player, addedScore: Int) {
         if(!game.players.contains(lastPlayer)) throw IllegalStateException()
         else {
             lastPlayer.scoreTotal += addedScore
@@ -31,10 +31,14 @@ class GameRepository : GameDataSource {
         }
     }
 
-    override fun updatePlayers(game: Game, players: List<Player>) : List<Player> {
-        game.players = players
+//    override fun updatePlayers(game: Game, players: List<Player>) : List<Player> {
+//        game.players = players
+//        updateGame(game)
+//        return game.players
+//    }
+
+    override fun updateGame(game: Game) {
         games[games.indexOf(game)] = game
-        return game.players
     }
 
     override fun clear() = games.clear()
