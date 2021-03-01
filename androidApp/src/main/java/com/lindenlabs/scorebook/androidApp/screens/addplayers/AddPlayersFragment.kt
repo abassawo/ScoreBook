@@ -1,43 +1,52 @@
 package com.lindenlabs.scorebook.androidApp.screens.addplayers
 
-import android.content.Context
-import android.content.Intent
+import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
-import com.lindenlabs.scorebook.androidApp.base.BaseActivity
-import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersActivityBinding
-import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
-import com.lindenlabs.scorebook.androidApp.navigation.Destination
+import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
 import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction.*
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.addplayers.AddPlayersViewState.*
 import java.util.*
 
-class AddPlayersActivity : BaseActivity() {
-    private val binding: AddPlayersActivityBinding by lazy { viewBinding() }
+class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
+    private val binding: AddPlayersFragmentBinding by lazy { viewBinding() }
+    val args: AddPlayersFragmentArgs by navArgs()
 
-    private fun viewBinding(): AddPlayersActivityBinding {
-        val rootView = findViewById<View>(R.id.addPlayersRoot)
-        return AddPlayersActivityBinding.bind(rootView)
+    private fun viewBinding(): AddPlayersFragmentBinding {
+        val rootView = requireView().findViewById<View>(R.id.addPlayersRoot)
+        return AddPlayersFragmentBinding.bind(rootView)
     }
     private val viewModel: AddPlayersViewModel by lazy { viewModel() }
-    private val gameId: UUID by lazy { intent.extras?.get(GAME_ID_KEY) as UUID }
 
     private fun viewModel() = ViewModelProvider(this).get(AddPlayersViewModel::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.add_players_activity)
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true /* enabled by default */) {
+                override fun handleOnBackPressed() {
+                    findNavController().navigate(AddPlayersFragmentDirections.navigateBackHome())
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel.run {
-            viewState.observe(this@AddPlayersActivity, ::processViewState)
-            viewEvent.observe(this@AddPlayersActivity, ::processViewEvent)
-            launch(appNavigator)
+            viewState.observe(viewLifecycleOwner, ::processViewState)
+            viewEvent.observe(viewLifecycleOwner, ::processViewEvent)
+            viewModel.launch(args)
         }
         binding.updateUI()
     }
@@ -45,7 +54,7 @@ class AddPlayersActivity : BaseActivity() {
     private fun processViewState(viewState: AddPlayersViewState) = when(viewState) {
         is TextEntryError -> binding.enterNewPlayerEditText.setError("Enter a valid name")
         is UpdateCurrentPlayersText -> {
-            binding.doneButton.visibility = View.VISIBLE
+            binding.updatePointsButton.visibility = View.VISIBLE
             binding.playersText.text = viewState.playersText
             binding.enterNewPlayerEditText.setText("")
         }
@@ -55,21 +64,21 @@ class AddPlayersActivity : BaseActivity() {
                 visibility = if (isEnabled) View.VISIBLE else View.GONE
             }
         }
-        TypingState -> binding.doneButton.visibility = View.GONE
+        TypingState -> binding.updatePointsButton.visibility = View.GONE
     }
 
     private fun processViewEvent(viewEvent: AddPlayersViewEvent) {
         Log.d("APA", "Viewevent processed")
         when(viewEvent) {
             is AddPlayersViewEvent.NavigateToGameDetail -> {
-                val bundle = AppNavigator.AppBundle.GameDetailBundle(viewEvent.game)
-                appNavigator.navigate(this, Destination.GameDetail(bundle))
+                val directions = AddPlayersFragmentDirections.navigateToScoreGameScreen(viewEvent.game)
+                findNavController().navigate(directions)
             }
         }
     }
 
-    private fun AddPlayersActivityBinding.updateUI() {
-        this.doneButton.setOnClickListener {
+    private fun AddPlayersFragmentBinding.updateUI() {
+        this.updatePointsButton.setOnClickListener {
             val name = binding.enterNewPlayerEditText.text.toString()
             viewModel.handleInteraction(SavePlayerDataAndExit(name)) // new player routes back to Game Detail Screen
         }
@@ -95,10 +104,8 @@ class AddPlayersActivity : BaseActivity() {
 
     companion object {
         private const val GAME_ID_KEY = "gameIdKey"
-        fun newIntent(context: Context, game: Game) : Intent {
-            return Intent(context, AddPlayersActivity::class.java)
-                .putExtra(GAME_ID_KEY, game.id)
-        }
+
+        fun newIntent(arg: AddPlayersFragmentDirections) = Unit
     }
 }
 

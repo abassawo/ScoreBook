@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/score_book_nav"
+    app:startDestination="@+id/navHomeFragment">
+
+    <fragment
+        android:id="@+id/navHomeFragment"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.home.HomeFragment"
+        tools:layout="@layout/home_fragment">
+
+        <action
+            android:id="@+id/navigateHome"
+            app:destination="@id/navHomeFragment"/>
+
+        <action
+            android:id="@+id/navigateToAddPlayersScreen"
+            app:destination="@id/navAddPlayers"
+            app:enterAnim="@anim/fragment_fade_exit">
+
+            <argument
+                android:name="gameArg"
+                app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game"/>
+
+        </action>
+        <action
+            android:id="@+id/navigateToScoreGameScreen"
+            app:destination="@id/navScoreGame"
+            app:enterAnim="@anim/fragment_fade_exit">
+
+            <argument
+                android:name="gameArg"
+                app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game"/>
+
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navAddPlayers"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.addplayers.AddPlayersFragment"
+        tools:layout="@layout/add_players_fragment">
+
+        <argument
+            android:name="gameArg"
+            app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game"/>
+
+        <action
+            android:id="@+id/navigateToScoreGameScreen"
+            app:destination="@id/navScoreGame">
+
+            <argument
+                android:name="gameArg"
+                app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game"/>
+
+        </action>
+
+        <action
+            android:id="@+id/navigateBackHome"
+            app:destination="@id/navHomeFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navScoreGame"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragment"
+        tools:layout="@layout/game_detail_fragment">
+
+        <argument
+            android:name="gameArg"
+            app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game"/>
+
+        <action
+            android:id="@+id/navigateToAddPlayersScreen"
+            app:destination="@id/navAddPlayers">
+
+            <argument
+                android:name="gameArg"
+                app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game"/>
+
+        </action>
+
+
+        <action
+                android:id="@+id/navigateToUpdatePoints"
+                app:destination="@id/navUpdatePoints">
+
+                <argument
+                    android:name="gameArg"
+                    app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game"/>
+
+                <argument
+                    android:name="playerArg"
+                    app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player"/>
+
+        </action>
+
+
+        <action
+            android:id="@+id/navigateHome"
+            app:destination="@id/navHomeFragment"/>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/navUpdatePoints"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsFragment"
+        tools:layout="@layout/update_points_fragment">
+
+        <argument
+            android:name="gameArg"
+            app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game"/>
+
+        <argument
+            android:name="playerArg"
+            app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player"/>
+
+
+        <action
+            android:id="@+id/navigateBackToGameDetail"
+            app:destination="@id/navScoreGame"/>
+    </fragment>
+
+
+</navigation>

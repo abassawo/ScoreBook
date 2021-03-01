@@ -23,8 +23,6 @@ internal class GameAdapter() :
     companion object {
         const val HEADER_VIEW_TYPE = 11
         const val BODY_VIEW_TYPE = 22
-        const val HEADER_LAYOUT = R.layout.header_item_row
-        const val BODY_LAYOUT = R.layout.game_item_row
     }
 
     override fun getItemViewType(position: Int): Int {

@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lindenlabs.scorebook.androidApp.data.GameDataSource
 import com.lindenlabs.scorebook.androidApp.data.GameRepository
-import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
 import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
@@ -14,13 +13,12 @@ import java.util.*
 class AddPlayersViewModel : ViewModel() {
     val viewState: MutableLiveData<AddPlayersViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<AddPlayersViewEvent> = MutableLiveData()
-    private val repository: GameDataSource = GameRepository
+    private val repository: GameDataSource = GameRepository()
     private lateinit var game: Game
 
 
-    fun launch(appNavigator: AppNavigator) {
-        val bundle = (appNavigator.appBundle as AppNavigator.AppBundle.AddPlayersBundle)
-        this.game = bundle.game
+    fun launch(args: AddPlayersFragmentArgs) {
+        this.game = args.gameArg
         val players = game.players
         if (players.isNotEmpty()) {
             viewState.postValue(AddPlayersViewState.UpdateCurrentPlayersText(players.toText()))
@@ -43,8 +41,8 @@ class AddPlayersViewModel : ViewModel() {
                     viewState.postValue(AddPlayersViewState.TextEntryError)
                 else {
                     val player = Player(interaction.playerName)
-                    val players = repository.addPlayer(game, player)
-                    val playersText = players.toText()
+                    game.players += player
+                    val playersText = game.players.toText()
                     viewState.postValue(AddPlayersViewState.UpdateCurrentPlayersText(playersText))
                 }
             }

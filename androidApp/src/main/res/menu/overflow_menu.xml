@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- TODO Step 9.1 - Add an item for the settings fragment -->
+    <item
+        android:id="@+id/navHomeFragment"
+        android:icon="@drawable/cheese_1"
+        android:menuCategory="secondary"
+        android:title="@string/settings" />
+</menu>

@@ -3,8 +3,6 @@ package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lindenlabs.scorebook.androidApp.base.GameEngine
-import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
-import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator.AppBundle.*
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent.AddPlayersClicked
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent.EditScoreForPlayer
@@ -23,9 +21,8 @@ class GameViewModel : ViewModel() {
 
     private var isFirstRun: Boolean = true
 
-    fun launch(appNavigator: AppNavigator) {
-        val destination = (appNavigator.appBundle as GameDetailBundle)
-        game = destination.game
+    fun launch(args: GameDetailFragmentArgs) {
+        game = args.gameArg
 
         val players = game.players
         if (isFirstRun && players.isNullOrEmpty()) {

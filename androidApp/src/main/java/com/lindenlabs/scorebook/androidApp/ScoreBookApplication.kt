@@ -1,15 +1,24 @@
 package com.lindenlabs.scorebook.androidApp
 
 import android.app.Application
-import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
+import com.lindenlabs.scorebook.androidApp.base.AppData
+import com.lindenlabs.scorebook.androidApp.base.GameEngine
+import com.lindenlabs.scorebook.androidApp.data.GameDataSource
+import com.lindenlabs.scorebook.androidApp.data.GameRepository
+import timber.log.Timber
 
 class ScoreBookApplication : Application() {
-    private lateinit var serviceLocator: ServiceLocator
-    lateinit var appNavigator: AppNavigator
+    val appData: AppData = AppData(initEngine(), initRepo())
+
+    private fun initEngine(): GameEngine = GameEngine()
+    private fun initRepo(): GameDataSource = GameRepository()
 
     override fun onCreate() {
         super.onCreate()
-        serviceLocator = ServiceLocator()
-        appNavigator = serviceLocator.appNavigator
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
     }
 }
+

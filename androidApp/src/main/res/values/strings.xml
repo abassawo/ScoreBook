@@ -17,4 +17,6 @@
     <string name="done_text">Done</string>
     <string name="add_points">Add points</string>
     <string name="end_game">End Game</string>
+    <string name="settings">Home</string>
+    <string name="home">Home</string>
 </resources>

@@ -4,6 +4,8 @@ plugins {
     kotlin("android")
     id("kotlin-android")
     id("kotlin-kapt")
+    id("androidx.navigation.safeargs.kotlin")
+    id("kotlin-android-extensions")
 }
 
 dependencies {
@@ -20,6 +22,9 @@ dependencies {
 //    def room_version = "2.2.6"
 
     implementation("androidx.room:room-runtime:2.2.6")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.3.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.3.3")
+    implementation("com.jakewharton.timber:timber:4.7.1")
     kapt("androidx.room:room-compiler:2.2.6")
 
     // optional - Kotlin Extensions and Coroutines support for Room
@@ -31,6 +36,9 @@ dependencies {
 
 android {
     compileSdkVersion(29)
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
     defaultConfig {
         applicationId = "com.lindenlabs.scorebook.androidApp"
         minSdkVersion(24)

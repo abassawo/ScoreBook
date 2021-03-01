@@ -1,86 +1,92 @@
 package com.lindenlabs.scorebook.androidApp
 
+import android.content.res.Resources
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import com.lindenlabs.scorebook.androidApp.base.BaseActivity
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.onNavDestinationSelected
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import com.lindenlabs.scorebook.androidApp.databinding.ActivityMainBinding
-import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
-import com.lindenlabs.scorebook.androidApp.navigation.AppNavigator
-import com.lindenlabs.scorebook.androidApp.navigation.Destination
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.*
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent.*
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewState
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameAdapter
 
-class MainActivity : BaseActivity() {
+class MainActivity : AppCompatActivity() {
+    private lateinit var  appBarConfiguration : AppBarConfiguration
     private val binding: ActivityMainBinding by lazy { viewBinding() }
-    private val gameBinding: IncludeHomeScreenBinding by lazy { homeScreenBinding()}
-    private val gameAdapter = GameAdapter()
 
-    private fun homeScreenBinding() =
-        IncludeHomeScreenBinding.bind(findViewById(R.id.homeScrenRoot))
-
-    private val viewModel: HomeViewModel by lazy { viewModel() }
-
-    private fun viewModel() = ViewModelProvider(this).get(HomeViewModel::class.java)
-
-    private fun viewBinding(): ActivityMainBinding {
-        val rootView = findViewById<View>(R.id.main_view)
-        return ActivityMainBinding.bind(rootView)
+    fun viewBinding(): ActivityMainBinding {
+        val view: View = findViewById(R.id.drawer_layout)
+        return ActivityMainBinding.bind(view)
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (savedInstanceState == null) {
-            binding.updateUi()
-            viewModel.viewState.observe(this, ::showGames)
-            viewModel.viewEvent.observe(this, ::processViewEvent)
+        binding.toolbar.title = "Score Book"
+
+        val host: NavHostFragment = supportFragmentManager
+            .findFragmentById(R.id.container) as NavHostFragment? ?: return
+
+        // Set up Action Bar
+        val navController = host.navController
+        appBarConfiguration = AppBarConfiguration(navController.graph)
+        setupActionBar(navController, appBarConfiguration)
+        setupNavigationMenu(navController)
+        setupBottomNavMenu(navController)
+    }
+
+    private fun setupBottomNavMenu(navController: NavController) =
+        binding.bottomNavView.setupWithNavController(navController)
+
+    private fun setupNavigationMenu(navController: NavController) {
+//        // In split screen mode, you can drag this view out from the left
+        // This does NOT modify the actionbar
+        binding.navView.setupWithNavController(navController)
+        // TODO END STEP 9.4
+    }
+
+    private fun setupActionBar(navController: NavController, appBarConfig : AppBarConfiguration) {
+//        // This allows NavigationUI to decide what label to show in the action bar
+//        // By using appBarConfig, it will also determine whether to
+//        // show the up arrow or drawer menu icon
+        setupActionBarWithNavController(navController, appBarConfig)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val navigationView = binding.navView
+        // The NavigationView already has these same navigation items, so we only add
+        // navigation items to the menu here if there isn't a NavigationView
+        if (navigationView == null) {
+            menuInflater.inflate(R.menu.overflow_menu, menu)
+            return true
         }
+        return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.refresh()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return super.onOptionsItemSelected(item)
+//        // Have the NavigationUI look for an action or destination matching the menu
+//        // item id and navigate there if found.
+//        // Otherwise, bubble up to the parent.
+        return item.onNavDestinationSelected(findNavController(R.id.my_nav_host_fragment))
+                || super.onOptionsItemSelected(item)
     }
 
-    private fun processViewEvent(event: HomeViewEvent) = when(event){
-        is AlertNoTextEntered -> showError(event)
-        is ShowGameDetail -> showGameDetail(event.game)
+    override fun onSupportNavigateUp(): Boolean {
+        // Allows NavigationUI to support proper up navigation or the drawer layout
+        // drawer menu, depending on the situation
+        return findNavController(R.id.my_nav_host_fragment).navigateUp()
     }
-
-    private fun showGameDetail(game: Game) {
-        val bundle = AppNavigator.AppBundle.GameDetailBundle(game)
-        appNavigator.navigate(this, Destination.GameDetail(bundle))
-    }
-
-    private fun showError(event: HomeViewEvent.AlertNoTextEntered) {
-        val errorPair = event.errorText to  getDrawable(android.R.drawable.stat_notify_error)
-        gameBinding.enterNewGameEditText.setError(errorPair.first, errorPair.second)
-    }
-
-    private fun ActivityMainBinding.updateUi() {
-        toolbar.setTitle(R.string.app_name)
-        gamesRecyclerView.adapter = gameAdapter
-
-        fun IncludeHomeScreenBinding.bind() =
-            with(gameRuleSwitch) {
-                textOff = getString(R.string.high_score)
-                textOn = getString(R.string.low_score)
-                newGameButton.setOnClickListener {
-                    val enteredText = enterNewGameEditText.text.toString()
-                    viewModel.handleInteraction(GameDetailsEntered(enteredText, isChecked))
-                    enterNewGameEditText.setText("")
-                }
-            }
-
-        gameBinding.bind()
-    }
-
-    private fun showGames(viewState: HomeViewState) =
-        gameAdapter.setData(viewState.entities)
 }
