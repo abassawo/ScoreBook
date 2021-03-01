@@ -2,6 +2,7 @@ package com.lindenlabs.scorebook.androidApp.screens.updatepoints
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
@@ -11,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.UpdatePointsFragmentBinding
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
+import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragmentDirections
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsViewModel.*
 
@@ -27,6 +29,17 @@ class UpdatePointsFragment : Fragment(R.layout.update_points_fragment) {
         return UpdatePointsFragmentBinding.bind(rootView)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true /* enabled by default */) {
+                override fun handleOnBackPressed() {
+                   findNavController().navigate(R.id.navHomeFragment)
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.viewState.observe(this as LifecycleOwner, ::processState)
@@ -37,7 +50,6 @@ class UpdatePointsFragment : Fragment(R.layout.update_points_fragment) {
             viewModel.handleInteraction(AddPointsInteraction.AddScore(points))
         }
     }
-
 
     private fun processEvent(viewEvent: UpdatePointsViewEvent?) {
         with(viewEvent) {

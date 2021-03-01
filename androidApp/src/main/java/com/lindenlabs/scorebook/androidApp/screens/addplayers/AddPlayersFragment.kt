@@ -1,10 +1,12 @@
 package com.lindenlabs.scorebook.androidApp.screens.addplayers
 
+import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
@@ -27,6 +29,17 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
     private val viewModel: AddPlayersViewModel by lazy { viewModel() }
 
     private fun viewModel() = ViewModelProvider(this).get(AddPlayersViewModel::class.java)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true /* enabled by default */) {
+                override fun handleOnBackPressed() {
+                    findNavController().navigate(AddPlayersFragmentDirections.navigateBackHome())
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

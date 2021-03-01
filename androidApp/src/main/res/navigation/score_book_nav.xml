@@ -54,6 +54,10 @@
                 app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game"/>
 
         </action>
+
+        <action
+            android:id="@+id/navigateBackHome"
+            app:destination="@id/navHomeFragment"/>
     </fragment>
 
     <fragment
@@ -76,7 +80,7 @@
         </action>
 
 
-            <action
+        <action
                 android:id="@+id/navigateToUpdatePoints"
                 app:destination="@id/navUpdatePoints">
 
@@ -88,7 +92,7 @@
                     android:name="playerArg"
                     app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player"/>
 
-            </action>
+        </action>
 
 
         <action

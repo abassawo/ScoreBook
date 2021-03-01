@@ -2,9 +2,9 @@ package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.lindenlabs.scorebook.androidApp.base.AppData
 import com.lindenlabs.scorebook.androidApp.base.GameEngine
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
-import com.lindenlabs.scorebook.androidApp.data.GameRepository
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetClosedGames
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetOpenGames
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameStrategy.*
@@ -16,12 +16,14 @@ import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.Ho
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewState
 
 internal class HomeViewModel : ViewModel() {
+    private lateinit var appData: AppData
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
-    private val gameEngine: GameEngine = GameEngine()
-    private val repository = GameRepository()
+    private lateinit var gameEngine: GameEngine
 
-    init {
+    fun launch(appData: AppData) {
+        this.appData = appData
+        this.gameEngine = appData.gameEngine
         refresh()
     }
 
@@ -29,8 +31,8 @@ internal class HomeViewModel : ViewModel() {
 
     private fun showGames() {
         val viewEntity = GamesWrapper(
-            openGames = GetOpenGames(repository).invoke(),
-            closedGames = GetClosedGames(repository).invoke()
+            openGames = GetOpenGames(appData.gameDataSource).invoke(),
+            closedGames = GetClosedGames(appData.gameDataSource).invoke()
         )
         viewState.postValue(viewEntity.toViewState())
     }
@@ -41,19 +43,21 @@ internal class HomeViewModel : ViewModel() {
                 showError()
             } else {
                 val strategy = if(interaction.lowestScoreWins) LowestScoreWins else HighestScoreWins
-                storeNewGame(interaction.name, strategy)
+                val game = storeNewGame(interaction.name, strategy)
+                viewEvent.postValue(ShowAddPlayersScreen(game))
             }
         }
-        is GameClicked -> viewEvent.postValue(ShowGameDetail(interaction.game))
+        is GameClicked -> viewEvent.postValue(ShowActiveGame(interaction.game))
     }
 
     private fun showError() = viewEvent.postValue(AlertNoTextEntered())
 
-    private fun storeNewGame(name: String, strategy: GameStrategy) {
-        val game = Game(name = name, strategy = strategy)
-        repository.storeGame(game)
-        gameEngine.startGame(game)
-        viewEvent.postValue(ShowGameDetail(game))
+    private fun storeNewGame(name: String, strategy: GameStrategy): Game {
+        return Game(name = name, strategy = strategy).also { game ->
+            gameEngine.startGame(game)
+            appData.gameDataSource.storeGame(game)
+        }
+
     }
 
     private fun GamesWrapper.toViewState(): HomeViewState {
