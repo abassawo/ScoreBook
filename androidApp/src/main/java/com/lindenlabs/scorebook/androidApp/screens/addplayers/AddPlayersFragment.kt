@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -66,6 +67,10 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
             }
         }
         TypingState -> binding.updatePointsButton.visibility = View.GONE
+        is InitialState -> {
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, viewState.suggestedPlayerNames);
+            binding.enterNewPlayerEditText.setAdapter(adapter)
+        }
     }
 
     private fun processViewEvent(viewEvent: AddPlayersViewEvent) {

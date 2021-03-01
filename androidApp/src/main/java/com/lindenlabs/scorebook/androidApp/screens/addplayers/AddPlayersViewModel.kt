@@ -17,10 +17,19 @@ class AddPlayersViewModel(application: Application) : AndroidViewModel(applicati
     private val repository: GameDataSource = PersistentGameRepository.getInstance(application)
     private lateinit var game: Game
 
+    init {
+        repository.load {
+            val setOfNames: MutableSet<String> = mutableSetOf()
+            val (opengames, closedGames) = it
+            (opengames + closedGames).map { it.players.map { player -> setOfNames.add(player.name) } }
+            viewState.postValue(AddPlayersViewState.InitialState(setOfNames.toList()))
+        }
+    }
 
     fun launch(args: AddPlayersFragmentArgs) {
         this.game = args.gameArg
         val players = game.players
+
         if (players.isNotEmpty()) {
             viewState.postValue(AddPlayersViewState.UpdateCurrentPlayersText(players.toText()))
         }
