@@ -51,6 +51,10 @@ class AddPlayersViewModel(application: Application) : AndroidViewModel(applicati
             is TextEntered -> viewState.postValue(AddPlayersViewState.ValidateTextForPlusButton(true))
             is EmptyText -> viewState.postValue(AddPlayersViewState.ValidateTextForPlusButton(false))
             is Typing -> viewState.postValue(AddPlayersViewState.TypingState)
+            GoBackHome -> {
+                repository.updateGame(game)
+                viewEvent.postValue(AddPlayersViewEvent.NavigateHome)
+            }
         }
     }
 }

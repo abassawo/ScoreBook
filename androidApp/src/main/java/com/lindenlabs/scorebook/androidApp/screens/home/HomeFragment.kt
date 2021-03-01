@@ -3,6 +3,7 @@ package com.lindenlabs.scorebook.androidApp.screens.home
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -11,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.lindenlabs.scorebook.androidApp.R
-import com.lindenlabs.scorebook.androidApp.ScoreBookApplication
 import com.lindenlabs.scorebook.androidApp.databinding.HomeFragmentBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
@@ -48,8 +48,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         viewModel.viewEvent.observe(this as LifecycleOwner, this::processViewEvent)
     }
 
-
-
     private fun View.homeScreenBinding() =
         IncludeHomeScreenBinding.bind(findViewById(R.id.homeScrenRoot))
 
@@ -62,7 +60,15 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     private fun processViewEvent(event: HomeViewEvent) = when(event){
         is HomeViewEvent.AlertNoTextEntered -> showError(event)
         is HomeViewEvent.ShowAddPlayersScreen -> findNavController().showAddPlayersScreen(event.game)
+            .also { hideKeyboard() }
         is HomeViewEvent.ShowActiveGame -> findNavController().showActiveGame(event.game)
+            .also { hideKeyboard() }
+    }
+
+    private fun hideKeyboard() {
+        val imm: InputMethodManager =
+            requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 
     private fun NavController.showAddPlayersScreen(game: Game) =
@@ -72,13 +78,15 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         navigate(HomeFragmentDirections.navigateToScoreGameScreen(game))
 
     private fun showError(event: HomeViewEvent.AlertNoTextEntered) {
-        val errorPair = event.errorText to ContextCompat.getDrawable(requireContext(), android.R.drawable.stat_notify_error)
+        val errorPair = event.errorText to ContextCompat.getDrawable(
+            requireContext(),
+            android.R.drawable.stat_notify_error
+        )
         gameBinding.enterNewGameEditText.setError(errorPair.first, errorPair.second)
     }
 
     private fun HomeFragmentBinding.updateUi() {
         gamesRecyclerView.adapter = gameAdapter
-
         fun IncludeHomeScreenBinding.bind() =
             with(gameRuleSwitch) {
                 textOff = getString(R.string.high_score)

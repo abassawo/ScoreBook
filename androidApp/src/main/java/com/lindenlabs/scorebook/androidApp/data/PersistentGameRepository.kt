@@ -41,15 +41,7 @@ class PersistentGameRepository(application: Application) : GameDataSource {
         gamesDatabase.updateGame(game)
     }
 
-//    override fun updatePlayers(game: Game, players: List<Player>): List<Player> {
-//        game.players = players
-//        updateGame(game)
-//        return game.players
-//    }
-
-    override fun updateGame(game: Game) {
-        gamesDatabase.updateGame(game)
-    }
+    override fun updateGame(game: Game) = gamesDatabase.updateGame(game)
 
     override fun clear() = gamesDatabase.removeGames(*games.toTypedArray())
 

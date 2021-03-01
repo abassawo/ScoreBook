@@ -12,4 +12,6 @@ sealed class AddPlayerInteraction {
 
     object Typing : AddPlayerInteraction()
 
+    object GoBackHome : AddPlayerInteraction()
+
 }

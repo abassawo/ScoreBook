@@ -16,6 +16,7 @@
         android:id="@+id/pointsEditText"
         android:text="0"
         android:textSize="32dp"
+        android:inputType="number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

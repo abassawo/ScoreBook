@@ -6,26 +6,27 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
-import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction.*
 import com.lindenlabs.scorebook.androidApp.screens.addplayers.AddPlayersViewState.*
-import java.util.*
+import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction
+import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction.*
 
 class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
     private val binding: AddPlayersFragmentBinding by lazy { viewBinding() }
-    val args: AddPlayersFragmentArgs by navArgs()
+    private val args: AddPlayersFragmentArgs by navArgs()
 
     private fun viewBinding(): AddPlayersFragmentBinding {
         val rootView = requireView().findViewById<View>(R.id.addPlayersRoot)
         return AddPlayersFragmentBinding.bind(rootView)
     }
+
     private val viewModel: AddPlayersViewModel by lazy { viewModel() }
 
     private fun viewModel() = ViewModelProvider(this).get(AddPlayersViewModel::class.java)
@@ -35,7 +36,7 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
                 override fun handleOnBackPressed() {
-                    findNavController().navigate(AddPlayersFragmentDirections.navigateBackHome())
+                    viewModel.handleInteraction(AddPlayerInteraction.GoBackHome)
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
@@ -51,7 +52,7 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
         binding.updateUI()
     }
 
-    private fun processViewState(viewState: AddPlayersViewState) = when(viewState) {
+    private fun processViewState(viewState: AddPlayersViewState) = when (viewState) {
         is TextEntryError -> binding.enterNewPlayerEditText.setError("Enter a valid name")
         is UpdateCurrentPlayersText -> {
             binding.updatePointsButton.visibility = View.VISIBLE
@@ -69,12 +70,21 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
 
     private fun processViewEvent(viewEvent: AddPlayersViewEvent) {
         Log.d("APA", "Viewevent processed")
-        when(viewEvent) {
+        when (viewEvent) {
             is AddPlayersViewEvent.NavigateToGameDetail -> {
                 val directions = AddPlayersFragmentDirections.navigateToScoreGameScreen(viewEvent.game)
-                findNavController().navigate(directions)
+                findNavController().navigate(directions).also { hideKeyboard() }
             }
+            AddPlayersViewEvent.NavigateHome ->
+                findNavController().navigate(AddPlayersFragmentDirections.navigateBackHome())
+                    .also { hideKeyboard() }
         }
+    }
+
+    private fun hideKeyboard() {
+        val imm: InputMethodManager =
+            requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 
     private fun AddPlayersFragmentBinding.updateUI() {
@@ -96,16 +106,10 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                s?.let { viewModel.handleInteraction(if(it.isEmpty()) EmptyText else TextEntered)  }
+                s?.let { viewModel.handleInteraction(if (it.isEmpty()) EmptyText else TextEntered) }
 
             }
         })
-    }
-
-    companion object {
-        private const val GAME_ID_KEY = "gameIdKey"
-
-        fun newIntent(arg: AddPlayersFragmentDirections) = Unit
     }
 }
 
