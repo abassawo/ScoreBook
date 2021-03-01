@@ -1,6 +1,7 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.data.model
 
 import android.os.Parcelable
+import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.lindenlabs.scorebook.androidApp.data.persistence.Converters
@@ -14,6 +15,7 @@ data class Player(
     var scoreTotal: Int = 0,
     var rounds: List<Round> = emptyList(),
     var isPlayerTurn: Boolean = false,
+    @PrimaryKey
     val id: UUID = UUID.randomUUID()
 ): Parcelable {
 

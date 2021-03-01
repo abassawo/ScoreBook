@@ -3,26 +3,25 @@ package com.lindenlabs.scorebook.androidApp.data.persistence
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.GameOutcome
 import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameStrategy
 import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
+import java.lang.reflect.Type
 import java.util.*
+
 
 fun JSONObject.toPlayer(): Player {
     Timber.d("Converter player $this")
     return Player(name = this.optString("name"))
 }
 
-private fun JSONArray.toPlayer(): List<Player> {
-    val players = mutableListOf<Player>()
-    for (i in 0 until length()) {
-        val jsonObj = this.getJSONObject(i)
-        players += jsonObj.toPlayer()
-    }
-    return players
+fun <T> getList(jsonArray: String?, clazz: Class<T>?): List<T> {
+    val typeOfT = TypeToken.getParameterized(MutableList::class.java, clazz).type
+    return Gson().fromJson(jsonArray, typeOfT)
 }
 
 interface Converters {
@@ -65,15 +64,13 @@ interface Converters {
     class PlayerListConverter {
 
         @TypeConverter
-        fun playerToString(players: List<Player>): String = buildString {
-            players.forEach { player ->
-                append(Gson().toJson(player))
-            }
-        }
+        fun playerToString(players: List<Player>): String = Gson().toJson(players.toTypedArray())
 
         @TypeConverter
         fun stringToPlayer(playerString: String): List<Player> {
-            return JSONArray(playerString).toPlayer()
+            Timber.e("Player string $playerString")
+            val playerListType: Type = object : TypeToken<ArrayList<Player?>?>() {}.type
+            return Gson().fromJson(playerString, playerListType)
         }
     }
 
