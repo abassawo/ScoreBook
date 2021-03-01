@@ -3,13 +3,12 @@ package com.lindenlabs.scorebook.androidApp.screens.addplayers
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.lindenlabs.scorebook.androidApp.data.GameDataSource
-import com.lindenlabs.scorebook.androidApp.data.PersistentGameRepository
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
+import com.lindenlabs.scorebook.androidApp.base.domain.PersistentGameRepository
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
+import com.lindenlabs.scorebook.androidApp.base.domain.GameDataSource
 import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction.*
-import com.lindenlabs.scorebook.androidApp.toText
 
 class AddPlayersViewModel(application: Application) : AndroidViewModel(application) {
     val viewState: MutableLiveData<AddPlayersViewState> = MutableLiveData()
@@ -64,6 +63,23 @@ class AddPlayersViewModel(application: Application) : AndroidViewModel(applicati
                 repository.updateGame(game)
                 viewEvent.postValue(AddPlayersViewEvent.NavigateHome)
             }
+        }
+    }
+
+    private fun List<Player>.toText(): String {
+        if (this.isEmpty()) return ""
+
+        fun makeCommaText(items: List<Player>): String = buildString {
+            append(items.first().name)
+            for (i in 1 until items.size) {
+                append(", ${items[i].name}")
+            }
+        }
+
+        return when (this.size) {
+            0 -> ""
+            1 -> this.first().name
+            else -> makeCommaText(this)
         }
     }
 }

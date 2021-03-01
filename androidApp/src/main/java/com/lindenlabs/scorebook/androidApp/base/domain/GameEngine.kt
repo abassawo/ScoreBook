@@ -1,10 +1,10 @@
-package com.lindenlabs.scorebook.androidApp.base
+package com.lindenlabs.scorebook.androidApp.base.domain
 
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.GameOutcome
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.StalematePair
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameStrategy
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
+import com.lindenlabs.scorebook.androidApp.base.data.raw.GameOutcome
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
+import com.lindenlabs.scorebook.androidApp.base.data.raw.StalematePair
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameStrategy
 
 class GameEngine {
 

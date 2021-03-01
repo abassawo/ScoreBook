@@ -12,8 +12,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailFragmentBinding
-import com.lindenlabs.scorebook.androidApp.screens.addplayers.AddPlayersFragmentDirections
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragmentDirections.Companion.navigateToAddPlayersScreen
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragmentDirections.Companion.navigateToUpdatePoints
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction

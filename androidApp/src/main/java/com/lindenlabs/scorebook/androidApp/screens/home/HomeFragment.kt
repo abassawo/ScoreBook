@@ -14,7 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.HomeFragmentBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent

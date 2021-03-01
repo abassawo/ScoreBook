@@ -11,8 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.UpdatePointsFragmentBinding
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragmentDirections
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsViewModel.*
 

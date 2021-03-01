@@ -21,7 +21,7 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game"/>
+                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game"/>
 
         </action>
         <action
@@ -31,7 +31,7 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game"/>
+                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game"/>
 
         </action>
     </fragment>
@@ -43,7 +43,7 @@
 
         <argument
             android:name="gameArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game"/>
+            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game"/>
 
         <action
             android:id="@+id/navigateToScoreGameScreen"
@@ -51,7 +51,7 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game"/>
+                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game"/>
 
         </action>
 
@@ -67,7 +67,7 @@
 
         <argument
             android:name="gameArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game"/>
+            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game"/>
 
         <action
             android:id="@+id/navigateToAddPlayersScreen"
@@ -75,7 +75,7 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game"/>
+                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game"/>
 
         </action>
 
@@ -86,11 +86,11 @@
 
                 <argument
                     android:name="gameArg"
-                    app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game"/>
+                    app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game"/>
 
                 <argument
                     android:name="playerArg"
-                    app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player"/>
+                    app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Player"/>
 
         </action>
 
@@ -108,12 +108,11 @@
 
         <argument
             android:name="gameArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game"/>
+            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game"/>
 
         <argument
             android:name="playerArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player"/>
-
+            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Player"/>
 
         <action
             android:id="@+id/navigateBackToGameDetail"

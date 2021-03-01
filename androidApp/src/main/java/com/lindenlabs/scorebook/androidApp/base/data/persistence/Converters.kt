@@ -1,13 +1,12 @@
-package com.lindenlabs.scorebook.androidApp.data.persistence
+package com.lindenlabs.scorebook.androidApp.base.data.persistence
 
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.GameOutcome
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameStrategy
-import org.json.JSONArray
+import com.lindenlabs.scorebook.androidApp.base.data.raw.GameOutcome
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameStrategy
 import org.json.JSONObject
 import timber.log.Timber
 import java.lang.reflect.Type

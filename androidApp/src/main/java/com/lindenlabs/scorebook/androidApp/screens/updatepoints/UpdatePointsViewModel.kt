@@ -3,9 +3,9 @@ package com.lindenlabs.scorebook.androidApp.screens.updatepoints
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.lindenlabs.scorebook.androidApp.data.PersistentGameRepository
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Player
+import com.lindenlabs.scorebook.androidApp.base.domain.PersistentGameRepository
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 
 class UpdatePointsViewModel(application: Application) : AndroidViewModel(application) {
     private lateinit var game: Game

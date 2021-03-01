@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.screens.home.data.model
+package com.lindenlabs.scorebook.androidApp.base.data.raw
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

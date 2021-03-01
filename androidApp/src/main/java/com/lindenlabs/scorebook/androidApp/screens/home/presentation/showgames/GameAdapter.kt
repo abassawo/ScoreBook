@@ -66,16 +66,16 @@ internal class GameAdapter() :
     }
 }
 
-abstract sealed class GameViewHolder(open val binding: ViewBinding) :
+sealed class GameViewHolder(binding: ViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    internal class HeaderViewHolder(override val binding: HeaderItemRowBinding) :
+    internal class HeaderViewHolder(private val binding: HeaderItemRowBinding) :
         GameViewHolder(binding) {
 
         fun bind(row: HeaderType) = with(binding.text1) { text = row.title }
     }
 
-    internal class BodyViewHolder(override val binding: GameItemRowBinding) :
+    internal class BodyViewHolder(private val binding: GameItemRowBinding) :
         GameViewHolder(binding) {
 
         fun bind(row: BodyType) {
