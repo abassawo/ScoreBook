@@ -3,8 +3,8 @@ package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.lindenlabs.scorebook.androidApp.base.GameEngine
-import com.lindenlabs.scorebook.androidApp.data.PersistentGameRepository
+import com.lindenlabs.scorebook.androidApp.base.domain.GameEngine
+import com.lindenlabs.scorebook.androidApp.base.domain.PersistentGameRepository
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent.AddPlayersClicked
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent.EditScoreForPlayer
@@ -12,7 +12,7 @@ import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.Scor
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction.EndGameClicked
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction.PlayerClicked
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 
 class GameViewModel(application: Application) : AndroidViewModel(application) {
     val viewState: MutableLiveData<ScoreBookViewState> = MutableLiveData()

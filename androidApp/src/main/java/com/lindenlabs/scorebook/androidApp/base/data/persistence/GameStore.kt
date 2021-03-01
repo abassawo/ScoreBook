@@ -1,7 +1,7 @@
-package com.lindenlabs.scorebook.androidApp.data.persistence
+package com.lindenlabs.scorebook.androidApp.base.data.persistence
 
 import androidx.room.*
-import com.lindenlabs.scorebook.androidApp.screens.home.data.model.Game
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 
 @Dao
 interface GameStore {

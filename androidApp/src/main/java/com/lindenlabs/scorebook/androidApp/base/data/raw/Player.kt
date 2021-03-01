@@ -1,10 +1,9 @@
-package com.lindenlabs.scorebook.androidApp.screens.home.data.model
+package com.lindenlabs.scorebook.androidApp.base.data.raw
 
 import android.os.Parcelable
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverter
 import androidx.room.TypeConverters
-import com.lindenlabs.scorebook.androidApp.data.persistence.Converters
+import com.lindenlabs.scorebook.androidApp.base.data.persistence.Converters
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
