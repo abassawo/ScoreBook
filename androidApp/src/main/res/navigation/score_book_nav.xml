@@ -38,7 +38,7 @@
 
     <fragment
         android:id="@+id/navAddPlayers"
-        android:name="com.lindenlabs.scorebook.androidApp.screens.addplayers.AddPlayersFragment"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersFragment"
         tools:layout="@layout/add_players_fragment">
 
         <argument
@@ -94,7 +94,11 @@
 
         </action>
 
+        <action
+            android:id="@+id/navigateToVictoryScreen"
+            app:destination="@+id/navVictoryFragment"/>
 
+<!--        temporary-->
         <action
             android:id="@+id/navigateHome"
             app:destination="@id/navHomeFragment"/>
@@ -119,5 +123,19 @@
             app:destination="@id/navScoreGame"/>
     </fragment>
 
+    <fragment
+        android:id="@+id/navVictoryFragment"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.victory.VictoryFragment"
+        tools:layout="@layout/fragment_victory">
+
+        <argument
+            android:name="gameArg"
+            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game"/>
+
+        <action
+            android:id="@+id/navigateHome"
+            app:destination="@id/navHomeFragment"/>
+
+    </fragment>
 
 </navigation>

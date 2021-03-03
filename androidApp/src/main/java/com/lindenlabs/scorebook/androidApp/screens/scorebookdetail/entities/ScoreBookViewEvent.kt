@@ -7,4 +7,5 @@ sealed class ScoreBookViewEvent {
     data class AddPlayersClicked(val game: Game) : ScoreBookViewEvent()
     data class EditScoreForPlayer(val game: Game, val player: Player) : ScoreBookViewEvent()
     object GoBackHome : ScoreBookViewEvent()
+    data class EndGame(val game: Game) : ScoreBookViewEvent()
 }

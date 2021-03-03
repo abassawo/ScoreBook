@@ -36,27 +36,15 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBar(navController, appBarConfiguration)
         setupNavigationMenu(navController)
-        setupBottomNavMenu(navController)
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    private fun setupBottomNavMenu(navController: NavController) =
-        binding.bottomNavView.setupWithNavController(navController)
-
-    private fun setupNavigationMenu(navController: NavController) {
-//        // In split screen mode, you can drag this view out from the left
-        // This does NOT modify the actionbar
+    private fun setupNavigationMenu(navController: NavController) =
         binding.navView.setupWithNavController(navController)
-        // TODO END STEP 9.4
-    }
 
     private fun setupActionBar(navController: NavController, appBarConfig : AppBarConfiguration) {
-//        // This allows NavigationUI to decide what label to show in the action bar
-//        // By using appBarConfig, it will also determine whether to
-//        // show the up arrow or drawer menu icon
+        // This allows NavigationUI to decide what label to show in the action bar
+        // By using appBarConfig, it will also determine whether to
+        // show the up arrow or drawer menu icon
         setupActionBarWithNavController(navController, appBarConfig)
     }
 
@@ -72,10 +60,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return super.onOptionsItemSelected(item)
-//        // Have the NavigationUI look for an action or destination matching the menu
-//        // item id and navigate there if found.
-//        // Otherwise, bubble up to the parent.
+        return super.onOptionsItemSelected(item)
+        // Have the NavigationUI look for an action or destination matching the menu
+        // item id and navigate there if found.
+        // Otherwise, bubble up to the parent.
         return item.onNavDestinationSelected(findNavController(R.id.my_nav_host_fragment))
                 || super.onOptionsItemSelected(item)
     }

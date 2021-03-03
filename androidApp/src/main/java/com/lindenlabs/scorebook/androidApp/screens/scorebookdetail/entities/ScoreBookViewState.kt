@@ -6,7 +6,4 @@ sealed class ScoreBookViewState(open val gameName: String) {
 
     data class ActiveGame(val scoreBooks: List<ScoreBookEntity>, override val gameName: String) :
         ScoreBookViewState(gameName)
-
-    data class GameOver(val result: String, override val gameName: String) :
-        ScoreBookViewState(gameName)
 }

@@ -1,14 +1,14 @@
-package com.lindenlabs.scorebook.androidApp.screens.addplayers
+package com.lindenlabs.scorebook.androidApp.screens.playerentry
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.lindenlabs.scorebook.androidApp.base.domain.PersistentGameRepository
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 import com.lindenlabs.scorebook.androidApp.base.domain.GameDataSource
-import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction.*
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*
 
 class AddPlayersViewModel(application: Application) : AndroidViewModel(application) {
     val viewState: MutableLiveData<AddPlayersViewState> = MutableLiveData()
