@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var  appBarConfiguration : AppBarConfiguration
     private val binding: ActivityMainBinding by lazy { viewBinding() }
 
-    fun viewBinding(): ActivityMainBinding {
+    private fun viewBinding(): ActivityMainBinding {
         val view: View = findViewById(R.id.drawer_layout)
         return ActivityMainBinding.bind(view)
     }
