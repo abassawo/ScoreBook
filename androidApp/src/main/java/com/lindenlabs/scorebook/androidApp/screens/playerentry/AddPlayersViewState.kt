@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.screens.addplayers
+package com.lindenlabs.scorebook.androidApp.screens.playerentry
 
 sealed class AddPlayersViewState {
     data class InitialState(val suggestedPlayerNames: List<String>) : AddPlayersViewState()

@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.screens.addplayers
+package com.lindenlabs.scorebook.androidApp.screens.playerentry
 
 import android.app.Activity
 import android.os.Bundle
@@ -15,9 +15,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
-import com.lindenlabs.scorebook.androidApp.screens.addplayers.AddPlayersViewState.*
-import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction
-import com.lindenlabs.scorebook.androidApp.screens.addplayers.entities.AddPlayerInteraction.*
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersViewState.*
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*
 
 class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
     private val binding: AddPlayersFragmentBinding by lazy { viewBinding() }

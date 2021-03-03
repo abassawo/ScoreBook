@@ -10,9 +10,8 @@ import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.Scor
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent.EditScoreForPlayer
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewState
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction.EndGameClicked
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction.PlayerClicked
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
+import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction.*
 
 class GameViewModel(application: Application) : AndroidViewModel(application) {
     val viewState: MutableLiveData<ScoreBookViewState> = MutableLiveData()
@@ -44,12 +43,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     fun handleInteraction(interaction: ScoreBookInteraction) {
         when (interaction) {
             is PlayerClicked -> viewEvent.postValue(EditScoreForPlayer(game, interaction.player))
-            is EndGameClicked -> {
-                val resultText = gameEngine.endGame(game)
-                viewState.postValue(ScoreBookViewState.GameOver(resultText, game.name))
-                viewEvent.postValue(ScoreBookViewEvent.GoBackHome)
-                gameRepo.updateGame(game)
-            }
+            is EndGameClicked -> viewEvent.postValue(ScoreBookViewEvent.EndGame(game))
+            GoBack -> viewEvent.postValue(ScoreBookViewEvent.GoBackHome)
         }
     }
 

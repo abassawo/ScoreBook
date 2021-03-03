@@ -4,5 +4,6 @@ import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 
 sealed class ScoreBookInteraction {
     data class PlayerClicked(val player : Player) : ScoreBookInteraction()
+    object GoBack : ScoreBookInteraction()
     object EndGameClicked : ScoreBookInteraction()
 }

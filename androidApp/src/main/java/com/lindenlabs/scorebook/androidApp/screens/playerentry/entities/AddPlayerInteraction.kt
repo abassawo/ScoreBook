@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.screens.addplayers.entities
+package com.lindenlabs.scorebook.androidApp.screens.playerentry.entities
 
 sealed class AddPlayerInteraction {
 

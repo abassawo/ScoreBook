@@ -2,7 +2,6 @@ package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +16,7 @@ import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFra
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragmentDirections.Companion.navigateToUpdatePoints
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent
+import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewState
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.showplayers.PlayerAdapter
 
@@ -40,7 +40,7 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
                 override fun handleOnBackPressed() {
-                    findNavController().navigate(GameDetailFragmentDirections.navigateHome())
+                    viewModel.handleInteraction(ScoreBookInteraction.GoBack)
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
@@ -73,15 +73,16 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
 
     private fun processViewEvent(event: ScoreBookViewEvent) {
         when (event) {
-            is ScoreBookViewEvent.AddPlayersClicked -> navigateToAddPlayers(event.game)
-            is ScoreBookViewEvent.EditScoreForPlayer -> navigateToUpdatePlayerScore(event)
-            ScoreBookViewEvent.GoBackHome -> navigateHome()
+            is GoBackHome -> navigateHome()
+            is AddPlayersClicked -> navigateToAddPlayers(event.game)
+            is EditScoreForPlayer -> navigateToUpdatePlayerScore(event)
+            is EndGame -> endGame(event.game)
         }
     }
 
     private fun navigateHome() = navController.navigate(GameDetailFragmentDirections.navigateHome())
 
-    private fun navigateToUpdatePlayerScore(event: ScoreBookViewEvent.EditScoreForPlayer) =
+    private fun navigateToUpdatePlayerScore(event: EditScoreForPlayer) =
         navController.navigate(navigateToUpdatePoints(event.game, event.player))
 
     private fun navigateToAddPlayers(game: Game) = navController.navigate(navigateToAddPlayersScreen(game))
@@ -91,12 +92,12 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
         when (state) {
             is ScoreBookViewState.EmptyState -> binding.showEmptyState()
             is ScoreBookViewState.ActiveGame -> binding.showActiveGame(state)
-            is ScoreBookViewState.GameOver -> processOutcome(state.result)
         }
     }
 
-    private fun processOutcome(outcome: String) {
-       Toast.makeText(requireContext(), outcome, Toast.LENGTH_LONG).show()
+    private fun endGame(game: Game) {
+        val directions = GameDetailFragmentDirections.navigateToVictoryScreen(game)
+        findNavController().navigate(directions)
     }
 
     private fun GameDetailFragmentBinding.showEmptyState() =
