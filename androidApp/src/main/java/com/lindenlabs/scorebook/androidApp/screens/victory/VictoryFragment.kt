@@ -2,6 +2,7 @@ package com.lindenlabs.scorebook.androidApp.screens.victory
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -55,12 +56,14 @@ class VictoryFragment : Fragment(R.layout.fragment_victory) {
     }
 
     private fun showVictory(victoryState: VictoryState) {
-        binding.victoryTextView.setText(victoryState.victoryText)
+        binding.victoryTextView.text = victoryState.victoryText
         binding.bottomNavView.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.navHomeFragment -> goHome()
                 else -> false
             }
         }
+        val runnable = Runnable { findNavController().navigate(VictoryFragmentDirections.navigateHome()) }
+        Handler().postDelayed(runnable, 10000)
     }
 }

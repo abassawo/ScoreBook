@@ -22,6 +22,9 @@ dependencies {
 
 
     implementation("com.facebook.stetho:stetho:1.5.1")
+    implementation("com.google.dagger:dagger-android:2.33")
+    implementation("com.google.dagger:dagger:2.33")
+    annotationProcessor("com.google.dagger:dagger-android-processor:2.33")
 
 //    def room_version = "2.2.6"
 

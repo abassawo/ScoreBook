@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.lindenlabs.scorebook.androidApp.base.domain.GameEngine
 import com.lindenlabs.scorebook.androidApp.base.domain.PersistentGameRepository
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.domain.GameDataSource
@@ -19,7 +18,6 @@ import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.Ho
 import kotlinx.coroutines.launch
 
 internal class HomeViewModel(application: Application) : AndroidViewModel(application) {
-    private val gameEngine = GameEngine()
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
     private val gamesRepo: GameDataSource = PersistentGameRepository.getInstance(application)
@@ -55,7 +53,7 @@ internal class HomeViewModel(application: Application) : AndroidViewModel(applic
 
     private fun storeNewGame(name: String, strategy: GameStrategy): Game {
         return Game(name = name, strategy = strategy).also { game ->
-            gameEngine.startGame(game)
+            game.start()
             viewModelScope.launch {
                 gamesRepo.storeGame(game)
             }
