@@ -45,6 +45,14 @@ dependencies {
 
     // optional - Test helpers
     testImplementation("androidx.room:room-testing:2.2.6")
+
+    // Required -- JUnit 4 framework
+    testImplementation("junit:junit:4.12")
+    // Optional -- Robolectric environment
+    testImplementation("androidx.test:core:1.0.0")
+    // Optional -- Mockito framework
+    testImplementation("org.mockito:mockito-core:1.10.19")
+    testImplementation("android.arch.core:core-testing:1.0.0-alpha3")
 }
 
 android {

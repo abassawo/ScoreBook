@@ -7,6 +7,5 @@ class AppRepository @Inject constructor(val gameDataSource: GameDataSource) {
 
     companion object {
         lateinit var instance: AppRepository
-
     }
 }

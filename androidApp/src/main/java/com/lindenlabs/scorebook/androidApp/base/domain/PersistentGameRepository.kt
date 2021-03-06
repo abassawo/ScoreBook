@@ -1,6 +1,7 @@
 package com.lindenlabs.scorebook.androidApp.base.domain
 
 import android.app.Application
+import com.lindenlabs.scorebook.androidApp.base.data.persistence.GameStore
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.data.persistence.GameStoreServiceHandler
 import com.lindenlabs.scorebook.androidApp.base.data.persistence.GamesDatabase
@@ -8,9 +9,9 @@ import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetClosedGames
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetOpenGames
 import java.util.*
+import javax.inject.Inject
 
-class PersistentGameRepository(application: Application) : GameDataSource {
-    private val gamesDao = GamesDatabase.getInstance(application).games()
+class PersistentGameRepository @Inject constructor(gamesDao: GameStore): GameDataSource {
     private val gamesService: GameStoreServiceHandler = GameStoreServiceHandler (gamesDao)
     var games: List<Game> = emptyList()
 
@@ -37,7 +38,7 @@ class PersistentGameRepository(application: Application) : GameDataSource {
     companion object {
         @Volatile private var INSTANCE: PersistentGameRepository? = null
 
-        fun getInstance(application: Application): PersistentGameRepository =
-            INSTANCE ?: PersistentGameRepository(application)
+        fun getInstance(gamesDao: GameStore): PersistentGameRepository =
+            INSTANCE ?: PersistentGameRepository(gamesDao)
     }
 }
