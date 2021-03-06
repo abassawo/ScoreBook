@@ -17,4 +17,10 @@ class AppModule(private val application: ScoreBookApplication) {
     @Provides
     @Singleton
     fun provideGameDataSource(): GameDataSource = PersistentGameRepository.getInstance(application)
+
+
+    @Provides
+    @Singleton
+    fun provideAppRepository(gameDataSource: GameDataSource) = AppRepository(gameDataSource)
+
 }

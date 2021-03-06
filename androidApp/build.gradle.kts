@@ -22,9 +22,14 @@ dependencies {
 
 
     implementation("com.facebook.stetho:stetho:1.5.1")
+    val daggerVersion=2.33
     implementation("com.google.dagger:dagger-android:2.33")
     implementation("com.google.dagger:dagger:2.33")
-    annotationProcessor("com.google.dagger:dagger-android-processor:2.33")
+//    annotationProcessor("com.google.dagger:dagger-android-processor:2.33")
+
+    implementation("com.google.dagger:dagger:$daggerVersion")
+    kapt("com.google.dagger:dagger-android-processor:$daggerVersion")
+    kapt("com.google.dagger:dagger-compiler:$daggerVersion")
 
 //    def room_version = "2.2.6"
 
@@ -53,6 +58,11 @@ android {
         targetSdkVersion(29)
         versionCode = 1
         versionName = "1.0"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments["room.incremental"] = "true"
+            }
+        }
     }
     buildTypes {
         getByName("release") {

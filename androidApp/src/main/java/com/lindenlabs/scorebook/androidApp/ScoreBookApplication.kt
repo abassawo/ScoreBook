@@ -4,6 +4,7 @@ import android.app.Application
 import com.facebook.stetho.Stetho
 import com.lindenlabs.scorebook.androidApp.di.AppComponent
 import com.lindenlabs.scorebook.androidApp.di.AppModule
+import com.lindenlabs.scorebook.androidApp.di.DaggerAppComponent
 import timber.log.Timber
 
 class ScoreBookApplication : Application() {
@@ -14,9 +15,9 @@ class ScoreBookApplication : Application() {
         appComponent = initAppComponent()
         appComponent.inject(this)
 
-//        if (BuildConfig.DEBUG) {
-//            Timber.plant(Timber.DebugTree())
-//        }
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
         Stetho.initializeWithDefaults(this)
     }
 
@@ -25,9 +26,5 @@ class ScoreBookApplication : Application() {
             .appModule(AppModule(this))
             .build()
 
-    companion object {
-        lateinit var instance: ScoreBookApplication
-            private set
-    }
 }
 

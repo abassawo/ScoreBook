@@ -6,15 +6,18 @@ import androidx.lifecycle.MutableLiveData
 import com.lindenlabs.scorebook.androidApp.base.domain.PersistentGameRepository
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
+import com.lindenlabs.scorebook.androidApp.base.domain.GameDataSource
+import com.lindenlabs.scorebook.androidApp.di.AppRepository
 
 class UpdatePointsViewModel(application: Application) : AndroidViewModel(application) {
     private lateinit var game: Game
     private lateinit var player: Player
     val viewState: MutableLiveData<UpdatePointsViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<UpdatePointsViewEvent> = MutableLiveData()
-    private val gameRepo = PersistentGameRepository.getInstance(application)
+    private lateinit var gameRepo: GameDataSource
 
-    fun launch(args: UpdatePointsFragmentArgs) {
+    fun launch(appRepo: AppRepository, args: UpdatePointsFragmentArgs) {
+        this.gameRepo = appRepo.gameDataSource
         this.game = args.gameArg
         this.player = args.playerArg
     }

@@ -1,35 +1,34 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lindenlabs.scorebook.androidApp.base.domain.PersistentGameRepository
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.domain.GameDataSource
+import com.lindenlabs.scorebook.androidApp.di.AppRepository
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.*
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameStrategy.HighestScoreWins
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameStrategy.LowestScoreWins
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.GameClicked
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.GameDetailsEntered
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameStrategy.HighestScoreWins
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameStrategy.LowestScoreWins
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent.*
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewState
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-internal class HomeViewModel(application: Application) : AndroidViewModel(application) {
+class HomeViewModel : ViewModel() {
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
-    private val gamesRepo: GameDataSource = PersistentGameRepository.getInstance(application)
+    private lateinit var gameDataSource: GameDataSource
 
-    init {
+    fun launch(appRepository: AppRepository) {
+        this.gameDataSource = appRepository.gameDataSource
         refresh()
     }
 
     private fun refresh() = showGames()
 
     private fun showGames() {
-        gamesRepo.load { pairOfOpenToClosedGames ->
+        gameDataSource.load { pairOfOpenToClosedGames ->
             val (openGames, closedGames) = pairOfOpenToClosedGames
             val viewEntity = GamesWrapper(openGames, closedGames )
             viewState.postValue(viewEntity.toViewState())
@@ -55,7 +54,7 @@ internal class HomeViewModel(application: Application) : AndroidViewModel(applic
         return Game(name = name, strategy = strategy).also { game ->
             game.start()
             viewModelScope.launch {
-                gamesRepo.storeGame(game)
+                gameDataSource.storeGame(game)
             }
         }
 
@@ -80,7 +79,7 @@ internal class HomeViewModel(application: Application) : AndroidViewModel(applic
 }
 
 
-internal sealed class GameRowEntity {
+sealed class GameRowEntity {
     data class HeaderType(val title: String) : GameRowEntity()
 
     data class BodyType(val game: Game, val clickAction: (interaction: GameInteraction) -> Unit) : GameRowEntity()

@@ -8,13 +8,15 @@ import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 import com.lindenlabs.scorebook.androidApp.base.domain.GameDataSource
+import com.lindenlabs.scorebook.androidApp.di.AppRepository
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*
 
 class AddPlayersViewModel(application: Application) : AndroidViewModel(application) {
     val viewState: MutableLiveData<AddPlayersViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<AddPlayersViewEvent> = MutableLiveData()
-    private val repository: GameDataSource = PersistentGameRepository.getInstance(application)
+    private lateinit var repository: GameDataSource
     private lateinit var game: Game
+
 
     init {
         repository.load {
@@ -25,7 +27,8 @@ class AddPlayersViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun launch(args: AddPlayersFragmentArgs) {
+    fun launch(appRepo: AppRepository, args: AddPlayersFragmentArgs) {
+        this.repository = appRepo.gameDataSource
         this.game = args.gameArg
         val players = game.players
 
