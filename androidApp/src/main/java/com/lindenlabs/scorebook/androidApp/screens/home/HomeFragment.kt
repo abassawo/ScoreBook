@@ -7,37 +7,35 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.lindenlabs.scorebook.androidApp.R
-import com.lindenlabs.scorebook.androidApp.ScoreBookApplication
+import com.lindenlabs.scorebook.androidApp.appComponent
+import com.lindenlabs.scorebook.androidApp.base.Environment
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.databinding.HomeFragmentBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.di.AppRepository
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewState
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameAdapter
-import dagger.android.AndroidInjection
 import javax.inject.Inject
-import javax.inject.Provider
 
 class HomeFragment : Fragment(R.layout.home_fragment) {
-    private lateinit var viewModel: HomeViewModel
-    private lateinit var  binding: HomeFragmentBinding
+    private val viewModel: HomeViewModel by viewModels()
+    private lateinit var binding: HomeFragmentBinding
     private lateinit var gameBinding: IncludeHomeScreenBinding
     private val gameAdapter = GameAdapter()
 
     @Inject
-    lateinit var appRepository: AppRepository
+    lateinit var environment: Environment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (requireActivity().application as ScoreBookApplication).appComponent.inject(this)
+        appComponent().value.homeFragmentComponent().inject(this)
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
                 override fun handleOnBackPressed() {
@@ -49,13 +47,12 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         binding = view.viewBinding()
         gameBinding = view.homeScreenBinding()
         binding.updateUi()
         viewModel.viewState.observe(this as LifecycleOwner, this::showGames)
         viewModel.viewEvent.observe(this as LifecycleOwner, this::processViewEvent)
-        viewModel.launch(appRepository)
+        viewModel.launch(environment)
     }
 
     private fun View.homeScreenBinding() =
@@ -67,7 +64,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     }
 
 
-    private fun processViewEvent(event: HomeViewEvent) = when(event){
+    private fun processViewEvent(event: HomeViewEvent) = when (event) {
         is HomeViewEvent.AlertNoTextEntered -> showError(event)
         is HomeViewEvent.ShowAddPlayersScreen -> findNavController().showAddPlayersScreen(event.game)
             .also { hideKeyboard() }

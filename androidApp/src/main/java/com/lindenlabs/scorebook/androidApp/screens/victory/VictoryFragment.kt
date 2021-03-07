@@ -5,13 +5,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
-import com.lindenlabs.scorebook.androidApp.ScoreBookApplication
+import com.lindenlabs.scorebook.androidApp.appComponent
+import com.lindenlabs.scorebook.androidApp.base.Environment
 import com.lindenlabs.scorebook.androidApp.databinding.FragmentVictoryBinding
-import com.lindenlabs.scorebook.androidApp.di.AppRepository
 import nl.dionsegijn.konfetti.emitters.StreamEmitter
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
@@ -19,9 +19,11 @@ import javax.inject.Inject
 
 class VictoryFragment : Fragment(R.layout.fragment_victory) {
     private val binding: FragmentVictoryBinding by lazy { viewBinding() }
+    private val viewModel: VictoryViewModel by viewModels()
     private val args: VictoryFragmentArgs by navArgs()
+
     @Inject
-    lateinit var appRepository: AppRepository
+    lateinit var environment: Environment
 
     private fun viewBinding(): FragmentVictoryBinding {
         val view: View = requireView().findViewById(R.id.victoryRoot)
@@ -30,16 +32,15 @@ class VictoryFragment : Fragment(R.layout.fragment_victory) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (requireActivity().application as ScoreBookApplication).appComponent.inject(this)
+        appComponent().value.victoryFragmentComponent().inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.updateUI()
-        val viewModel = ViewModelProvider(this).get(VictoryViewModel::class.java)
         viewModel.viewState.observe(viewLifecycleOwner, ::showVictory)
         viewModel.viewEvent.observe(viewLifecycleOwner, { goHome() })
-        viewModel.init(appRepository, args)
+        viewModel.launch(environment, args)
     }
 
     private fun FragmentVictoryBinding.updateUI() {

@@ -1,37 +1,36 @@
 package com.lindenlabs.scorebook.androidApp.screens.playerentry
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.lindenlabs.scorebook.androidApp.base.domain.PersistentGameRepository
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.lindenlabs.scorebook.androidApp.base.Environment
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
-import com.lindenlabs.scorebook.androidApp.base.domain.GameDataSource
-import com.lindenlabs.scorebook.androidApp.di.AppRepository
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
-class AddPlayersViewModel(application: Application) : AndroidViewModel(application) {
+class AddPlayersViewModel : ViewModel() {
     val viewState: MutableLiveData<AddPlayersViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<AddPlayersViewEvent> = MutableLiveData()
-    private lateinit var repository: GameDataSource
     private lateinit var game: Game
+    private lateinit var environment: Environment
 
 
-    init {
-        repository.load {
-            val setOfNames: MutableSet<String> = mutableSetOf()
-            val (opengames, closedGames) = it
-            (opengames + closedGames).map { it.players.map { player -> setOfNames.add(player.name) } }
-            viewState.postValue(AddPlayersViewState.InitialState(setOfNames.toList()))
+    fun launch(environment: Environment, args: AddPlayersFragmentArgs) {
+        this.environment = environment
+        viewModelScope.launch {
+            runBlocking {
+                val games = environment.load()
+                val setOfNames: MutableSet<String> = mutableSetOf()
+                games.map { it.players.map { player -> setOfNames += player.name } }
+                viewState.postValue(AddPlayersViewState.InitialState(setOfNames.toList()))
+            }
         }
-    }
 
-    fun launch(appRepo: AppRepository, args: AddPlayersFragmentArgs) {
-        this.repository = appRepo.gameDataSource
         this.game = args.gameArg
         val players = game.players
-
         if (players.isNotEmpty()) {
             viewState.postValue(AddPlayersViewState.UpdateCurrentPlayersText(players.toText()))
         }
@@ -44,7 +43,9 @@ class AddPlayersViewModel(application: Application) : AndroidViewModel(applicati
                     viewState.postValue(AddPlayersViewState.TextEntryError)
                 } else {
                     viewEvent.postValue(AddPlayersViewEvent.NavigateToGameDetail(game))
-                    repository.updateGame(game)
+                    viewModelScope.launch {
+                        runBlocking { environment.updateGame(game) }
+                    }
                 }
                 // navigate to Game Detail screen
             }
@@ -63,7 +64,7 @@ class AddPlayersViewModel(application: Application) : AndroidViewModel(applicati
             is EmptyText -> viewState.postValue(AddPlayersViewState.ValidateTextForPlusButton(false))
             is Typing -> viewState.postValue(AddPlayersViewState.TypingState)
             GoBackHome -> {
-                repository.updateGame(game)
+                viewModelScope.launch  { environment.updateGame(game) }
                 viewEvent.postValue(AddPlayersViewEvent.NavigateHome)
             }
         }

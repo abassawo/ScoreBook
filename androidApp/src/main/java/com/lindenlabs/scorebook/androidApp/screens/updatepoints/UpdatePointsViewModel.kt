@@ -1,23 +1,23 @@
 package com.lindenlabs.scorebook.androidApp.screens.updatepoints
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.lindenlabs.scorebook.androidApp.base.domain.PersistentGameRepository
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.lindenlabs.scorebook.androidApp.base.Environment
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
-import com.lindenlabs.scorebook.androidApp.base.domain.GameDataSource
-import com.lindenlabs.scorebook.androidApp.di.AppRepository
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
-class UpdatePointsViewModel(application: Application) : AndroidViewModel(application) {
+class UpdatePointsViewModel : ViewModel() {
+    private lateinit var environment: Environment
     private lateinit var game: Game
     private lateinit var player: Player
     val viewState: MutableLiveData<UpdatePointsViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<UpdatePointsViewEvent> = MutableLiveData()
-    private lateinit var gameRepo: GameDataSource
 
-    fun launch(appRepo: AppRepository, args: UpdatePointsFragmentArgs) {
-        this.gameRepo = appRepo.gameDataSource
+    fun launch(environment: Environment, args: UpdatePointsFragmentArgs) {
+        this.environment = environment
         this.game = args.gameArg
         this.player = args.playerArg
     }
@@ -28,7 +28,11 @@ class UpdatePointsViewModel(application: Application) : AndroidViewModel(applica
                 val score = interaction.point
                 player.addToScore(score)
                 viewEvent.postValue(UpdatePointsViewEvent.ScoreUpdated(player, game))
-                gameRepo.updateGame(game)
+                viewModelScope.launch {
+                    runBlocking {
+                        environment.updateGame(game)
+                    }
+                }
             }
             is AddPointsInteraction.UndoLastScore -> Unit
         }
