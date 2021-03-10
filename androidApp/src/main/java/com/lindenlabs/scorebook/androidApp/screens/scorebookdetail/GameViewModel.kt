@@ -1,24 +1,19 @@
 package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.lindenlabs.scorebook.androidApp.base.domain.GameEngine
-import com.lindenlabs.scorebook.androidApp.base.domain.PersistentGameRepository
+import androidx.lifecycle.ViewModel
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
+import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction
+import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction.*
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent.AddPlayersClicked
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent.EditScoreForPlayer
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewState
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction.*
 
-class GameViewModel(application: Application) : AndroidViewModel(application) {
+class GameViewModel : ViewModel() {
     val viewState: MutableLiveData<ScoreBookViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<ScoreBookViewEvent> = MutableLiveData()
-    val gameRepo: PersistentGameRepository = PersistentGameRepository.getInstance(application)
     private val mapper: GameViewEntityMapper = GameViewEntityMapper()
-    private val gameEngine: GameEngine = GameEngine()
     private lateinit var game: Game
 
     private var isFirstRun: Boolean = true

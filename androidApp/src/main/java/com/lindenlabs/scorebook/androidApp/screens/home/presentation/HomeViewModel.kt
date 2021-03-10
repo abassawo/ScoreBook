@@ -1,49 +1,44 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lindenlabs.scorebook.androidApp.base.domain.GameEngine
-import com.lindenlabs.scorebook.androidApp.base.domain.PersistentGameRepository
+import com.lindenlabs.scorebook.androidApp.base.Environment
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.base.domain.GameDataSource
+import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetClosedGames
+import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetOpenGames
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.*
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameStrategy.HighestScoreWins
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameStrategy.LowestScoreWins
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.GameClicked
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.GameDetailsEntered
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameStrategy.HighestScoreWins
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameStrategy.LowestScoreWins
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent.*
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewState
 import kotlinx.coroutines.launch
 
-internal class HomeViewModel(application: Application) : AndroidViewModel(application) {
-    private val gameEngine = GameEngine()
+class HomeViewModel : ViewModel() {
+    private lateinit var environment: Environment
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
-    private val gamesRepo: GameDataSource = PersistentGameRepository.getInstance(application)
+    private val gamesMapper: GamesMapper = GamesMapper()
 
-    init {
-        refresh()
-    }
-
-    private fun refresh() = showGames()
-
-    private fun showGames() {
-        gamesRepo.load { pairOfOpenToClosedGames ->
-            val (openGames, closedGames) = pairOfOpenToClosedGames
-            val viewEntity = GamesWrapper(openGames, closedGames )
-            viewState.postValue(viewEntity.toViewState())
+    fun launch(repo: Environment) {
+        this.environment = repo
+        viewModelScope.launch {
+            val gamesWrapper = gamesMapper.mapGamesToWrapper(games = repo.load())
+            showGames(gamesWrapper)
         }
     }
+
+    private fun showGames(gamesWrapper: GamesWrapper) =
+        viewState.postValue(gamesWrapper.toViewState())
 
     internal fun handleInteraction(interaction: GameInteraction) = when (interaction) {
         is GameDetailsEntered -> {
             if (interaction.name.isNullOrEmpty()) {
                 showError()
             } else {
-                val strategy = if(interaction.lowestScoreWins) LowestScoreWins else HighestScoreWins
+                val strategy =
+                    if (interaction.lowestScoreWins) LowestScoreWins else HighestScoreWins
                 val game = storeNewGame(interaction.name, strategy)
                 viewEvent.postValue(ShowAddPlayersScreen(game))
             }
@@ -55,12 +50,9 @@ internal class HomeViewModel(application: Application) : AndroidViewModel(applic
 
     private fun storeNewGame(name: String, strategy: GameStrategy): Game {
         return Game(name = name, strategy = strategy).also { game ->
-            gameEngine.startGame(game)
-            viewModelScope.launch {
-                gamesRepo.storeGame(game)
-            }
+            game.start()
+            viewModelScope.launch { environment.storeGame(game) }
         }
-
     }
 
     private fun GamesWrapper.toViewState(): HomeViewState {
@@ -76,14 +68,6 @@ internal class HomeViewModel(application: Application) : AndroidViewModel(applic
         return HomeViewState(listOfEntities)
     }
 
-    private fun List<Game>.toBodyEntity(): List<GameRowEntity.BodyType> {
-        return this.map { game -> GameRowEntity.BodyType(game) { handleInteraction(GameClicked(game)) } }
-    }
-}
-
-
-internal sealed class GameRowEntity {
-    data class HeaderType(val title: String) : GameRowEntity()
-
-    data class BodyType(val game: Game, val clickAction: (interaction: GameInteraction) -> Unit) : GameRowEntity()
+    private fun List<Game>.toBodyEntity(): List<GameRowEntity.BodyType> =
+        this.map { game -> GameRowEntity.BodyType(game) { handleInteraction(GameClicked(game)) } }
 }

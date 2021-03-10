@@ -10,30 +10,35 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
+import com.lindenlabs.scorebook.androidApp.appComponent
+import com.lindenlabs.scorebook.androidApp.base.Environment
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersViewState.*
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*
+import javax.inject.Inject
 
 class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
     private val binding: AddPlayersFragmentBinding by lazy { viewBinding() }
+    private val viewModel: AddPlayersViewModel by viewModels()
     private val args: AddPlayersFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var environment: Environment
 
     private fun viewBinding(): AddPlayersFragmentBinding {
         val rootView = requireView().findViewById<View>(R.id.addPlayersRoot)
         return AddPlayersFragmentBinding.bind(rootView)
     }
 
-    private val viewModel: AddPlayersViewModel by lazy { viewModel() }
-
-    private fun viewModel() = ViewModelProvider(this).get(AddPlayersViewModel::class.java)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        appComponent().value.addPlayersFragmentComponent().inject(this)
+
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
                 override fun handleOnBackPressed() {
@@ -48,7 +53,7 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
         viewModel.run {
             viewState.observe(viewLifecycleOwner, ::processViewState)
             viewEvent.observe(viewLifecycleOwner, ::processViewEvent)
-            viewModel.launch(args)
+            viewModel.launch(environment, args)
         }
         binding.updateUI()
     }
@@ -68,7 +73,11 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
         }
         TypingState -> binding.updatePointsButton.visibility = View.GONE
         is InitialState -> {
-            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, viewState.suggestedPlayerNames);
+            val adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                viewState.suggestedPlayerNames
+            );
             binding.enterNewPlayerEditText.setAdapter(adapter)
         }
     }
@@ -77,7 +86,8 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
         Log.d("APA", "Viewevent processed")
         when (viewEvent) {
             is AddPlayersViewEvent.NavigateToGameDetail -> {
-                val directions = AddPlayersFragmentDirections.navigateToScoreGameScreen(viewEvent.game)
+                val directions =
+                    AddPlayersFragmentDirections.navigateToScoreGameScreen(viewEvent.game)
                 findNavController().navigate(directions).also { hideKeyboard() }
             }
             AddPlayersViewEvent.NavigateHome ->

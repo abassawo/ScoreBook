@@ -1,5 +1,6 @@
 package com.lindenlabs.scorebook.androidApp.base.data.persistence
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 
@@ -7,13 +8,16 @@ import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 interface GameStore {
 
     @Query("SELECT * FROM games")
-    fun loadAll() : List<Game>
+    suspend fun loadAll() : List<Game>
 
     @Insert
-    fun insert(game: Game)
+    suspend fun insert(game: Game)
+
+    @Query("SELECT * FROM games WHERE id = :id")
+    fun getGame(id: Int): LiveData<Game>
 
     @Update
-    fun update(game: Game)
+    suspend fun update(game: Game)
 
     @Delete
     fun delete(vararg games: Game)

@@ -49,13 +49,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val navigationView = binding.navView
-        // The NavigationView already has these same navigation items, so we only add
-        // navigation items to the menu here if there isn't a NavigationView
-        if (navigationView == null) {
-            menuInflater.inflate(R.menu.overflow_menu, menu)
-            return true
-        }
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -64,8 +57,8 @@ class MainActivity : AppCompatActivity() {
         // Have the NavigationUI look for an action or destination matching the menu
         // item id and navigate there if found.
         // Otherwise, bubble up to the parent.
-        return item.onNavDestinationSelected(findNavController(R.id.my_nav_host_fragment))
-                || super.onOptionsItemSelected(item)
+//        return item.onNavDestinationSelected(findNavController(R.id.my_nav_host_fragment))
+//                || super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {

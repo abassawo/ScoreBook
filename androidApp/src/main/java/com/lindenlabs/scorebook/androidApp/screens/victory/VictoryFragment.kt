@@ -2,33 +2,45 @@ package com.lindenlabs.scorebook.androidApp.screens.victory
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
+import com.lindenlabs.scorebook.androidApp.appComponent
+import com.lindenlabs.scorebook.androidApp.base.Environment
 import com.lindenlabs.scorebook.androidApp.databinding.FragmentVictoryBinding
 import nl.dionsegijn.konfetti.emitters.StreamEmitter
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
+import javax.inject.Inject
 
 class VictoryFragment : Fragment(R.layout.fragment_victory) {
     private val binding: FragmentVictoryBinding by lazy { viewBinding() }
+    private val viewModel: VictoryViewModel by viewModels()
     private val args: VictoryFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var environment: Environment
 
     private fun viewBinding(): FragmentVictoryBinding {
         val view: View = requireView().findViewById(R.id.victoryRoot)
         return FragmentVictoryBinding.bind(view)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        appComponent().value.victoryFragmentComponent().inject(this)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.updateUI()
-        val viewModel = ViewModelProvider(this).get(VictoryViewModel::class.java)
         viewModel.viewState.observe(viewLifecycleOwner, ::showVictory)
         viewModel.viewEvent.observe(viewLifecycleOwner, { goHome() })
-        viewModel.init(args)
+        viewModel.launch(environment, args)
     }
 
     private fun FragmentVictoryBinding.updateUI() {
@@ -55,12 +67,14 @@ class VictoryFragment : Fragment(R.layout.fragment_victory) {
     }
 
     private fun showVictory(victoryState: VictoryState) {
-        binding.victoryTextView.setText(victoryState.victoryText)
+        binding.victoryTextView.text = victoryState.victoryText
         binding.bottomNavView.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.navHomeFragment -> goHome()
                 else -> false
             }
         }
+        val runnable = Runnable { findNavController().navigate(VictoryFragmentDirections.navigateHome()) }
+        Handler().postDelayed(runnable, 10000)
     }
 }

@@ -22,6 +22,14 @@ dependencies {
 
 
     implementation("com.facebook.stetho:stetho:1.5.1")
+    val daggerVersion=2.33
+    implementation("com.google.dagger:dagger-android:2.33")
+    implementation("com.google.dagger:dagger:2.33")
+//    annotationProcessor("com.google.dagger:dagger-android-processor:2.33")
+
+    implementation("com.google.dagger:dagger:$daggerVersion")
+    kapt("com.google.dagger:dagger-android-processor:$daggerVersion")
+    kapt("com.google.dagger:dagger-compiler:$daggerVersion")
 
 //    def room_version = "2.2.6"
 
@@ -37,6 +45,23 @@ dependencies {
 
     // optional - Test helpers
     testImplementation("androidx.room:room-testing:2.2.6")
+
+    // Required -- JUnit 4 framework
+    testImplementation("junit:junit:4.12")
+    // Optional -- Robolectric environment
+    testImplementation("androidx.test:core:1.0.0")
+    // Optional -- Mockito framework
+//    testImplementation("org.mockito:mockito-core:3.3.3")
+//    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.3")
+//    testImplementation("android.arch.core:core-testing:1.0.0-alpha3")
+
+    testImplementation("androidx.test.ext:junit:1.1.2-alpha03")
+    testImplementation("org.mockito:mockito-core:3.0.0")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
+    testImplementation("org.mockito:mockito-inline:3.0.0")
+    testImplementation("org.amshove.kluent:kluent:1.51")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.3")
+    testImplementation("androidx.arch.core:core-testing:2.1.0")
 }
 
 android {
@@ -50,6 +75,11 @@ android {
         targetSdkVersion(29)
         versionCode = 1
         versionName = "1.0"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments["room.incremental"] = "true"
+            }
+        }
     }
     buildTypes {
         getByName("release") {

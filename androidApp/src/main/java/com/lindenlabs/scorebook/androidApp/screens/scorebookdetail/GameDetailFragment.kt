@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -23,6 +24,7 @@ import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.showplayers.P
 class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
     private val adapter: PlayerAdapter = PlayerAdapter()
     private val binding: GameDetailFragmentBinding by lazy { viewBinding() }
+    private val viewModel: GameViewModel by viewModels()
     private val args: GameDetailFragmentArgs by navArgs()
     private val navController: NavController by lazy { findNavController() }
 
@@ -30,10 +32,6 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
         val rootView = requireView().findViewById<View>(R.id.game_detail_root)
         return GameDetailFragmentBinding.bind(rootView)
     }
-
-    private val viewModel: GameViewModel by lazy { viewModel() }
-
-    private fun viewModel() = ViewModelProvider(this).get(GameViewModel::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
