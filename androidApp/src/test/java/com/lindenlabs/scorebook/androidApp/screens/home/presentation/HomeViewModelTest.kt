@@ -1,53 +1,18 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
-import com.lindenlabs.scorebook.androidApp.base.Environment
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.base.domain.GameRepository
+import com.lindenlabs.scorebook.androidApp.screens.BaseTest
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewState
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.Assert.assertEquals
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
-import org.mockito.Mockito.mock
 
 @ExperimentalCoroutinesApi
-class HomeViewModelTest {
-
-    @get:Rule
-    var rule: TestRule = InstantTaskExecutorRule()
-    private lateinit var lifeCycleTestOwner: LifeCycleTestOwner
+class HomeViewModelTest : BaseTest() {
     private val classToTest: HomeViewModel = HomeViewModel()
-    private val mockRepo: GameRepository = mock(GameRepository::class.java)
-    private val environment: Environment = Environment(mockRepo)
-    private val mainThreadSurrogate = newSingleThreadContext("UI thread")
-    private val arrangeBuilder: ArrangeBuilder = ArrangeBuilder()
 
-    @Before
-    fun before() {
-        Dispatchers.setMain(mainThreadSurrogate)
-        lifeCycleTestOwner = LifeCycleTestOwner()
-    }
-
-    @After
-    fun tearDown() {
-        lifeCycleTestOwner.onDestroy()
-        Dispatchers.resetMain() // reset main dispatcher to the original Main dispatcher
-        mainThreadSurrogate.close()
-    }
 
     @Test
     fun `Content with 1 open yields list of 1 open games header and 1 content body`() {
@@ -105,12 +70,5 @@ class HomeViewModelTest {
             assertEquals(this.game, game)
         }
 
-    }
-
-    inner class ArrangeBuilder {
-
-        suspend fun withGamesLoaded(games: List<Game>) = also {
-            whenever(environment.load()).thenReturn(games)
-        }
     }
 }

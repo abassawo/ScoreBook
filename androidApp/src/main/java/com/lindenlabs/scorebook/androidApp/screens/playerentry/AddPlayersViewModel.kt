@@ -25,7 +25,7 @@ class AddPlayersViewModel : ViewModel() {
                 val games = environment.load()
                 val setOfNames: MutableSet<String> = mutableSetOf()
                 games.map { it.players.map { player -> setOfNames += player.name } }
-                viewState.postValue(AddPlayersViewState.InitialState(setOfNames.toList()))
+                viewState.postValue(AddPlayersViewState.LoadAutocompleteAdapter(setOfNames.toList()))
             }
         }
 

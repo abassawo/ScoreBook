@@ -72,7 +72,7 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
             }
         }
         TypingState -> binding.updatePointsButton.visibility = View.GONE
-        is InitialState -> {
+        is LoadAutocompleteAdapter -> {
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_dropdown_item_1line,
