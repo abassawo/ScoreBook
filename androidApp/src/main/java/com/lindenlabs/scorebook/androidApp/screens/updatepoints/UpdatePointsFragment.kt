@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.appComponent
+import com.lindenlabs.scorebook.androidApp.base.Argument
 import com.lindenlabs.scorebook.androidApp.base.Environment
 import com.lindenlabs.scorebook.androidApp.databinding.UpdatePointsFragmentBinding
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
@@ -47,7 +48,7 @@ class UpdatePointsFragment : Fragment(R.layout.update_points_fragment) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.viewState.observe(this as LifecycleOwner, ::processState)
         viewModel.viewEvent.observe(this as LifecycleOwner, ::processEvent)
-        viewModel.launch(environment, args)
+        viewModel.launch(environment, Argument.UpdatePoints(args))
         binding.updatePointsButton.setOnClickListener {
             val points = Integer.parseInt(binding.pointsEditText.text.toString())
             viewModel.handleInteraction(AddPointsInteraction.AddScore(points))

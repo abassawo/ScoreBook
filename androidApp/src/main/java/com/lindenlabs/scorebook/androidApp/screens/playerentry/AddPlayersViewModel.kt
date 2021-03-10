@@ -1,71 +1,82 @@
 package com.lindenlabs.scorebook.androidApp.screens.playerentry
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavArgs
+import com.lindenlabs.scorebook.androidApp.base.Argument
+import com.lindenlabs.scorebook.androidApp.base.BaseViewModel
 import com.lindenlabs.scorebook.androidApp.base.Environment
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersViewState.*
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class AddPlayersViewModel : ViewModel() {
+class AddPlayersViewModel : BaseViewModel() {
     val viewState: MutableLiveData<AddPlayersViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<AddPlayersViewEvent> = MutableLiveData()
-    private lateinit var game: Game
-    private lateinit var environment: Environment
+    private lateinit var currentGame: Game
 
+    override fun launch(environment: Environment, args: Argument) {
+        super.launch(environment, args)
+        populateAutocompleteAdapter()
+        processArgumentsAndShowPlayersIfAvailable(args as AddPlayersFragmentArgs)
+    }
 
-    fun launch(environment: Environment, args: AddPlayersFragmentArgs) {
-        this.environment = environment
-        viewModelScope.launch {
-            runBlocking {
-                val games = environment.load()
-                val setOfNames: MutableSet<String> = mutableSetOf()
-                games.map { it.players.map { player -> setOfNames += player.name } }
-                viewState.postValue(AddPlayersViewState.LoadAutocompleteAdapter(setOfNames.toList()))
-            }
-        }
-
-        this.game = args.gameArg
-        val players = game.players
-        if (players.isNotEmpty()) {
-            viewState.postValue(AddPlayersViewState.UpdateCurrentPlayersText(players.toText()))
+    private fun populateAutocompleteAdapter() = viewModelScope.launch {
+        runBlocking {
+            val games = environment.load()
+            val setOfNames: MutableSet<String> = mutableSetOf()
+            games.map { it.players.map { player -> setOfNames += player.name } }
+            viewState.postValue(LoadAutocompleteAdapter(setOfNames.toList()))
         }
     }
 
-    fun handleInteraction(interaction: AddPlayerInteraction) {
+    private fun processArgumentsAndShowPlayersIfAvailable(args: AddPlayersFragmentArgs) =
+        with(args.gameArg) {
+            currentGame = this
+            if (players.isNotEmpty())
+                viewState.postValue(UpdateCurrentPlayersText(players.toText()))
+        }
+
+
+    fun handleInteraction(interaction: AddPlayerInteraction) =
         when (interaction) {
-            is SavePlayerDataAndExit -> {
-                if (game.players.isEmpty()) {
-                    viewState.postValue(AddPlayersViewState.TextEntryError)
-                } else {
-                    viewEvent.postValue(AddPlayersViewEvent.NavigateToGameDetail(game))
-                    viewModelScope.launch {
-                        runBlocking { environment.updateGame(game) }
-                    }
-                }
-                // navigate to Game Detail screen
-            }
-            is AddAnotherPlayer -> {
-                // stay on same screen
-                if (interaction.playerName.isEmpty())
-                    viewState.postValue(AddPlayersViewState.TextEntryError)
-                else {
-                    val player = Player(interaction.playerName)
-                    game.players += player
-                    val playersText = game.players.toText()
-                    viewState.postValue(AddPlayersViewState.UpdateCurrentPlayersText(playersText))
-                }
-            }
-            is TextEntered -> viewState.postValue(AddPlayersViewState.ValidateTextForPlusButton(true))
-            is EmptyText -> viewState.postValue(AddPlayersViewState.ValidateTextForPlusButton(false))
-            is Typing -> viewState.postValue(AddPlayersViewState.TypingState)
-            GoBackHome -> {
-                viewModelScope.launch  { environment.updateGame(game) }
-                viewEvent.postValue(AddPlayersViewEvent.NavigateHome)
+            is SavePlayerDataAndExit -> savePlayerDataAndExit()
+            is AddAnotherPlayer -> addAnotherPlayer(interaction.playerName)
+            is TextEntered -> viewState.postValue(PlusButtonEnabled(isEnabled = true))
+            is EmptyText -> viewState.postValue(PlusButtonEnabled(isEnabled = false))
+            is Typing -> viewState.postValue(TypingState)
+            is GoBackHome -> navigateHome()
+        }
+
+    private fun navigateHome() {
+        viewModelScope.launch { environment.updateGame(currentGame) }
+        viewEvent.postValue(AddPlayersViewEvent.NavigateHome)
+    }
+
+
+    private fun addAnotherPlayer(playerName: String) {
+        if (playerName.isEmpty())
+            viewState.postValue(TextEntryError)
+        else {
+            val player = Player(playerName)
+            currentGame.players += player
+            val playersText = currentGame.players.toText()
+            viewState.postValue(UpdateCurrentPlayersText(playersText))
+        }
+    }
+
+    private fun savePlayerDataAndExit() {
+        if (currentGame.players.isEmpty()) {
+            viewState.postValue(TextEntryError)
+        } else {
+            // navigate to Game Detail screen
+            viewEvent.postValue(AddPlayersViewEvent.NavigateToGameDetail(currentGame))
+            viewModelScope.launch {
+                runBlocking { environment.updateGame(currentGame) }
             }
         }
     }
