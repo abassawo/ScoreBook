@@ -1,12 +1,12 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavArgs
+import com.lindenlabs.scorebook.androidApp.base.Argument
+import com.lindenlabs.scorebook.androidApp.base.BaseViewModel
 import com.lindenlabs.scorebook.androidApp.base.Environment
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetClosedGames
-import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetOpenGames
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.*
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.GameClicked
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.GameDetailsEntered
@@ -15,16 +15,14 @@ import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.Ga
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent.*
 import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
-    private lateinit var environment: Environment
+class HomeViewModel : BaseViewModel() {
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
     private val gamesMapper: GamesMapper = GamesMapper()
 
-    fun launch(repo: Environment) {
-        this.environment = repo
+    override fun launch(environment: Environment, argument: Argument) {
         viewModelScope.launch {
-            val gamesWrapper = gamesMapper.mapGamesToWrapper(games = repo.load())
+            val gamesWrapper = gamesMapper.mapGamesToWrapper(games = environment.load())
             showGames(gamesWrapper)
         }
     }

@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.appComponent
+import com.lindenlabs.scorebook.androidApp.base.Argument
 import com.lindenlabs.scorebook.androidApp.base.Environment
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersViewState.*
@@ -53,7 +54,7 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
         viewModel.run {
             viewState.observe(viewLifecycleOwner, ::processViewState)
             viewEvent.observe(viewLifecycleOwner, ::processViewEvent)
-            viewModel.launch(environment, args)
+            viewModel.launch(environment, Argument.AddPlayers(args))
         }
         binding.updateUI()
     }
@@ -65,7 +66,7 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
             binding.playersText.text = viewState.playersText
             binding.enterNewPlayerEditText.setText("")
         }
-        is ValidateTextForPlusButton -> {
+        is PlusButtonEnabled -> {
             binding.addAnotherPlayer.run {
                 isEnabled = viewState.isEnabled
                 visibility = if (isEnabled) View.VISIBLE else View.GONE
