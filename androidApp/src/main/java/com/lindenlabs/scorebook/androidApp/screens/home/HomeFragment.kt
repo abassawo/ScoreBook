@@ -9,9 +9,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.lindenlabs.scorebook.androidApp.R
+import com.lindenlabs.scorebook.androidApp.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.appComponent
 import com.lindenlabs.scorebook.androidApp.base.Environment
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
@@ -25,13 +27,13 @@ import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.G
 import javax.inject.Inject
 
 class HomeFragment : Fragment(R.layout.home_fragment) {
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by lazy { viewModelFactory.makeViewModel(this, HomeViewModel::class.java) }
     private lateinit var binding: HomeFragmentBinding
     private lateinit var gameBinding: IncludeHomeScreenBinding
     private val gameAdapter = GameAdapter()
 
     @Inject
-    lateinit var environment: Environment
+    lateinit var viewModelFactory: ViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +54,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         binding.updateUi()
         viewModel.viewState.observe(this as LifecycleOwner, this::showGames)
         viewModel.viewEvent.observe(this as LifecycleOwner, this::processViewEvent)
-        viewModel.launch(environment)
     }
 
     private fun View.homeScreenBinding() =

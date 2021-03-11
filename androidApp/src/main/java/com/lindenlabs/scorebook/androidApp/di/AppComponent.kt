@@ -1,8 +1,11 @@
 package com.lindenlabs.scorebook.androidApp.di
 
 import com.lindenlabs.scorebook.androidApp.ScoreBookApplication
+import com.lindenlabs.scorebook.androidApp.di.SubComponents.*
+import com.lindenlabs.scorebook.androidApp.di.scope.FragmentScope
 import com.lindenlabs.scorebook.androidApp.screens.home.HomeFragment
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersFragment
+import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragment
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsFragment
 import com.lindenlabs.scorebook.androidApp.screens.victory.VictoryFragment
 import dagger.Component
@@ -14,27 +17,8 @@ import javax.inject.Singleton
 interface AppComponent {
     fun inject(app: ScoreBookApplication)
     fun homeFragmentComponent(): HomeFragmentComponent
-    fun addPlayersFragmentComponent(): AddPlayersFragmentComponent
-    fun updatePointsFragmentComponent(): UpdatePointsFragmentComponent
-    fun victoryFragmentComponent(): VictoryFragmentComponent
-}
-
-@Subcomponent
-interface HomeFragmentComponent {
-    fun inject(fragment: HomeFragment)
-}
-
-@Subcomponent
-interface AddPlayersFragmentComponent {
-    fun inject(fragment: AddPlayersFragment)
-}
-
-@Subcomponent
-interface UpdatePointsFragmentComponent {
-    fun inject(fragment: UpdatePointsFragment)
-}
-
-@Subcomponent
-interface VictoryFragmentComponent {
-    fun inject(fragment: VictoryFragment)
+    fun addPlayersComponentBuilder(): AddPlayersFragmentComponent.Builder
+    fun updatePointsComponentBuilder(): UpdatePointsFragmentComponent.Builder
+    fun victoryFragmentComponentBuilder(): VictoryFragmentComponent.Builder
+    fun gameScoreComponentBuilder(): GameScoreComponent.Builder
 }

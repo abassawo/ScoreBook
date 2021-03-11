@@ -1,13 +1,11 @@
 package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail
 
-import com.lindenlabs.scorebook.androidApp.screens.BaseTest
 import com.lindenlabs.scorebook.androidApp.screens.game
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.getOrAwaitValue
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent
-import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsViewEvent
 import org.junit.Test
 
-class GameViewModelTest : BaseTest(){
+class GameViewModelTest {
     private val underTest: GameViewModel = GameViewModel()
 
     @Test

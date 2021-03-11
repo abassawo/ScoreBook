@@ -3,6 +3,7 @@ package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction.*
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent
@@ -10,18 +11,16 @@ import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.Scor
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent.EditScoreForPlayer
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewState
 
-class GameViewModel : ViewModel() {
+class GameViewModel(args: GameDetailFragmentArgs) : ViewModel() {
     val viewState: MutableLiveData<ScoreBookViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<ScoreBookViewEvent> = MutableLiveData()
     private val mapper: GameViewEntityMapper = GameViewEntityMapper()
-    private lateinit var game: Game
+    private val game: Game = args.gameArg
+    private val players: List<Player> = game.players
 
     private var isFirstRun: Boolean = true
 
-    fun launch(args: GameDetailFragmentArgs) {
-        game = args.gameArg
-
-        val players = game.players
+    init {
         if (isFirstRun && players.isNullOrEmpty()) {
             isFirstRun = false
             viewEvent.postValue(AddPlayersClicked(game)) // Bypass home screen, just add

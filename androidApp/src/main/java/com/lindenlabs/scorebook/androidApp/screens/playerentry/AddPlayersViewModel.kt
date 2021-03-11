@@ -1,10 +1,8 @@
 package com.lindenlabs.scorebook.androidApp.screens.playerentry
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavArgs
-import com.lindenlabs.scorebook.androidApp.base.Argument
-import com.lindenlabs.scorebook.androidApp.base.BaseViewModel
 import com.lindenlabs.scorebook.androidApp.base.Environment
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
@@ -13,16 +11,16 @@ import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlaye
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
-class AddPlayersViewModel : BaseViewModel() {
+class AddPlayersViewModel @Inject constructor(val environment: Environment, args: AddPlayersFragmentArgs) : ViewModel() {
     val viewState: MutableLiveData<AddPlayersViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<AddPlayersViewEvent> = MutableLiveData()
     private lateinit var currentGame: Game
 
-    override fun launch(environment: Environment, args: Argument) {
-        super.launch(environment, args)
+    init {
         populateAutocompleteAdapter()
-        processArgumentsAndShowPlayersIfAvailable(args as AddPlayersFragmentArgs)
+        processArgumentsAndShowPlayersIfAvailable(args)
     }
 
     private fun populateAutocompleteAdapter() = viewModelScope.launch {

@@ -1,6 +1,6 @@
 package com.lindenlabs.scorebook.androidApp.screens.playerentry
 
-import com.lindenlabs.scorebook.androidApp.base.Argument
+import com.lindenlabs.scorebook.androidApp.base.NavigationArg
 import com.lindenlabs.scorebook.androidApp.screens.BaseViewModelTest
 import com.lindenlabs.scorebook.androidApp.screens.game
 import com.lindenlabs.scorebook.androidApp.screens.gameWithPlayers
@@ -13,7 +13,7 @@ import org.junit.Test
 
 class AddPlayersViewModelTest : BaseViewModelTest<AddPlayersViewModel>() {
 
-    override fun args(): Argument = Argument.AddPlayers(AddPlayersFragmentArgs(game()))
+    override fun args(): NavigationArg = NavigationArg.AddPlayers(AddPlayersFragmentArgs(game()))
 
     override fun initViewModel(): AddPlayersViewModel = AddPlayersViewModel()
 

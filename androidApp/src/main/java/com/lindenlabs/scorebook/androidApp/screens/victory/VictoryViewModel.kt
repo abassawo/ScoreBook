@@ -8,11 +8,11 @@ import kotlinx.coroutines.launch
 
 data class VictoryState(val victoryText: String)
 
-class VictoryViewModel : ViewModel() {
+class VictoryViewModel(val environment: Environment, val args: VictoryFragmentArgs) : ViewModel() {
     val viewState: MutableLiveData<VictoryState> = MutableLiveData()
     val viewEvent: MutableLiveData<VictoryViewEvent> = MutableLiveData()
 
-    fun launch(environment: Environment, args: VictoryFragmentArgs) {
+    init {
         viewState.postValue(VictoryState(victoryText = args.gameArg.end()))
         viewModelScope.launch {
             environment.updateGame(args.gameArg)
