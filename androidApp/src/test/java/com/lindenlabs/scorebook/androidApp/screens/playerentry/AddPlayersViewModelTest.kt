@@ -1,7 +1,7 @@
 package com.lindenlabs.scorebook.androidApp.screens.playerentry
 
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.screens.BaseTest
-import com.lindenlabs.scorebook.androidApp.screens.game
 import com.lindenlabs.scorebook.androidApp.screens.gameWithPlayers
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.getOrAwaitValue
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersViewState.*
@@ -9,10 +9,8 @@ import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlaye
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -24,16 +22,20 @@ class AddPlayersViewModelTest : BaseTest() {
     private val underTest = AddPlayersViewModel(
         environment,
         AddPlayersFragmentArgs(gameWithPlayers()),
-        testCoroutineScope
+        TestCoroutineScope()
     )
 
     @Test
     fun `autocomplete player names state is triggered when there are existing games with players`() {
+        val game = Game(name = "test1")
+        val openGames = listOf(game)
         testCoroutineScope.runBlockingTest {
-            arrangeBuilder.withGamesLoaded(listOf(game()))
-            underTest.launch()
-            assert(underTest.viewState.getOrAwaitValue() is LoadAutocompleteAdapter)
+            arrangeBuilder.withGamesLoaded(openGames)
+
         }
+
+        underTest.launch()
+        assert(underTest.viewState.getOrAwaitValue() is LoadAutocompleteAdapter)
     }
 
     @Test

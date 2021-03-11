@@ -9,9 +9,7 @@ import com.lindenlabs.scorebook.androidApp.screens.home.presentation.LifeCycleTe
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestCoroutineScope
-import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -25,6 +23,7 @@ abstract class BaseTest {
     var rule: TestRule = InstantTaskExecutorRule()
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()
+    private val testCoroutineScope = coroutineTestRule.testCoroutineScope
 
     private lateinit var lifeCycleTestOwner: LifeCycleTestOwner
     private val mockRepo: GameRepository = Mockito.mock(GameRepository::class.java)
@@ -35,7 +34,12 @@ abstract class BaseTest {
     @Before
     open fun before() {
         MockitoAnnotations.initMocks(this)
+        Dispatchers.setMain(coroutineTestRule.testDispatcher)
         lifeCycleTestOwner = LifeCycleTestOwner()
+
+        testCoroutineScope.runBlockingTest {
+            arrangeBuilder.withGamesLoaded(listOf(game()))
+        }
     }
 
     @After

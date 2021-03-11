@@ -4,10 +4,13 @@ import com.lindenlabs.scorebook.androidApp.screens.BaseTest
 import com.lindenlabs.scorebook.androidApp.screens.gameWithPlayers
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.getOrAwaitValue
 import junit.framework.Assert.assertEquals
+import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 
 class VictoryViewModelTest : BaseTest() {
-    private val underTest = VictoryViewModel(environment, initArgs())
+    private val testCoroutineScope = TestCoroutineScope()
+    private val underTest = VictoryViewModel(environment, initArgs(),  TestCoroutineScope())
 
     fun initArgs(): VictoryFragmentArgs {
         val game = gameWithPlayers()
@@ -17,7 +20,7 @@ class VictoryViewModelTest : BaseTest() {
     }
 
     @Test
-    fun `test single winner is announced`() {
+    fun `test single winner is announced`() = testCoroutineScope.runBlockingTest {
         val emittedState = underTest.viewState.getOrAwaitValue()
         assertEquals("Player 1 is the winner", emittedState.victoryText)
     }
