@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 
 data class VictoryState(val victoryText: String)
 
-class VictoryViewModel(val environment: Environment, val args: VictoryFragmentArgs) : ViewModel() {
+class VictoryViewModel(val environment: Environment, args: VictoryFragmentArgs) : ViewModel() {
     val viewState: MutableLiveData<VictoryState> = MutableLiveData()
     val viewEvent: MutableLiveData<VictoryViewEvent> = MutableLiveData()
 

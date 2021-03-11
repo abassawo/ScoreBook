@@ -6,11 +6,10 @@ import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.Scor
 import org.junit.Test
 
 class GameViewModelTest {
-    private val underTest: GameViewModel = GameViewModel()
+    private val underTest: GameViewModel = GameViewModel(GameDetailFragmentArgs(game()))
 
     @Test
     fun `test game just created as noted by empty players list` () {
-        underTest.launch(GameDetailFragmentArgs(game()))
         val emittedEvent = underTest.viewEvent.getOrAwaitValue()
         assert(emittedEvent is ScoreBookViewEvent.AddPlayersClicked)
     }

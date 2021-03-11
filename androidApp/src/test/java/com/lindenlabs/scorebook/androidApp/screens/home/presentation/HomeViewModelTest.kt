@@ -1,17 +1,29 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.lindenlabs.scorebook.androidApp.CoroutineTestRule
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.screens.BaseViewModelTest
+import com.lindenlabs.scorebook.androidApp.screens.BaseTest
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent
 import junit.framework.Assert.assertEquals
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.setMain
+import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
-class HomeViewModelTest : BaseViewModelTest<HomeViewModel>() {
+@ExperimentalCoroutinesApi
+@RunWith(JUnit4::class)
+class HomeViewModelTest : BaseTest() {
 
-    override fun initViewModel(): HomeViewModel = HomeViewModel()
+    private var underTest = HomeViewModel(environment, coroutineTestRule.testDispatcherProvider)
 
     @Test
     fun `Content with 1 open yields list of 1 open games header and 1 content body`() {
@@ -19,7 +31,8 @@ class HomeViewModelTest : BaseViewModelTest<HomeViewModel>() {
         val openGames = listOf(game)
         runBlocking { arrangeBuilder.withGamesLoaded(openGames) }
 
-        underTest.launch(environment)
+        underTest.launch()
+
         val emittedState = underTest.viewState.getOrAwaitValue()
         assert(emittedState.entities.size == 1 + openGames.size)
 
@@ -37,8 +50,10 @@ class HomeViewModelTest : BaseViewModelTest<HomeViewModel>() {
         val game = Game(name = "test1")
         val game2 = Game(name = "test2", isClosed = true)
         val games = listOf(game, game2)
-        runBlocking { arrangeBuilder.withGamesLoaded(listOf(game, game2)) }
-        underTest.launch(environment)
+        coroutineTestRule.testDispatcher.runBlockingTest {
+            arrangeBuilder.withGamesLoaded(listOf(game, game2))
+        }
+        underTest.launch()
         val emittedState = underTest.viewState.getOrAwaitValue()
         assert(emittedState.entities.size == 2 + games.size)
     }

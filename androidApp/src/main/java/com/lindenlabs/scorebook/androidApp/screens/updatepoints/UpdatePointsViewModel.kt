@@ -9,7 +9,7 @@ import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class UpdatePointsViewModel(val environment: Environment, val args: UpdatePointsFragmentArgs) : ViewModel() {
+class UpdatePointsViewModel(val environment: Environment, args: UpdatePointsFragmentArgs) : ViewModel() {
     private val game: Game = args.gameArg
     private val  player: Player = args.playerArg
     val viewState: MutableLiveData<UpdatePointsViewState> = MutableLiveData()

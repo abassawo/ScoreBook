@@ -1,13 +1,13 @@
 package com.lindenlabs.scorebook.androidApp.screens.victory
 
-import com.lindenlabs.scorebook.androidApp.screens.BaseViewModelTest
+import com.lindenlabs.scorebook.androidApp.screens.BaseTest
 import com.lindenlabs.scorebook.androidApp.screens.gameWithPlayers
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.getOrAwaitValue
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 
-class VictoryViewModelTest : BaseViewModelTest<VictoryViewModel>(){
-    override fun initViewModel(): VictoryViewModel = VictoryViewModel(environment, initArgs())
+class VictoryViewModelTest : BaseTest() {
+    private val underTest = VictoryViewModel(environment, initArgs())
 
     fun initArgs(): VictoryFragmentArgs {
         val game = gameWithPlayers()
