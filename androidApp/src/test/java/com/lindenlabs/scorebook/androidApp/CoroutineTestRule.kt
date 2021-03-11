@@ -1,38 +1,32 @@
 package com.lindenlabs.scorebook.androidApp
 
-import com.lindenlabs.scorebook.androidApp.base.data.DispatcherProvider
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
+import org.junit.runners.model.Statement
 
 @ExperimentalCoroutinesApi
-class CoroutineTestRule(
+class CoroutineTestRule : TestWatcher() {
     val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
-) : TestWatcher() {
+    val testCoroutineScope: TestCoroutineScope = TestCoroutineScope((testDispatcher))
 
-    val testDispatcherProvider = object : DispatcherProvider {
-        override fun io(): CoroutineDispatcher = testDispatcher
-        override fun main(): CoroutineDispatcher = testDispatcher
-        override fun default(): CoroutineDispatcher = testDispatcher
-        override fun unconfined(): CoroutineDispatcher = testDispatcher
+    override fun apply(base: Statement, description: Description?): Statement  = object : Statement() {
+        @Throws(Throwable::class)
+        override fun evaluate() {
+            Dispatchers.setMain(testDispatcher)
+
+            base.evaluate()
+
+            Dispatchers.resetMain()
+            testCoroutineScope.cleanupTestCoroutines()
+        }
+
     }
 
-    override fun starting(description: Description?) {
-        super.starting(description)
-        Dispatchers.setMain(testDispatcher)
-    }
-
-    override fun finished(description: Description?) {
-        super.finished(description)
-        Dispatchers.resetMain()
-        testDispatcher.cleanupTestCoroutines()
+    fun runBlockingTest(block: suspend TestCoroutineScope.() -> Unit) {
+        testDispatcher.runBlockingTest(block)
     }
 }
 
-@ExperimentalCoroutinesApi
-fun CoroutineTestRule.runBlockingTest(block: suspend TestCoroutineScope.() -> Unit) {
-    testDispatcher.runBlockingTest(block)
-}

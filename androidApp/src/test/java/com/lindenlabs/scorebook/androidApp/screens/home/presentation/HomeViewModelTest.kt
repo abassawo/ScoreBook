@@ -1,35 +1,30 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.lindenlabs.scorebook.androidApp.CoroutineTestRule
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.screens.BaseTest
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent
 import junit.framework.Assert.assertEquals
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.setMain
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
 @ExperimentalCoroutinesApi
+
 @RunWith(JUnit4::class)
 class HomeViewModelTest : BaseTest() {
-
-    private var underTest = HomeViewModel(environment, coroutineTestRule.testDispatcherProvider)
+    private val testCoroutineScope = TestCoroutineScope()
+    private var underTest = HomeViewModel(environment, TestCoroutineScope())
 
     @Test
     fun `Content with 1 open yields list of 1 open games header and 1 content body`() {
         val game = Game(name = "test1")
         val openGames = listOf(game)
-        runBlocking { arrangeBuilder.withGamesLoaded(openGames) }
+        testCoroutineScope.runBlockingTest { arrangeBuilder.withGamesLoaded(openGames) }
 
         underTest.launch()
 
@@ -46,17 +41,17 @@ class HomeViewModelTest : BaseTest() {
     }
 
     @Test
-    fun `Content with 1 open game and 1 closed game yields 2 headers and 2 body items`() {
-        val game = Game(name = "test1")
-        val game2 = Game(name = "test2", isClosed = true)
-        val games = listOf(game, game2)
-        coroutineTestRule.testDispatcher.runBlockingTest {
+    fun `Content with 1 open game and 1 closed game yields 2 headers and 2 body items`() =
+        coroutineTestRule.runBlockingTest {
+            val game = Game(name = "test1")
+            val game2 = Game(name = "test2", isClosed = true)
+            val games = listOf(game, game2)
+
             arrangeBuilder.withGamesLoaded(listOf(game, game2))
+            underTest.launch()
+            val emittedState = underTest.viewState.getOrAwaitValue()
+            assert(emittedState.entities.size == 2 + games.size)
         }
-        underTest.launch()
-        val emittedState = underTest.viewState.getOrAwaitValue()
-        assert(emittedState.entities.size == 2 + games.size)
-    }
 
     @Test
     fun `creating a new game triggers add player screens`() {

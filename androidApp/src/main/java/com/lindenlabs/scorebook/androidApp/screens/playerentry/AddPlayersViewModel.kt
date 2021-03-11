@@ -2,7 +2,6 @@ package com.lindenlabs.scorebook.androidApp.screens.playerentry
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.lindenlabs.scorebook.androidApp.base.Environment
 import com.lindenlabs.scorebook.androidApp.base.Launchable
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
@@ -10,17 +9,21 @@ import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersViewState.*
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*
+import com.lindenlabs.scorebook.androidApp.viewModelScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class AddPlayersViewModel @Inject constructor(
     val environment: Environment,
-    private val args: AddPlayersFragmentArgs
+    args: AddPlayersFragmentArgs,
+    coroutineScope: CoroutineScope? = null
 ) : ViewModel(), Launchable {
     val viewState: MutableLiveData<AddPlayersViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<AddPlayersViewEvent> = MutableLiveData()
-    private lateinit var currentGame: Game
+    private val currentGame: Game = args.gameArg
+
+    private val viewModelScope = viewModelScope(coroutineScope)
 
     init {
         launch()
@@ -28,24 +31,21 @@ class AddPlayersViewModel @Inject constructor(
 
     override fun launch() {
         populateAutocompleteAdapter()
-        processArgumentsAndShowPlayersIfAvailable(args)
+        showPlayers(currentGame.players)
     }
 
-    private fun populateAutocompleteAdapter() = viewModelScope.launch {
-        runBlocking {
+    private fun populateAutocompleteAdapter() =
+        viewModelScope.launch {
             val games = environment.load()
             val setOfNames: MutableSet<String> = mutableSetOf()
             games.map { it.players.map { player -> setOfNames += player.name } }
             viewState.postValue(LoadAutocompleteAdapter(setOfNames.toList()))
         }
-    }
 
-    private fun processArgumentsAndShowPlayersIfAvailable(args: AddPlayersFragmentArgs) =
-        with(args.gameArg) {
-            currentGame = this
-            if (players.isNotEmpty())
-                viewState.postValue(UpdateCurrentPlayersText(players.toText()))
-        }
+    private fun showPlayers(players: List<Player>) {
+        if (players.isNotEmpty())
+            viewState.postValue(UpdateCurrentPlayersText(players.toText()))
+    }
 
 
     fun handleInteraction(interaction: AddPlayerInteraction) =
@@ -62,7 +62,6 @@ class AddPlayersViewModel @Inject constructor(
         viewModelScope.launch { environment.updateGame(currentGame) }
         viewEvent.postValue(AddPlayersViewEvent.NavigateHome)
     }
-
 
     private fun addAnotherPlayer(playerName: String) {
         if (playerName.isEmpty())
@@ -82,7 +81,7 @@ class AddPlayersViewModel @Inject constructor(
             // navigate to Game Detail screen
             viewEvent.postValue(AddPlayersViewEvent.NavigateToGameDetail(currentGame))
             viewModelScope.launch {
-                runBlocking { environment.updateGame(currentGame) }
+                environment.updateGame(currentGame)
             }
         }
     }

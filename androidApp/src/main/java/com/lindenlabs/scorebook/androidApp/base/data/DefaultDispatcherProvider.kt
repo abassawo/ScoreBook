@@ -2,6 +2,8 @@ package com.lindenlabs.scorebook.androidApp.base.data
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 interface DispatcherProvider {
     fun main(): CoroutineDispatcher = Dispatchers.Main
@@ -12,3 +14,8 @@ interface DispatcherProvider {
 }
 
 class DefaultDispatcherProvider : DispatcherProvider
+
+open class CoroutineContextProvider {
+    open val Main: CoroutineContext by lazy { Dispatchers.Main }
+    open val Io: CoroutineContext by lazy { Dispatchers.IO }
+}

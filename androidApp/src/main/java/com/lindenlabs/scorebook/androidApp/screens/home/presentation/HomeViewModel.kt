@@ -2,44 +2,37 @@ package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.lindenlabs.scorebook.androidApp.base.Environment
 import com.lindenlabs.scorebook.androidApp.base.Launchable
-import com.lindenlabs.scorebook.androidApp.base.data.DefaultDispatcherProvider
-import com.lindenlabs.scorebook.androidApp.base.data.DispatcherProvider
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
+import com.lindenlabs.scorebook.androidApp.viewModelScope
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.*
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.GameClicked
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.GameDetailsEntered
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameStrategy.HighestScoreWins
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameStrategy.LowestScoreWins
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent.*
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
     val environment: Environment,
-    val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider()
+    coroutineScope: CoroutineScope? = null
 ) : ViewModel(), Launchable {
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
     private val gamesMapper: GamesMapper = GamesMapper()
+    private val viewModelScope = viewModelScope(coroutineScope)
 
     init {
         launch()
     }
 
     override fun launch() {
-        with(dispatcherProvider.default()) {
-            viewModelScope.launch {
-                val gamesWrapper = gamesMapper.mapGamesToWrapper(games = environment.load())
-                showGames(gamesWrapper)
-            }
+        viewModelScope.launch {
+            val gamesWrapper = gamesMapper.mapGamesToWrapper(games = environment.load())
+            showGames(gamesWrapper)
         }
-//        viewModelScope.launch {
-//            val gamesWrapper = gamesMapper.mapGamesToWrapper(games = environment.load())
-//            showGames(gamesWrapper)
-//        }
     }
 
     private fun showGames(gamesWrapper: GamesWrapper) =
