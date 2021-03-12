@@ -18,8 +18,6 @@ import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.AddPlayersArgsModule
-import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersFragmentArgs
-import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersFragmentDirections
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewState.*
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*

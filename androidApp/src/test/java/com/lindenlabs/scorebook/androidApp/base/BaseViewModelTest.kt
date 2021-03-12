@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.lindenlabs.scorebook.androidApp.utils.CoroutineTestRule
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
-import com.lindenlabs.scorebook.androidApp.base.data.source.LocalGameDataSource
+import com.lindenlabs.scorebook.androidApp.base.data.sources.LocalGameDataSource
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.After

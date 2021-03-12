@@ -14,14 +14,12 @@ import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailFragmentBinding
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.di.GameScoreModule
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragmentArgs
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragmentDirections
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragmentDirections.Companion.navigateToAddPlayersScreen
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragmentDirections.Companion.navigateToUpdatePoints
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewState
+import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.GameDetailFragmentDirections.Companion.navigateToAddPlayersScreen
+import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.GameDetailFragmentDirections.Companion.navigateToUpdatePoints
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.showplayers.PlayerAdapter
 import javax.inject.Inject
 

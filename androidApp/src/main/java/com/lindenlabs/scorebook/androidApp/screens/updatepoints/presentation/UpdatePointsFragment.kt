@@ -15,8 +15,6 @@ import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.databinding.UpdatePointsFragmentBinding
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.di.UpdatePointsModule
-import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsFragmentArgs
-import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsFragmentDirections
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsViewModel.*
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewEvent

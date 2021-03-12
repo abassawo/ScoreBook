@@ -16,7 +16,6 @@ import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.databinding.HomeFragmentBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
-import com.lindenlabs.scorebook.androidApp.screens.home.HomeFragmentDirections
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewState
