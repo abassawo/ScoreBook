@@ -4,15 +4,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
-import com.lindenlabs.scorebook.androidApp.ViewModelFactory
+import com.lindenlabs.scorebook.androidApp.base.presentation.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.appComponent
-import com.lindenlabs.scorebook.androidApp.base.Environment
+import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.databinding.UpdatePointsFragmentBinding
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.di.UpdatePointsModule
@@ -26,7 +25,7 @@ class UpdatePointsFragment : Fragment(R.layout.update_points_fragment) {
     private val args: UpdatePointsFragmentArgs by navArgs()
 
     @Inject
-    lateinit var environment: Environment
+    lateinit var appRepository: AppRepository
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory

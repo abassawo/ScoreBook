@@ -1,10 +1,10 @@
-package com.lindenlabs.scorebook.androidApp.screens
+package com.lindenlabs.scorebook.androidApp.base
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.lindenlabs.scorebook.androidApp.CoroutineTestRule
-import com.lindenlabs.scorebook.androidApp.base.Environment
+import com.lindenlabs.scorebook.androidApp.utils.CoroutineTestRule
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.base.domain.GameRepository
+import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
+import com.lindenlabs.scorebook.androidApp.base.data.source.LocalGameDataSource
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.LifeCycleTestOwner
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,7 +17,8 @@ import org.mockito.Mockito
 open class BaseViewModelTest  {
     var lifeCycleTestOwner: LifeCycleTestOwner? = null
 
-    val mockRepo: GameRepository = Mockito.mock(GameRepository::class.java)
+    private val mockRepo: LocalGameDataSource = Mockito.mock(LocalGameDataSource::class.java)
+    val appRepository: AppRepository = AppRepository(mockRepo)
 
     @ExperimentalCoroutinesApi
     @get:Rule
@@ -26,7 +27,6 @@ open class BaseViewModelTest  {
 
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
-    val environment: Environment = Environment(mockRepo)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
@@ -43,7 +43,7 @@ open class BaseViewModelTest  {
     inner class ArrangeBuilder {
 
         suspend fun withGamesLoaded(games: List<Game>) = also {
-            whenever(environment.load()).thenReturn(games)
+            whenever(appRepository.load()).thenReturn(games)
         }
     }
 }

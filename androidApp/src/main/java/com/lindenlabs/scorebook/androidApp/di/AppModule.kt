@@ -10,5 +10,5 @@ class AppModule(private val application: ScoreBookApplication) {
 
     @Provides
     @Singleton
-    fun provideEnvironment() = application.environment
+    fun provideEnvironment() = application.appRepository
 }

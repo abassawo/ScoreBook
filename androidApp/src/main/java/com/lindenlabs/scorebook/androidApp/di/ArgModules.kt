@@ -1,8 +1,8 @@
 package com.lindenlabs.scorebook.androidApp.di
 
 import androidx.navigation.NavArgs
-import com.lindenlabs.scorebook.androidApp.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.base.Environment
+import com.lindenlabs.scorebook.androidApp.base.presentation.ViewModelFactory
+import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.di.scope.FragmentScope
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragmentArgs
@@ -15,8 +15,8 @@ import dagger.Provides
 class HomeModule {
     @Provides
     @FragmentScope
-    fun provideViewModelFactory(environment: Environment): ViewModelFactory =
-        ViewModelFactory(environment, object : NavArgs {})
+    fun provideViewModelFactory(appRepository: AppRepository): ViewModelFactory =
+        ViewModelFactory(appRepository, object : NavArgs {})
 }
 
 
@@ -29,8 +29,8 @@ class AddPlayersArgsModule(private val addPlayerArgs: AddPlayersFragmentArgs) {
 
     @Provides
     @FragmentScope
-    fun provideViewModelFactory(environment: Environment): ViewModelFactory  =
-        ViewModelFactory(environment, addPlayerArgs)
+    fun provideViewModelFactory(appRepository: AppRepository): ViewModelFactory =
+        ViewModelFactory(appRepository, addPlayerArgs)
 }
 
 
@@ -43,8 +43,8 @@ class UpdatePointsModule(private val updatePointsArgs: UpdatePointsFragmentArgs)
 
     @Provides
     @FragmentScope
-    fun provideViewModelFactory(environment: Environment): ViewModelFactory  =
-        ViewModelFactory(environment, updatePointsArgs)
+    fun provideViewModelFactory(appRepository: AppRepository): ViewModelFactory =
+        ViewModelFactory(appRepository, updatePointsArgs)
 }
 
 
@@ -57,8 +57,8 @@ class GameScoreModule(private val gameDetailFragmentArgs: GameDetailFragmentArgs
 
     @Provides
     @FragmentScope
-    fun provideViewModelFactory(environment: Environment): ViewModelFactory  =
-        ViewModelFactory(environment, gameDetailFragmentArgs)
+    fun provideViewModelFactory(appRepository: AppRepository): ViewModelFactory =
+        ViewModelFactory(appRepository, gameDetailFragmentArgs)
 }
 
 @Module
@@ -70,8 +70,8 @@ class VictoryModule(private val victoryFragmentArgs: VictoryFragmentArgs) {
 
     @Provides
     @FragmentScope
-    fun provideViewModelFactory(environment: Environment): ViewModelFactory  =
-        ViewModelFactory(environment, victoryFragmentArgs)
+    fun provideViewModelFactory(appRepository: AppRepository): ViewModelFactory =
+        ViewModelFactory(appRepository, victoryFragmentArgs)
 }
 
 

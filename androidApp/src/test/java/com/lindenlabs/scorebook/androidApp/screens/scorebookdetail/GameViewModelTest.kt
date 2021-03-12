@@ -1,17 +1,15 @@
 package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail
 
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.screens.BaseViewModelTest
-import com.lindenlabs.scorebook.androidApp.screens.game
-import com.lindenlabs.scorebook.androidApp.screens.gameWithPlayers
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.getOrAwaitValue
+import com.lindenlabs.scorebook.androidApp.base.BaseViewModelTest
+import com.lindenlabs.scorebook.androidApp.utils.game
+import com.lindenlabs.scorebook.androidApp.utils.gameWithPlayers
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.amshove.kluent.mock
 import org.junit.Test
@@ -25,7 +23,7 @@ class GameViewModelTest : BaseViewModelTest() {
     @Test
     fun `test game just created as noted by empty players list`() = runBlockingTest {
         MainScope().launch {
-            val emittedEvent = underTest.viewEvent.getOrAwaitValue()
+            val emittedEvent = underTest.viewEvent.value
             assert(emittedEvent is ScoreBookViewEvent.AddPlayersClicked)
         }
     }
@@ -44,7 +42,7 @@ class GameViewModelTest : BaseViewModelTest() {
     fun `test on back interaction`() = runBlockingTest {
         MainScope().launch {
             underTest.handleInteraction(ScoreBookInteraction.GoBack)
-            val emittedEvent = underTest.viewEvent.getOrAwaitValue()
+            val emittedEvent = underTest.viewEvent.value
             assert(emittedEvent is ScoreBookViewEvent.GoBackHome)
         }
     }
@@ -53,7 +51,7 @@ class GameViewModelTest : BaseViewModelTest() {
     fun `test end game interaction`() = runBlockingTest {
         MainScope().launch {
             underTest.handleInteraction(ScoreBookInteraction.EndGameClicked)
-            val emittedEvent = underTest.viewEvent.getOrAwaitValue()
+            val emittedEvent = underTest.viewEvent.value
             assert(emittedEvent is ScoreBookViewEvent.EndGame)
         }
     }

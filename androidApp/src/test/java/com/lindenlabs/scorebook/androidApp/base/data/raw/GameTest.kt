@@ -1,6 +1,6 @@
 package com.lindenlabs.scorebook.androidApp.base.data.raw
 
-import com.lindenlabs.scorebook.androidApp.screens.gameWithPlayers
+import com.lindenlabs.scorebook.androidApp.utils.gameWithPlayers
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 

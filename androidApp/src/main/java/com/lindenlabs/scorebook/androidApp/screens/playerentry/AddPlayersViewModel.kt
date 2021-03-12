@@ -3,32 +3,26 @@ package com.lindenlabs.scorebook.androidApp.screens.playerentry
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lindenlabs.scorebook.androidApp.base.Environment
-import com.lindenlabs.scorebook.androidApp.base.Launchable
+import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersViewState.*
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class AddPlayersViewModel @Inject constructor(
-    val environment: Environment,
+    val appRepository: AppRepository,
     args: AddPlayersFragmentArgs
-) : ViewModel(), Launchable {
+) : ViewModel() {
     val viewState: MutableLiveData<AddPlayersViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<AddPlayersViewEvent> = MutableLiveData()
     private val currentGame: Game = args.gameArg
 
 
     init {
-        launch()
-    }
-
-    override fun launch() {
         populateAutocompleteAdapter()
         showPlayers(currentGame.players)
     }
@@ -36,14 +30,12 @@ class AddPlayersViewModel @Inject constructor(
     private fun populateAutocompleteAdapter() {
         val setOfNames: MutableSet<String> = mutableSetOf()
         viewModelScope.launch {
-            withContext(environment.dispatcher) {
-                runCatching { environment.load() }
-                    .onSuccess { games ->
-                        games.map { it.players.map { player -> setOfNames += player.name } }
-                        viewState.postValue(LoadAutocompleteAdapter(setOfNames.toList()))
-                    }
-                    .onFailure { }
-            }
+            runCatching { appRepository.load() }
+                .onSuccess { games ->
+                    games.map { it.players.map { player -> setOfNames += player.name } }
+                    viewState.postValue(LoadAutocompleteAdapter(setOfNames.toList()))
+                }
+                .onFailure { }
         }
     }
 
@@ -65,9 +57,7 @@ class AddPlayersViewModel @Inject constructor(
 
     private fun navigateHome() {
         viewModelScope.launch {
-            withContext(environment.dispatcher) {
-                environment.updateGame(currentGame)
-            }
+            appRepository.updateGame(currentGame)
         }
         viewEvent.postValue(AddPlayersViewEvent.NavigateHome)
     }
@@ -90,8 +80,8 @@ class AddPlayersViewModel @Inject constructor(
             // navigate to Game Detail screen
             viewEvent.postValue(AddPlayersViewEvent.NavigateToGameDetail(currentGame))
             viewModelScope.launch {
-                withContext(environment.dispatcher) {
-                    environment.updateGame(currentGame)
+                withContext(appRepository.dispatcher) {
+                    appRepository.updateGame(currentGame)
                 }
             }
         }

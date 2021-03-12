@@ -1,11 +1,10 @@
 package com.lindenlabs.scorebook.androidApp.screens.playerentry
 
+import com.lindenlabs.scorebook.androidApp.base.BaseViewModelTest
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.screens.BaseViewModelTest
-import com.lindenlabs.scorebook.androidApp.screens.gameWithPlayers
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.getOrAwaitValue
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersViewState.*
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*
+import com.lindenlabs.scorebook.androidApp.utils.gameWithPlayers
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,7 +19,7 @@ import org.junit.Test
 class AddPlayersViewModelTest : BaseViewModelTest() {
     private val arrangeBuilder = ArrangeBuilder()
     private val underTest =
-        AddPlayersViewModel(environment, AddPlayersFragmentArgs(gameWithPlayers()))
+        AddPlayersViewModel(appRepository, AddPlayersFragmentArgs(gameWithPlayers()))
 
     @Before
     override fun before() {
@@ -36,7 +35,7 @@ class AddPlayersViewModelTest : BaseViewModelTest() {
             MainScope().launch {
                 arrangeBuilder.withGamesLoaded(openGames)
                 underTest.launch()
-                assert(underTest.viewState.getOrAwaitValue() is LoadAutocompleteAdapter)
+                assert(underTest.viewState.value is LoadAutocompleteAdapter)
             }
         }
     }
@@ -47,7 +46,7 @@ class AddPlayersViewModelTest : BaseViewModelTest() {
             MainScope().launch {
                 arrangeBuilder.withGamesLoaded(listOf(gameWithPlayers()))
                 underTest.launch()
-                assert(underTest.viewState.getOrAwaitValue() is UpdateCurrentPlayersText)
+                assert(underTest.viewState.value is UpdateCurrentPlayersText)
             }
         }
     }
@@ -58,7 +57,7 @@ class AddPlayersViewModelTest : BaseViewModelTest() {
             MainScope().launch {
                 underTest.launch()
                 underTest.handleInteraction(TextEntered)
-                assert(underTest.viewState.getOrAwaitValue() is PlusButtonEnabled)
+                assert(underTest.viewState.value is PlusButtonEnabled)
             }
         }
     }
@@ -69,7 +68,7 @@ class AddPlayersViewModelTest : BaseViewModelTest() {
             MainScope().launch {
                 underTest.launch()
                 underTest.handleInteraction(AddAnotherPlayer("Player 1"))
-                val emittedState = underTest.viewState.getOrAwaitValue() as UpdateCurrentPlayersText
+                val emittedState = underTest.viewState.value as UpdateCurrentPlayersText
                 assertEquals("Player 1", emittedState.playersText)
             }
         }
@@ -85,8 +84,7 @@ class AddPlayersViewModelTest : BaseViewModelTest() {
                     handleInteraction(AddAnotherPlayer("Player 1"))
                     handleInteraction(AddAnotherPlayer("Player 2"))
                     handleInteraction(AddAnotherPlayer("Player 3"))
-                    val emittedState =
-                        viewState.getOrAwaitValue() as UpdateCurrentPlayersText
+                    val emittedState = viewState.value as UpdateCurrentPlayersText
                     assertEquals("Player 1, Player 2, Player 3", emittedState.playersText)
                 }
             }
@@ -101,7 +99,7 @@ class AddPlayersViewModelTest : BaseViewModelTest() {
                     handleInteraction(AddAnotherPlayer("Player 1"))
                     handleInteraction(AddAnotherPlayer("Player 2"))
                     handleInteraction(SavePlayerDataAndExit("Player 3"))
-                    assert(viewEvent.getOrAwaitValue() is AddPlayersViewEvent.NavigateToGameDetail)
+                    assert(viewEvent.value is AddPlayersViewEvent.NavigateToGameDetail)
                 }
             }
         }
@@ -114,7 +112,7 @@ class AddPlayersViewModelTest : BaseViewModelTest() {
                 underTest.run {
                     launch()
                     underTest.handleInteraction(GoBackHome)
-                    assert(underTest.viewEvent.getOrAwaitValue() is AddPlayersViewEvent.NavigateHome)
+                    assert(underTest.viewEvent.value is AddPlayersViewEvent.NavigateHome)
                 }
             }
         }
@@ -126,7 +124,7 @@ class AddPlayersViewModelTest : BaseViewModelTest() {
                 underTest.run {
                     launch()
                     underTest.handleInteraction(AddAnotherPlayer(""))
-                    assert(underTest.viewState.getOrAwaitValue() is TextEntryError)
+                    assert(underTest.viewState.value is TextEntryError)
                 }
             }
         }
@@ -139,7 +137,7 @@ class AddPlayersViewModelTest : BaseViewModelTest() {
                 underTest.run {
                     launch()
                     underTest.handleInteraction(EmptyText)
-                    assert(underTest.viewState.getOrAwaitValue() is PlusButtonEnabled)
+                    assert(underTest.viewState.value is PlusButtonEnabled)
                 }
             }
         }

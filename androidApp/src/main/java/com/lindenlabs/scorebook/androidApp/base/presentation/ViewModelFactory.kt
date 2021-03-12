@@ -1,10 +1,10 @@
-package com.lindenlabs.scorebook.androidApp
+package com.lindenlabs.scorebook.androidApp.base.presentation
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavArgs
-import com.lindenlabs.scorebook.androidApp.base.Environment
+import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersViewModel
@@ -16,16 +16,16 @@ import com.lindenlabs.scorebook.androidApp.screens.victory.VictoryFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.victory.VictoryViewModel
 import javax.inject.Inject
 
-class ViewModelFactory @Inject constructor(private val environment: Environment, val navArgs: NavArgs) :
+class ViewModelFactory @Inject constructor(private val appRepository: AppRepository, val navArgs: NavArgs) :
     ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
         when (modelClass) {
-            HomeViewModel::class.java -> HomeViewModel(environment) as T
+            HomeViewModel::class.java -> HomeViewModel(appRepository) as T
             GameViewModel::class.java -> GameViewModel(navArgs as GameDetailFragmentArgs) as T
-            AddPlayersViewModel::class.java -> AddPlayersViewModel(environment, navArgs as AddPlayersFragmentArgs) as T
-            UpdatePointsViewModel::class.java -> UpdatePointsViewModel(environment, navArgs as UpdatePointsFragmentArgs) as T
-            VictoryViewModel::class.java -> VictoryViewModel(environment, navArgs as VictoryFragmentArgs) as T
+            AddPlayersViewModel::class.java -> AddPlayersViewModel(appRepository, navArgs as AddPlayersFragmentArgs) as T
+            UpdatePointsViewModel::class.java -> UpdatePointsViewModel(appRepository, navArgs as UpdatePointsFragmentArgs) as T
+            VictoryViewModel::class.java -> VictoryViewModel(appRepository, navArgs as VictoryFragmentArgs) as T
             else -> throw Exception()
         }
 

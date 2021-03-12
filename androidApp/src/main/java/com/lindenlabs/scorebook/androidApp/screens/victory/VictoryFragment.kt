@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
-import com.lindenlabs.scorebook.androidApp.ViewModelFactory
+import com.lindenlabs.scorebook.androidApp.base.presentation.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.appComponent
-import com.lindenlabs.scorebook.androidApp.base.Environment
+import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.databinding.FragmentVictoryBinding
 import com.lindenlabs.scorebook.androidApp.di.VictoryModule
 import nl.dionsegijn.konfetti.emitters.StreamEmitter
@@ -24,7 +24,7 @@ class VictoryFragment : Fragment(R.layout.fragment_victory) {
     private val args: VictoryFragmentArgs by navArgs()
 
     @Inject
-    lateinit var environment: Environment
+    lateinit var appRepository: AppRepository
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory

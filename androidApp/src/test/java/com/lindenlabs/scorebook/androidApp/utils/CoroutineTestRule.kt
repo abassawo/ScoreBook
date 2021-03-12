@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp
+package com.lindenlabs.scorebook.androidApp.utils
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,5 +19,4 @@ class CoroutineTestRule(private val dispatcher: TestCoroutineDispatcher = TestCo
         super.finished(description)
         Dispatchers.resetMain()
     }
-
 }

@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.base.domain
+package com.lindenlabs.scorebook.androidApp.base.data.source
 
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player

@@ -1,7 +1,7 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.screens.BaseViewModelTest
+import com.lindenlabs.scorebook.androidApp.base.BaseViewModelTest
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent
 import junit.framework.Assert.assertEquals
@@ -13,7 +13,7 @@ import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class HomeViewModelTest : BaseViewModelTest() {
-    private var underTest = HomeViewModel(environment)
+    private var underTest = HomeViewModel(appRepository)
     private val arrangeBuilder = ArrangeBuilder()
 
     @Test
@@ -22,7 +22,7 @@ class HomeViewModelTest : BaseViewModelTest() {
             MainScope().launch {
                 val openGames = listOf(Game(name = "test1"))
                 arrangeBuilder.withGamesLoaded(openGames)
-                val emittedState = underTest.viewState.getOrAwaitValue()
+                val emittedState = requireNotNull( underTest.viewState.value)
                 assert(emittedState.entities.size == 1 + openGames.size)
 
                 with(emittedState.entities) {
@@ -44,7 +44,7 @@ class HomeViewModelTest : BaseViewModelTest() {
         runBlockingTest {
             MainScope().launch {
                 arrangeBuilder.withGamesLoaded(listOf(game, game2))
-                val emittedState = underTest.viewState.getOrAwaitValue()
+                val emittedState = requireNotNull(underTest.viewState.value)
                 assert(emittedState.entities.size == 2 + games.size)
             }
         }
@@ -55,7 +55,7 @@ class HomeViewModelTest : BaseViewModelTest() {
     fun `creating a new game triggers add player screens`() {
         val interaction = GameInteraction.GameDetailsEntered("Game1")
         underTest.handleInteraction(interaction)
-        val emittedEvent = underTest.viewEvent.getOrAwaitValue()
+        val emittedEvent = requireNotNull(underTest.viewEvent.value)
         assert(emittedEvent is HomeViewEvent.ShowAddPlayersScreen)
     }
 
@@ -63,7 +63,7 @@ class HomeViewModelTest : BaseViewModelTest() {
     fun `entering empty game name should trigger error`() {
         val interaction = GameInteraction.GameDetailsEntered("")
         underTest.handleInteraction(interaction)
-        val emittedEvent = underTest.viewEvent.getOrAwaitValue()
+        val emittedEvent = requireNotNull(underTest.viewEvent.value)
         assert(emittedEvent is HomeViewEvent.AlertNoTextEntered)
     }
 
@@ -72,7 +72,7 @@ class HomeViewModelTest : BaseViewModelTest() {
         val game = Game(name = "test")
         val interaction = GameInteraction.GameClicked(game)
         underTest.handleInteraction(interaction)
-        val emittedEvent = underTest.viewEvent.getOrAwaitValue()
+        val emittedEvent = requireNotNull(underTest.viewEvent.value)
         with(emittedEvent as HomeViewEvent.ShowActiveGame) {
             assertEquals(this.game, game)
         }
