@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.presentation.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.appComponent
+import com.lindenlabs.scorebook.androidApp.extensions.appComponent
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.databinding.UpdatePointsFragmentBinding
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
@@ -42,6 +42,7 @@ class UpdatePointsFragment : Fragment(R.layout.update_points_fragment) {
             .plus(UpdatePointsModule(args))
             .build()
             .inject(this)
+
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
                 override fun handleOnBackPressed() {

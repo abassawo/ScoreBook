@@ -4,4 +4,4 @@ import javax.inject.Scope
 
 @Scope
 @Retention
-public annotation class FragmentScope
+annotation class FragmentScope
