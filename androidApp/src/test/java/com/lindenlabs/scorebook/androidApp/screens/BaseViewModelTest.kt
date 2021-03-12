@@ -31,7 +31,6 @@ open class BaseViewModelTest  {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     open fun before() {
-//        Dispatchers.setMain(testDispatcher)
         lifeCycleTestOwner = LifeCycleTestOwner()
     }
 
@@ -39,8 +38,6 @@ open class BaseViewModelTest  {
     @After
     fun tearDown() {
         lifeCycleTestOwner?.onDestroy()
-//        Dispatchers.resetMain() // reset main dispatcher to the original Main dispatcher
-//        testDispatcher.cleanupTestCoroutines()
     }
 
     inner class ArrangeBuilder {

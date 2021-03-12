@@ -10,7 +10,7 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 
 class VictoryViewModelTest : BaseViewModelTest() {
-//    private val testCoroutineScope = TestCoroutineScope()
+    //    private val testCoroutineScope = TestCoroutineScope()
     private val underTest = VictoryViewModel(environment, initArgs())
 
     fun initArgs(): VictoryFragmentArgs {
@@ -29,8 +29,10 @@ class VictoryViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `test stalemate is announced`() {
-        val emittedState = underTest.viewState.getOrAwaitValue()
-        assertEquals("Stalemate!", emittedState.victoryText)
+    fun `test stalemate is announced`() = runBlockingTest {
+        MainScope().launch {
+            val emittedState = underTest.viewState.getOrAwaitValue()
+            assertEquals("Stalemate!", emittedState.victoryText)
+        }
     }
 }

@@ -4,7 +4,10 @@ import com.lindenlabs.scorebook.androidApp.screens.gameWithPlayers
 import com.lindenlabs.scorebook.androidApp.screens.BaseViewModelTest
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.verify
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 
 class UpdatePointsViewModelTest : BaseViewModelTest() {
@@ -17,10 +20,12 @@ class UpdatePointsViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `test adding points for first player`() =
-        runBlocking {
-            underTest.handleInteraction(UpdatePointsViewModel.AddPointsInteraction.AddScore(20))
-            val emittedEvent = underTest.viewEvent.value
-            assert(emittedEvent is UpdatePointsViewEvent.ScoreUpdated)
-            verify(environment.gamesRepo).updateGame(any())
+        runBlockingTest {
+            MainScope().launch {
+                underTest.handleInteraction(UpdatePointsViewModel.AddPointsInteraction.AddScore(20))
+                val emittedEvent = underTest.viewEvent.value
+                assert(emittedEvent is UpdatePointsViewEvent.ScoreUpdated)
+                verify(environment.gamesRepo).updateGame(any())
+            }
         }
 }
