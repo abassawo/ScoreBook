@@ -1,14 +1,14 @@
-
-package com.lindenlabs.scorebook.androidApp.screens.victory
+package com.lindenlabs.scorebook.androidApp.screens.victory.presentation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
+import com.lindenlabs.scorebook.androidApp.screens.victory.VictoryFragmentArgs
+import com.lindenlabs.scorebook.androidApp.screens.victory.entities.VictoryState
+import com.lindenlabs.scorebook.androidApp.screens.victory.entities.VictoryViewEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
-data class VictoryState(val victoryText: String)
 
 class VictoryViewModel(val appRepository: AppRepository, args: VictoryFragmentArgs, coroutineScope: CoroutineScope? = null) : ViewModel() {
     val viewState: MutableLiveData<VictoryState> = MutableLiveData()

@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.screens.home
+package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import android.app.Activity
 import android.os.Bundle
@@ -11,15 +11,15 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.lindenlabs.scorebook.androidApp.R
-import com.lindenlabs.scorebook.androidApp.base.presentation.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.extensions.appComponent
+import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
+import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.databinding.HomeFragmentBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewState
+import com.lindenlabs.scorebook.androidApp.screens.home.HomeFragmentDirections
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewState
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameAdapter
 import javax.inject.Inject
 

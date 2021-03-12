@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.screens.playerentry
+package com.lindenlabs.scorebook.androidApp.screens.playerentry.entities
 
 sealed class AddPlayersViewState {
     data class LoadAutocompleteAdapter(val suggestedPlayerNames: List<String>) : AddPlayersViewState()

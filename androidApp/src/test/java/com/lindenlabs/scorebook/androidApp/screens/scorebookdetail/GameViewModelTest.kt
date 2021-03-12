@@ -6,6 +6,7 @@ import com.lindenlabs.scorebook.androidApp.utils.game
 import com.lindenlabs.scorebook.androidApp.utils.gameWithPlayers
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent
+import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.GameViewModel
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope

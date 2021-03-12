@@ -1,9 +1,9 @@
-package com.lindenlabs.scorebook.androidApp.screens.home.presentation
+package com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames
 
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetClosedGames
 import com.lindenlabs.scorebook.androidApp.screens.home.domain.GetOpenGames
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GamesWrapper
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GamesWrapper
 
 class GamesMapper {
 

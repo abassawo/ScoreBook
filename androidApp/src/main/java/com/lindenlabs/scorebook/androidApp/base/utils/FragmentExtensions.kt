@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.extensions
+package com.lindenlabs.scorebook.androidApp.base.utils
 
 import androidx.fragment.app.Fragment
 import com.lindenlabs.scorebook.androidApp.ScoreBookApplication

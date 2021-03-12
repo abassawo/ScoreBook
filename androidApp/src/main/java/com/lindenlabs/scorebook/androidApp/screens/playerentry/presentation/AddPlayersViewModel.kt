@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.screens.playerentry
+package com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -6,9 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
-import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersViewState.*
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersFragmentArgs
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewState.*
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewEvent
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewState
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

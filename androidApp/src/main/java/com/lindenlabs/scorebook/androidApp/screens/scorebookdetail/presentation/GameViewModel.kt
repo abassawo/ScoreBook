@@ -1,15 +1,17 @@
-package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail
+package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
+import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction.*
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent.AddPlayersClicked
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent.EditScoreForPlayer
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewState
+import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.showplayers.GameViewEntityMapper
 
 class GameViewModel(args: GameDetailFragmentArgs) : ViewModel() {
     val viewState: MutableLiveData<ScoreBookViewState> = MutableLiveData()

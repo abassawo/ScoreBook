@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.screens.updatepoints
+package com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -6,6 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
+import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsFragmentArgs
+import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewEvent
+import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewState
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 

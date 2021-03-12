@@ -2,8 +2,9 @@ package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.BaseViewModelTest
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope

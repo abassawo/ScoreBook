@@ -5,12 +5,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.*
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.GameClicked
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.GameDetailsEntered
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameStrategy.HighestScoreWins
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameStrategy.LowestScoreWins
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent.*
+import com.lindenlabs.scorebook.androidApp.base.data.raw.GameStrategy
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.*
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction.GameClicked
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction.GameDetailsEntered
+import com.lindenlabs.scorebook.androidApp.base.data.raw.GameStrategy.HighestScoreWins
+import com.lindenlabs.scorebook.androidApp.base.data.raw.GameStrategy.LowestScoreWins
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent.*
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GamesMapper
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GamesWrapper
 import kotlinx.coroutines.launch
 
 class HomeViewModel(val appRepository: AppRepository) : ViewModel(){

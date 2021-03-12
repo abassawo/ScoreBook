@@ -1,7 +1,6 @@
 package com.lindenlabs.scorebook.androidApp.di
 
 import androidx.navigation.NavArgs
-import com.lindenlabs.scorebook.androidApp.base.presentation.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.di.scope.FragmentScope
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersFragmentArgs

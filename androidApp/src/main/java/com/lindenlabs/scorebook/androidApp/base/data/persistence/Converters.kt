@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.lindenlabs.scorebook.androidApp.base.data.raw.GameOutcome
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameStrategy
+import com.lindenlabs.scorebook.androidApp.base.data.raw.GameStrategy
 import org.json.JSONObject
 import timber.log.Timber
 import java.lang.reflect.Type

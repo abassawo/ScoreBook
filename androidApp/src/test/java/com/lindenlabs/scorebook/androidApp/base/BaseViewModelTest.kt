@@ -5,7 +5,6 @@ import com.lindenlabs.scorebook.androidApp.utils.CoroutineTestRule
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.base.data.source.LocalGameDataSource
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.LifeCycleTestOwner
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.After
@@ -15,7 +14,7 @@ import org.junit.rules.TestRule
 import org.mockito.Mockito
 
 open class BaseViewModelTest  {
-    var lifeCycleTestOwner: LifeCycleTestOwner? = null
+//    var lifeCycleTestOwner: LifeCycleTestOwner? = null
 
     private val mockRepo: LocalGameDataSource = Mockito.mock(LocalGameDataSource::class.java)
     val appRepository: AppRepository = AppRepository(mockRepo)
@@ -31,13 +30,13 @@ open class BaseViewModelTest  {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     open fun before() {
-        lifeCycleTestOwner = LifeCycleTestOwner()
+//        lifeCycleTestOwner = LifeCycleTestOwner()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @After
     fun tearDown() {
-        lifeCycleTestOwner?.onDestroy()
+//        lifeCycleTestOwner?.onDestroy()
     }
 
     inner class ArrangeBuilder {

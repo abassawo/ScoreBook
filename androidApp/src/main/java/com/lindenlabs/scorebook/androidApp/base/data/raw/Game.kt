@@ -3,7 +3,6 @@ package com.lindenlabs.scorebook.androidApp.base.data.raw
 import android.os.Parcelable
 import androidx.room.*
 import com.lindenlabs.scorebook.androidApp.base.data.persistence.Converters.*
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameStrategy
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 

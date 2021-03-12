@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.screens.updatepoints
+package com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation
 
 import android.os.Bundle
 import android.view.View
@@ -9,14 +9,18 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
-import com.lindenlabs.scorebook.androidApp.base.presentation.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.extensions.appComponent
+import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
+import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.databinding.UpdatePointsFragmentBinding
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.di.UpdatePointsModule
-import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsViewEvent.*
-import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsViewModel.*
+import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsFragmentArgs
+import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsFragmentDirections
+import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewEvent.*
+import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsViewModel.*
+import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewEvent
+import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewState
 import javax.inject.Inject
 
 class UpdatePointsFragment : Fragment(R.layout.update_points_fragment) {

@@ -1,7 +1,7 @@
-package com.lindenlabs.scorebook.androidApp.screens.home.presentation
+package com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames
 
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction
 
 sealed class GameRowEntity {
     data class HeaderType(val title: String) : GameRowEntity()

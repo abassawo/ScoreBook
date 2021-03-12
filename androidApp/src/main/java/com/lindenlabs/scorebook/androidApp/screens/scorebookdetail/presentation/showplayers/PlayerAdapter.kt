@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.showplayers
+package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.showplayers
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

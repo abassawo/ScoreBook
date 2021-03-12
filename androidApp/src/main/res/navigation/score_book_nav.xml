@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navHomeFragment"
-        android:name="com.lindenlabs.scorebook.androidApp.screens.home.HomeFragment"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeFragment"
         tools:layout="@layout/home_fragment">
 
         <action
@@ -38,7 +38,7 @@
 
     <fragment
         android:id="@+id/navAddPlayers"
-        android:name="com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersFragment"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersFragment"
         tools:layout="@layout/add_players_fragment">
 
         <argument
@@ -62,7 +62,7 @@
 
     <fragment
         android:id="@+id/navScoreGame"
-        android:name="com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragment"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.GameDetailFragment"
         tools:layout="@layout/game_detail_fragment">
 
         <argument
@@ -107,7 +107,7 @@
 
     <fragment
         android:id="@+id/navUpdatePoints"
-        android:name="com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsFragment"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsFragment"
         tools:layout="@layout/update_points_fragment">
 
         <argument
@@ -125,7 +125,7 @@
 
     <fragment
         android:id="@+id/navVictoryFragment"
-        android:name="com.lindenlabs.scorebook.androidApp.screens.victory.VictoryFragment"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryFragment"
         tools:layout="@layout/fragment_victory">
 
         <argument

@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail
+package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation
 
 import android.os.Bundle
 import android.view.View
@@ -9,18 +9,20 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.lindenlabs.scorebook.androidApp.R
-import com.lindenlabs.scorebook.androidApp.base.presentation.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.extensions.appComponent
+import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
+import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailFragmentBinding
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.di.GameScoreModule
+import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragmentArgs
+import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragmentDirections
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragmentDirections.Companion.navigateToAddPlayersScreen
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragmentDirections.Companion.navigateToUpdatePoints
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewState
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.showplayers.PlayerAdapter
+import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.showplayers.PlayerAdapter
 import javax.inject.Inject
 
 class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {

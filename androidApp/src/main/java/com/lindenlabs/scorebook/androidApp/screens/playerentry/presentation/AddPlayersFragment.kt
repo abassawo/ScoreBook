@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.screens.playerentry
+package com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation
 
 import android.app.Activity
 import android.os.Bundle
@@ -13,14 +13,18 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
-import com.lindenlabs.scorebook.androidApp.base.presentation.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.extensions.appComponent
+import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
+import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.AddPlayersArgsModule
-import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersViewState.*
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersFragmentArgs
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersFragmentDirections
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewState.*
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewEvent
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewState
 import javax.inject.Inject
 
 class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {

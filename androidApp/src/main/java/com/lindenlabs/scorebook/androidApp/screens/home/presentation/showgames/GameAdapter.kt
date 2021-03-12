@@ -1,18 +1,15 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.viewbinding.ViewBinding
-import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.GameItemRowBinding
 import com.lindenlabs.scorebook.androidApp.databinding.HeaderItemRowBinding
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameRowEntity
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameRowEntity.BodyType
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.GameRowEntity.HeaderType
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity.BodyType
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity.HeaderType
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameViewHolder.BodyViewHolder
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameViewHolder.HeaderViewHolder
 
