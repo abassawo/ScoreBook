@@ -1,13 +1,13 @@
 package com.lindenlabs.scorebook.androidApp.screens.updatepoints
 
-import com.lindenlabs.scorebook.androidApp.screens.BaseTest
 import com.lindenlabs.scorebook.androidApp.screens.gameWithPlayers
+import com.lindenlabs.scorebook.androidApp.screens.BaseViewModelTest
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
-class UpdatePointsViewModelTest : BaseTest() {
+class UpdatePointsViewModelTest : BaseViewModelTest() {
     private val underTest = UpdatePointsViewModel(environment, initArgs())
 
     private fun initArgs() = UpdatePointsFragmentArgs(

@@ -12,12 +12,12 @@ import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlaye
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class AddPlayersViewModel @Inject constructor(
     val environment: Environment,
-    args: AddPlayersFragmentArgs,
-    coroutineScope: CoroutineScope? = null
+    args: AddPlayersFragmentArgs
 ) : ViewModel(), Launchable {
     val viewState: MutableLiveData<AddPlayersViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<AddPlayersViewEvent> = MutableLiveData()
@@ -33,13 +33,19 @@ class AddPlayersViewModel @Inject constructor(
         showPlayers(currentGame.players)
     }
 
-    private fun populateAutocompleteAdapter() =
+    private fun populateAutocompleteAdapter() {
+        val setOfNames: MutableSet<String> = mutableSetOf()
         viewModelScope.launch {
-            val games = environment.load()
-            val setOfNames: MutableSet<String> = mutableSetOf()
-            games.map { it.players.map { player -> setOfNames += player.name } }
-            viewState.postValue(LoadAutocompleteAdapter(setOfNames.toList()))
+            withContext(environment.dispatcher) {
+                runCatching { environment.load() }
+                    .onSuccess { games ->
+                        games.map { it.players.map { player -> setOfNames += player.name } }
+                        viewState.postValue(LoadAutocompleteAdapter(setOfNames.toList()))
+                    }
+                    .onFailure { }
+            }
         }
+    }
 
     private fun showPlayers(players: List<Player>) {
         if (players.isNotEmpty())
@@ -58,7 +64,11 @@ class AddPlayersViewModel @Inject constructor(
         }
 
     private fun navigateHome() {
-        viewModelScope.launch { environment.updateGame(currentGame) }
+        viewModelScope.launch {
+            withContext(environment.dispatcher) {
+                environment.updateGame(currentGame)
+            }
+        }
         viewEvent.postValue(AddPlayersViewEvent.NavigateHome)
     }
 
@@ -80,7 +90,9 @@ class AddPlayersViewModel @Inject constructor(
             // navigate to Game Detail screen
             viewEvent.postValue(AddPlayersViewEvent.NavigateToGameDetail(currentGame))
             viewModelScope.launch {
-                environment.updateGame(currentGame)
+                withContext(environment.dispatcher) {
+                    environment.updateGame(currentGame)
+                }
             }
         }
     }
