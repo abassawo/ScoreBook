@@ -22,16 +22,15 @@ dependencies {
 
 
     implementation("com.facebook.stetho:stetho:1.5.1")
+
     val daggerVersion=2.33
+
     implementation("com.google.dagger:dagger-android:2.33")
     implementation("com.google.dagger:dagger:2.33")
-//    annotationProcessor("com.google.dagger:dagger-android-processor:2.33")
 
     implementation("com.google.dagger:dagger:$daggerVersion")
     kapt("com.google.dagger:dagger-android-processor:$daggerVersion")
     kapt("com.google.dagger:dagger-compiler:$daggerVersion")
-
-//    def room_version = "2.2.6"
 
     implementation("androidx.room:room-runtime:2.2.6")
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.3")
@@ -50,10 +49,6 @@ dependencies {
     testImplementation("junit:junit:4.12")
     // Optional -- Robolectric environment
     testImplementation("androidx.test:core:1.0.0")
-    // Optional -- Mockito framework
-//    testImplementation("org.mockito:mockito-core:3.3.3")
-//    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.3")
-//    testImplementation("android.arch.core:core-testing:1.0.0-alpha3")
     val coroutines = "1.4.3"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines")
