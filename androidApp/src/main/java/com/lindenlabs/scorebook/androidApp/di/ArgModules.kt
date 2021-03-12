@@ -3,10 +3,10 @@ package com.lindenlabs.scorebook.androidApp.di
 import androidx.navigation.NavArgs
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.di.scope.FragmentScope
-import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersFragmentArgs
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragmentArgs
-import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsFragmentArgs
-import com.lindenlabs.scorebook.androidApp.screens.victory.VictoryFragmentArgs
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersFragmentArgs
+import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.GameDetailFragmentArgs
+import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsFragmentArgs
+import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryFragmentArgs
 import dagger.Module
 import dagger.Provides
 

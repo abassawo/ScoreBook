@@ -1,9 +1,9 @@
 package com.lindenlabs.scorebook.androidApp.base.domain
 
-import com.lindenlabs.scorebook.androidApp.base.data.DefaultDispatcherProvider
+import com.lindenlabs.scorebook.androidApp.base.data.sources.GameDataSource
+import com.lindenlabs.scorebook.androidApp.base.utils.DefaultDispatcherProvider
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
-import com.lindenlabs.scorebook.androidApp.base.data.source.GameDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.util.*

@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavArgs
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
-import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersFragmentArgs
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersViewModel
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.GameDetailFragmentArgs
+import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.GameDetailFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.GameViewModel
-import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsFragmentArgs
+import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsViewModel
-import com.lindenlabs.scorebook.androidApp.screens.victory.VictoryFragmentArgs
+import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryViewModel
 import javax.inject.Inject
 

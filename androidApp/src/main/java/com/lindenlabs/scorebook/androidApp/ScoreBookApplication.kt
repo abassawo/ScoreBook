@@ -4,8 +4,8 @@ import android.app.Application
 import com.facebook.stetho.Stetho
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.base.data.persistence.GamesDatabase
-import com.lindenlabs.scorebook.androidApp.base.data.source.GameDataSource
-import com.lindenlabs.scorebook.androidApp.base.data.source.LocalGameDataSource
+import com.lindenlabs.scorebook.androidApp.base.data.sources.GameDataSource
+import com.lindenlabs.scorebook.androidApp.base.data.sources.LocalGameDataSource
 import com.lindenlabs.scorebook.androidApp.di.AppComponent
 import com.lindenlabs.scorebook.androidApp.di.AppModule
 import com.lindenlabs.scorebook.androidApp.di.DaggerAppComponent

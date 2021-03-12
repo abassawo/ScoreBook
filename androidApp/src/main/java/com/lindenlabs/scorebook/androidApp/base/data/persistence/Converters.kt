@@ -12,7 +12,6 @@ import timber.log.Timber
 import java.lang.reflect.Type
 import java.util.*
 
-
 fun JSONObject.toPlayer(): Player {
     Timber.d("Converter player $this")
     return Gson().fromJson(this.toString(), Player::class.java)

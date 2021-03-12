@@ -1,9 +1,7 @@
-package com.lindenlabs.scorebook.androidApp.base.data
+package com.lindenlabs.scorebook.androidApp.base.utils
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 interface DispatcherProvider {
     fun default(): CoroutineDispatcher = Dispatchers.Default

@@ -13,8 +13,6 @@ import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.databinding.FragmentVictoryBinding
 import com.lindenlabs.scorebook.androidApp.di.VictoryModule
-import com.lindenlabs.scorebook.androidApp.screens.victory.VictoryFragmentArgs
-import com.lindenlabs.scorebook.androidApp.screens.victory.VictoryFragmentDirections
 import com.lindenlabs.scorebook.androidApp.screens.victory.entities.VictoryState
 import nl.dionsegijn.konfetti.emitters.StreamEmitter
 import nl.dionsegijn.konfetti.models.Shape
