@@ -2,6 +2,7 @@ package com.lindenlabs.scorebook.androidApp.screens.playerentry
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.lindenlabs.scorebook.androidApp.base.Environment
 import com.lindenlabs.scorebook.androidApp.base.Launchable
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
@@ -9,7 +10,6 @@ import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersViewState.*
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*
-import com.lindenlabs.scorebook.androidApp.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,7 +23,6 @@ class AddPlayersViewModel @Inject constructor(
     val viewEvent: MutableLiveData<AddPlayersViewEvent> = MutableLiveData()
     private val currentGame: Game = args.gameArg
 
-    private val viewModelScope = viewModelScope(coroutineScope)
 
     init {
         launch()

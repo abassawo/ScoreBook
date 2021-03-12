@@ -2,10 +2,10 @@ package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.lindenlabs.scorebook.androidApp.base.Environment
 import com.lindenlabs.scorebook.androidApp.base.Launchable
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.viewModelScope
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.*
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.GameClicked
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.GameDetailsEntered
@@ -14,15 +14,13 @@ import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.Ga
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class HomeViewModel(
-    val environment: Environment,
-    coroutineScope: CoroutineScope? = null
-) : ViewModel(), Launchable {
+class HomeViewModel(val environment: Environment) : ViewModel(), Launchable {
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
     private val gamesMapper: GamesMapper = GamesMapper()
-    private val viewModelScope = viewModelScope(coroutineScope)
+//    private val workerScope = environment.coroutineScope ?: viewModelScope
 
     init {
         launch()
@@ -30,13 +28,18 @@ class HomeViewModel(
 
     override fun launch() {
         viewModelScope.launch {
-            val gamesWrapper = gamesMapper.mapGamesToWrapper(games = environment.load())
-            showGames(gamesWrapper)
+                withContext(environment.dispatcher) {
+                runCatching { environment.load() }
+                     .onSuccess(::showGames)
+                    .onFailure { }
+            }
         }
     }
 
-    private fun showGames(gamesWrapper: GamesWrapper) =
-        viewState.postValue(gamesWrapper.toViewState())
+    private fun showGames(games: List<Game>) {
+        val wrapper = gamesMapper.mapGamesToWrapper(games)
+        viewState.postValue(wrapper.toViewState())
+    }
 
     internal fun handleInteraction(interaction: GameInteraction) = when (interaction) {
         is GameDetailsEntered -> {
@@ -57,7 +60,11 @@ class HomeViewModel(
     private fun storeNewGame(name: String, strategy: GameStrategy): Game {
         return Game(name = name, strategy = strategy).also { game ->
             game.start()
-            viewModelScope.launch { environment.storeGame(game) }
+            viewModelScope.launch {
+                withContext(environment.dispatcher) {
+                    environment.storeGame(game)
+                }
+            }
         }
     }
 

@@ -11,5 +11,5 @@ fun Fragment.appComponent(): Lazy<AppComponent> = lazy {
     (requireActivity().application as ScoreBookApplication).appComponent
 }
 
-fun ViewModel.viewModelScope(coroutineScope: CoroutineScope? = null) =
-    coroutineScope ?: this.viewModelScope
+//fun ViewModel.viewModelScope(coroutineScope: CoroutineScope? = null) =
+//    coroutineScope ?: this.viewModelScope

@@ -54,6 +54,15 @@ dependencies {
 //    testImplementation("org.mockito:mockito-core:3.3.3")
 //    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.3")
 //    testImplementation("android.arch.core:core-testing:1.0.0-alpha3")
+    val coroutines = "1.4.3"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines")
+
+    // testImplementation for pure JVM unit tests
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines")
+
+    // androidTestImplementation for Android instrumentation tests
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines")
 
     testImplementation("androidx.test.ext:junit:1.1.2-alpha03")
     testImplementation("org.mockito:mockito-core:3.0.0")
