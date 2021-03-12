@@ -1,45 +1,48 @@
 package com.lindenlabs.scorebook.androidApp.screens.playerentry
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavArgs
-import com.lindenlabs.scorebook.androidApp.base.Argument
-import com.lindenlabs.scorebook.androidApp.base.BaseViewModel
-import com.lindenlabs.scorebook.androidApp.base.Environment
+import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.AddPlayersViewState.*
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class AddPlayersViewModel : BaseViewModel() {
+class AddPlayersViewModel @Inject constructor(
+    val appRepository: AppRepository,
+    args: AddPlayersFragmentArgs
+) : ViewModel() {
     val viewState: MutableLiveData<AddPlayersViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<AddPlayersViewEvent> = MutableLiveData()
-    private lateinit var currentGame: Game
+    private val currentGame: Game = args.gameArg
 
-    override fun launch(environment: Environment, args: Argument) {
-        super.launch(environment, args)
+
+    init {
         populateAutocompleteAdapter()
-        processArgumentsAndShowPlayersIfAvailable(args as AddPlayersFragmentArgs)
+        showPlayers(currentGame.players)
     }
 
-    private fun populateAutocompleteAdapter() = viewModelScope.launch {
-        runBlocking {
-            val games = environment.load()
-            val setOfNames: MutableSet<String> = mutableSetOf()
-            games.map { it.players.map { player -> setOfNames += player.name } }
-            viewState.postValue(LoadAutocompleteAdapter(setOfNames.toList()))
+    private fun populateAutocompleteAdapter() {
+        val setOfNames: MutableSet<String> = mutableSetOf()
+        viewModelScope.launch {
+            runCatching { appRepository.load() }
+                .onSuccess { games ->
+                    games.map { it.players.map { player -> setOfNames += player.name } }
+                    viewState.postValue(LoadAutocompleteAdapter(setOfNames.toList()))
+                }
+                .onFailure { }
         }
     }
 
-    private fun processArgumentsAndShowPlayersIfAvailable(args: AddPlayersFragmentArgs) =
-        with(args.gameArg) {
-            currentGame = this
-            if (players.isNotEmpty())
-                viewState.postValue(UpdateCurrentPlayersText(players.toText()))
-        }
+    private fun showPlayers(players: List<Player>) {
+        if (players.isNotEmpty())
+            viewState.postValue(UpdateCurrentPlayersText(players.toText()))
+    }
 
 
     fun handleInteraction(interaction: AddPlayerInteraction) =
@@ -53,10 +56,11 @@ class AddPlayersViewModel : BaseViewModel() {
         }
 
     private fun navigateHome() {
-        viewModelScope.launch { environment.updateGame(currentGame) }
+        viewModelScope.launch {
+            appRepository.updateGame(currentGame)
+        }
         viewEvent.postValue(AddPlayersViewEvent.NavigateHome)
     }
-
 
     private fun addAnotherPlayer(playerName: String) {
         if (playerName.isEmpty())
@@ -76,7 +80,9 @@ class AddPlayersViewModel : BaseViewModel() {
             // navigate to Game Detail screen
             viewEvent.postValue(AddPlayersViewEvent.NavigateToGameDetail(currentGame))
             viewModelScope.launch {
-                runBlocking { environment.updateGame(currentGame) }
+                withContext(appRepository.dispatcher) {
+                    appRepository.updateGame(currentGame)
+                }
             }
         }
     }

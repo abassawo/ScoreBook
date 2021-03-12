@@ -1,11 +1,9 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavArgs
-import com.lindenlabs.scorebook.androidApp.base.Argument
-import com.lindenlabs.scorebook.androidApp.base.BaseViewModel
-import com.lindenlabs.scorebook.androidApp.base.Environment
+import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.*
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.GameInteraction.GameClicked
@@ -15,20 +13,24 @@ import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.Ga
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.entities.HomeViewEvent.*
 import kotlinx.coroutines.launch
 
-class HomeViewModel : BaseViewModel() {
+class HomeViewModel(val appRepository: AppRepository) : ViewModel(){
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
     private val gamesMapper: GamesMapper = GamesMapper()
 
-    override fun launch(environment: Environment, argument: Argument) {
+    init {
         viewModelScope.launch {
-            val gamesWrapper = gamesMapper.mapGamesToWrapper(games = environment.load())
-            showGames(gamesWrapper)
+            runCatching { appRepository.load() }
+                .onSuccess(::showGames)
+                .onFailure { }
         }
     }
 
-    private fun showGames(gamesWrapper: GamesWrapper) =
-        viewState.postValue(gamesWrapper.toViewState())
+
+    private fun showGames(games: List<Game>) {
+        val wrapper = gamesMapper.mapGamesToWrapper(games)
+        viewState.postValue(wrapper.toViewState())
+    }
 
     internal fun handleInteraction(interaction: GameInteraction) = when (interaction) {
         is GameDetailsEntered -> {
@@ -49,7 +51,7 @@ class HomeViewModel : BaseViewModel() {
     private fun storeNewGame(name: String, strategy: GameStrategy): Game {
         return Game(name = name, strategy = strategy).also { game ->
             game.start()
-            viewModelScope.launch { environment.storeGame(game) }
+            viewModelScope.launch { appRepository.storeGame(game) }
         }
     }
 

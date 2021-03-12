@@ -1,21 +1,24 @@
+
 package com.lindenlabs.scorebook.androidApp.screens.victory
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lindenlabs.scorebook.androidApp.base.Environment
+import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 data class VictoryState(val victoryText: String)
 
-class VictoryViewModel : ViewModel() {
+class VictoryViewModel(val appRepository: AppRepository, args: VictoryFragmentArgs, coroutineScope: CoroutineScope? = null) : ViewModel() {
     val viewState: MutableLiveData<VictoryState> = MutableLiveData()
     val viewEvent: MutableLiveData<VictoryViewEvent> = MutableLiveData()
 
-    fun launch(environment: Environment, args: VictoryFragmentArgs) {
+
+    init {
         viewState.postValue(VictoryState(victoryText = args.gameArg.end()))
         viewModelScope.launch {
-            environment.updateGame(args.gameArg)
+            appRepository.updateGame(args.gameArg)
         }
     }
 }

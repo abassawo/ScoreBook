@@ -4,28 +4,31 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
+import com.lindenlabs.scorebook.androidApp.base.presentation.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.appComponent
-import com.lindenlabs.scorebook.androidApp.base.Argument
-import com.lindenlabs.scorebook.androidApp.base.Environment
+import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.databinding.UpdatePointsFragmentBinding
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
+import com.lindenlabs.scorebook.androidApp.di.UpdatePointsModule
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.UpdatePointsViewModel.*
 import javax.inject.Inject
 
 class UpdatePointsFragment : Fragment(R.layout.update_points_fragment) {
     private val binding: UpdatePointsFragmentBinding by lazy { viewBinding() }
-    private val viewModel: UpdatePointsViewModel by viewModels()
+    private val viewModel: UpdatePointsViewModel by lazy { viewModelFactory.makeViewModel(this, UpdatePointsViewModel::class.java)  }
     private val args: UpdatePointsFragmentArgs by navArgs()
 
     @Inject
-    lateinit var environment: Environment
+    lateinit var appRepository: AppRepository
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     private fun viewBinding(): UpdatePointsFragmentBinding {
         val rootView = requireView().findViewById<View>(R.id.addPointsRoot)
@@ -34,7 +37,11 @@ class UpdatePointsFragment : Fragment(R.layout.update_points_fragment) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appComponent().value.updatePointsFragmentComponent().inject(this)
+        appComponent().value
+            .updatePointsComponentBuilder()
+            .plus(UpdatePointsModule(args))
+            .build()
+            .inject(this)
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
                 override fun handleOnBackPressed() {
@@ -48,7 +55,6 @@ class UpdatePointsFragment : Fragment(R.layout.update_points_fragment) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.viewState.observe(this as LifecycleOwner, ::processState)
         viewModel.viewEvent.observe(this as LifecycleOwner, ::processEvent)
-        viewModel.launch(environment, Argument.UpdatePoints(args))
         binding.updatePointsButton.setOnClickListener {
             val points = Integer.parseInt(binding.pointsEditText.text.toString())
             viewModel.handleInteraction(AddPointsInteraction.AddScore(points))

@@ -1,12 +1,12 @@
 
-package com.lindenlabs.scorebook.androidApp.base.domain
+package com.lindenlabs.scorebook.androidApp.base.data.source
 
 import com.lindenlabs.scorebook.androidApp.base.data.persistence.GameStore
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 import java.util.*
 
-open class GameRepository(private val gamesDao: GameStore) : GameDataSource {
+open class LocalGameDataSource(private val gamesDao: GameStore) : GameDataSource {
     var games: List<Game> = emptyList()
 
     fun games() = games

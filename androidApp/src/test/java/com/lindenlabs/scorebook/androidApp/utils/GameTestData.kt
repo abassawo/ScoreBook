@@ -1,8 +1,7 @@
-package com.lindenlabs.scorebook.androidApp.screens
+package com.lindenlabs.scorebook.androidApp.utils
 
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
-
 
 fun game() = Game(name = "Test")
 
