@@ -78,5 +78,16 @@ class HomeViewModelTest : BaseViewModelTest() {
             assertEquals(this.game, game)
         }
     }
+
+    @Test
+    fun `swipe to delete`() {
+        runBlockingTest {
+            MainScope().launch {
+                val openGames = listOf(Game(name = "test1"))
+                arrangeBuilder.withGamesLoaded(openGames)
+                underTest.handleInteraction(Home.GameSwiped(openGames.first()))
+            }
+        }
+    }
 }
 
