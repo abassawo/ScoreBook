@@ -4,8 +4,11 @@ import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.BaseViewModelTest
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewState
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity
+import com.nhaarman.mockitokotlin2.verify
 import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -80,12 +83,14 @@ class HomeViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `swipe to delete`() {
+    fun `swipe to delete interaction should trigger repository to delete game`() {
         runBlockingTest {
             MainScope().launch {
                 val openGames = listOf(Game(name = "test1"))
                 arrangeBuilder.withGamesLoaded(openGames)
-                underTest.handleInteraction(Home.GameSwiped(openGames.first()))
+                val game = openGames.first()
+                underTest.handleInteraction(GameInteraction.SwipeToDelete(game))
+                verify(mockRepo).deleteGame(game)
             }
         }
     }

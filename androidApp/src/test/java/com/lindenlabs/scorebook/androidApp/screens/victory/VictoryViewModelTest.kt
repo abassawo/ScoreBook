@@ -2,6 +2,7 @@ package com.lindenlabs.scorebook.androidApp.screens.victory
 
 import com.lindenlabs.scorebook.androidApp.utils.gameWithPlayers
 import com.lindenlabs.scorebook.androidApp.base.BaseViewModelTest
+import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryViewModel
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi

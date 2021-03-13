@@ -39,32 +39,40 @@ class HomeViewModel(val appRepository: AppRepository) : ViewModel() {
 
     internal fun handleInteraction(interaction: GameInteraction) = when (interaction) {
         is GameDetailsEntered -> {
-            if (interaction.name.isNullOrEmpty()) {
+            if (interaction.name.isNullOrEmpty())
                 showError()
-            } else {
-                val strategy =
-                    if (interaction.lowestScoreWins) LowestScoreWins else HighestScoreWins
-                val game = storeNewGame(interaction.name, strategy)
-                viewEvent.postValue(ShowAddPlayersScreen(game))
+            else {
+                val strategy = if (interaction.lowestScoreWins) LowestScoreWins else HighestScoreWins
+                startNewGame(interaction.name, strategy)
             }
         }
         is GameClicked -> viewEvent.postValue(ShowActiveGame(interaction.game))
-        is SwipeToDelete -> {
-            viewModelScope.launch {
-                runCatching { appRepository.deleteGame(interaction.game) }
-                    .onSuccess { loadGames() }
-                    .onFailure { }
-            }
+        is SwipeToDelete -> viewModelScope.launch {
+            runCatching { deleteGame(interaction.game) }
+                .onSuccess { loadGames() }
+                .onFailure { }
         }
+        is UndoDelete -> storeGame(interaction.game)
+    }
+
+
+    private suspend fun deleteGame(game: Game) {
+        appRepository.deleteGame(game)
+        viewEvent.postValue(ShowUndoDeletePrompt(game))
     }
 
     private fun showError() = viewEvent.postValue(AlertNoTextEntered())
 
-    private fun storeNewGame(name: String, strategy: GameStrategy): Game {
+    private fun startNewGame(name: String, strategy: GameStrategy): Game {
         return Game(name = name, strategy = strategy).also { game ->
             game.start()
-            viewModelScope.launch { appRepository.storeGame(game) }
+            storeGame(game)
         }
+    }
+
+    private fun storeGame(game: Game) = viewModelScope.launch {
+        kotlin.runCatching { appRepository.storeGame(game) }
+            .onSuccess { viewEvent.postValue(ShowAddPlayersScreen(game)) }
     }
 
     private fun GamesWrapper.toViewState(): HomeViewState {
@@ -90,5 +98,6 @@ class HomeViewModel(val appRepository: AppRepository) : ViewModel() {
             swipeAction = { this.onSwiped() })
 
     private fun Game.onClicked() = handleInteraction(GameClicked(this))
+
     private fun Game.onSwiped() = handleInteraction(SwipeToDelete(this))
 }

@@ -14,9 +14,7 @@ import org.junit.rules.TestRule
 import org.mockito.Mockito
 
 open class BaseViewModelTest  {
-//    var lifeCycleTestOwner: LifeCycleTestOwner? = null
-
-    private val mockRepo: LocalGameDataSource = Mockito.mock(LocalGameDataSource::class.java)
+    val mockRepo: LocalGameDataSource = Mockito.mock(LocalGameDataSource::class.java)
     val appRepository: AppRepository = AppRepository(mockRepo)
 
     @ExperimentalCoroutinesApi

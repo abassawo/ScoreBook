@@ -3,6 +3,7 @@ package com.lindenlabs.scorebook.androidApp.screens.updatepoints
 import com.lindenlabs.scorebook.androidApp.utils.gameWithPlayers
 import com.lindenlabs.scorebook.androidApp.base.BaseViewModelTest
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewEvent
+import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsViewModel
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.verify

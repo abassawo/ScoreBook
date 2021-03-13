@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
@@ -21,6 +22,7 @@ import com.lindenlabs.scorebook.androidApp.databinding.HomeFragmentBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction.*
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewState
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameAdapter
@@ -73,13 +75,22 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     }
 
 
-    private fun processViewEvent(event: HomeViewEvent) = when (event) {
-        is HomeViewEvent.AlertNoTextEntered -> showError(event)
-        is HomeViewEvent.ShowAddPlayersScreen -> findNavController().showAddPlayersScreen(event.game)
-            .also { hideKeyboard() }
-        is HomeViewEvent.ShowActiveGame -> findNavController().showActiveGame(event.game)
-            .also { hideKeyboard() }
+    private fun processViewEvent(event: HomeViewEvent) {
+        when (event) {
+            is HomeViewEvent.AlertNoTextEntered -> showError(event)
+            is HomeViewEvent.ShowAddPlayersScreen -> findNavController().showAddPlayersScreen(event.game)
+                .also { hideKeyboard() }
+            is HomeViewEvent.ShowActiveGame -> findNavController().showActiveGame(event.game)
+                .also { hideKeyboard() }
+            is HomeViewEvent.ShowUndoDeletePrompt -> showUndoPrompt(event)
+        }
     }
+
+    private fun showUndoPrompt(event: HomeViewEvent.ShowUndoDeletePrompt) =
+        Snackbar.make(requireView(), "You've deleted " + event.game.name, Snackbar.LENGTH_SHORT)
+            .setAction(R.string.undo) {
+                viewModel.handleInteraction(UndoDelete(event.game))
+            }
 
     private fun hideKeyboard() {
         val imm: InputMethodManager =
@@ -114,7 +125,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                 newGameButton.setOnClickListener {
                     val enteredText = enterNewGameEditText.text.toString()
                     viewModel.handleInteraction(
-                        GameInteraction.GameDetailsEntered(
+                        GameDetailsEntered(
                             enteredText,
                             isChecked
                         )

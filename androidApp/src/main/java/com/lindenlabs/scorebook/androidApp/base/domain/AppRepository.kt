@@ -9,7 +9,7 @@ import kotlinx.coroutines.withContext
 import java.util.*
 
 class AppRepository(
-    private val dataSource: GameDataSource,
+    val dataSource: GameDataSource,
     val dispatcher: CoroutineDispatcher = DefaultDispatcherProvider().default(),
 ) : GameDataSource {
 
