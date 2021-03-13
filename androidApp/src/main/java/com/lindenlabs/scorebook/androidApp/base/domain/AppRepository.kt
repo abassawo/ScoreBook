@@ -9,7 +9,7 @@ import kotlinx.coroutines.withContext
 import java.util.*
 
 class AppRepository(
-    val dataSource: GameDataSource,
+    private val dataSource: GameDataSource,
     val dispatcher: CoroutineDispatcher = DefaultDispatcherProvider().default(),
 ) : GameDataSource {
 
@@ -33,6 +33,10 @@ class AppRepository(
 
     override suspend fun updateGame(game: Game) = withContext(dispatcher) {
         dataSource.updateGame(game)
+    }
+
+    override suspend fun deleteGame(game: Game) = withContext(dispatcher) {
+        dataSource.deleteGame(game)
     }
 
     override suspend fun clear() = withContext(dispatcher) {

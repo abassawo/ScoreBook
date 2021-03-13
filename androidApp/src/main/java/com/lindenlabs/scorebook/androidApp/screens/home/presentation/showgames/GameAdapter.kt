@@ -12,9 +12,10 @@ import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.G
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameViewHolder.BodyViewHolder
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameViewHolder.HeaderViewHolder
+import com.lindenlabs.scorebook.androidApp.views.rv.ItemTouchHelperAdapter
+import com.lindenlabs.scorebook.androidApp.views.rv.SwipableViewHolder
 
-internal class GameAdapter() :
-    Adapter<GameViewHolder>() {
+internal class GameAdapter : Adapter<GameViewHolder>(), ItemTouchHelperAdapter {
     val data: MutableList<GameRowEntity> = mutableListOf()
 
     companion object {
@@ -61,6 +62,12 @@ internal class GameAdapter() :
         }
         notifyDataSetChanged()
     }
+
+    override fun onItemDismiss(position: Int) {
+
+//        data.removeAt(position)
+//        notifyItemRemoved(position)
+    }
 }
 
 sealed class GameViewHolder(binding: ViewBinding) :
@@ -73,13 +80,20 @@ sealed class GameViewHolder(binding: ViewBinding) :
     }
 
     internal class BodyViewHolder(private val binding: GameItemRowBinding) :
-        GameViewHolder(binding) {
+        GameViewHolder(binding), SwipableViewHolder {
+
+        private lateinit var row: GameRowEntity.BodyType
 
         fun bind(row: BodyType) {
+            this.row = row
             with(binding.text1) { text = row.game.name }
             itemView.setOnClickListener {
                 row.clickAction(GameInteraction.GameClicked(row.game))
             }
+        }
+
+        override fun onItemSwiped(position: Int) {
+            row.swipeAction(GameInteraction.SwipeToDelete(row.game))
         }
     }
 }

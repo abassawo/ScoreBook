@@ -21,5 +21,7 @@ open class LocalGameDataSource(private val gamesDao: GameStore) : GameDataSource
 
     override suspend fun updateGame(game: Game) = gamesDao.update(game)
 
+    override suspend fun deleteGame(game: Game) = gamesDao.delete(game)
+
     override suspend fun clear() = gamesDao.delete(*games.toTypedArray())
 }

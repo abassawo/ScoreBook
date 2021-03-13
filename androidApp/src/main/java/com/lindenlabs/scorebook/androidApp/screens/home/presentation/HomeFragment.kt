@@ -1,6 +1,8 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import android.app.Activity
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -10,20 +12,30 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.lindenlabs.scorebook.androidApp.R
-import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
+import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.databinding.HomeFragmentBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
+import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewState
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameAdapter
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameViewHolder
+import com.lindenlabs.scorebook.androidApp.views.rv.SwipeToDismissCallback
 import javax.inject.Inject
 
 class HomeFragment : Fragment(R.layout.home_fragment) {
-    private val viewModel: HomeViewModel by lazy { viewModelFactory.makeViewModel(this, HomeViewModel::class.java) }
+    private val viewModel: HomeViewModel by lazy {
+        viewModelFactory.makeViewModel(
+            this,
+            HomeViewModel::class.java
+        )
+    }
     private lateinit var binding: HomeFragmentBinding
     private lateinit var gameBinding: IncludeHomeScreenBinding
     private val gameAdapter = GameAdapter()
@@ -90,7 +102,11 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     }
 
     private fun HomeFragmentBinding.updateUi() {
+        ItemTouchHelper(SwipeToDismissCallback())
+            .attachToRecyclerView(gamesRecyclerView)
+
         gamesRecyclerView.adapter = gameAdapter
+
         fun IncludeHomeScreenBinding.bind() =
             with(gameRuleSwitch) {
                 textOff = getString(R.string.high_score)
