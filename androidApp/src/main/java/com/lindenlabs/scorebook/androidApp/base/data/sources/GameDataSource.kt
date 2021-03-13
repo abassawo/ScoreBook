@@ -10,5 +10,6 @@ interface GameDataSource {
     suspend fun storeGame(game: Game)
     suspend fun roundPlayed(game: Game, lastPlayer: Player, newScore: Int)
     suspend fun updateGame(game: Game)
+    suspend fun deleteGame(game: Game)
     suspend fun clear()
 }
