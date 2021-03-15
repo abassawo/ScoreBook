@@ -15,11 +15,13 @@ import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.G
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GamesMapper
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GamesWrapper
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class HomeViewModel(val appRepository: AppRepository) : ViewModel() {
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
     private val gamesMapper: GamesMapper = GamesMapper()
+    private val games: MutableList<Game> = mutableListOf()
 
     init {
         loadGames()
@@ -33,6 +35,10 @@ class HomeViewModel(val appRepository: AppRepository) : ViewModel() {
 
 
     private fun showGames(games: List<Game>) {
+        this.games.run {
+            clear()
+            addAll(games)
+        }
         val wrapper = gamesMapper.mapGamesToWrapper(games)
         viewState.postValue(wrapper.toViewState())
     }
@@ -42,37 +48,69 @@ class HomeViewModel(val appRepository: AppRepository) : ViewModel() {
             if (interaction.name.isNullOrEmpty())
                 showError()
             else {
-                val strategy = if (interaction.lowestScoreWins) LowestScoreWins else HighestScoreWins
-                startNewGame(interaction.name, strategy)
+                val strategy =
+                    if (interaction.lowestScoreWins) LowestScoreWins else HighestScoreWins
+                onNewGameCreated(interaction.name, strategy, autoStart = games.isEmpty())
             }
         }
         is GameClicked -> viewEvent.postValue(ShowActiveGame(interaction.game))
         is SwipeToDelete -> viewModelScope.launch {
             runCatching { deleteGame(interaction.game) }
-                .onSuccess { loadGames() }
+                .onSuccess {
+                    loadGames()
+                    viewEvent.postValue(ShowUndoDeletePrompt(interaction.game, it))
+                }
                 .onFailure { }
         }
-        is UndoDelete -> storeGame(interaction.game)
+        is UndoDelete -> restoreDeletedGame(interaction)
     }
 
+    private fun restoreDeletedGame(interaction: UndoDelete) {
+        games.add(interaction.restoreIndex, interaction.game)
 
-    private suspend fun deleteGame(game: Game) {
+        viewModelScope.launch {
+            runCatching { appRepository.storeGame(interaction.restoreIndex, interaction.game) }
+                .onSuccess {
+                    with(interaction) {
+                        val gameRowEntity = game.toBodyRow()
+                        viewEvent.postValue(DeletedGameRestored(restoreIndex, gameRowEntity))
+                    }
+                }.onFailure { Timber.e("error trying to re-add game$it") }
+        }
+    }
+
+    private suspend fun deleteGame(game: Game): Int {
+        val index = games.indexOf(game)
         appRepository.deleteGame(game)
-        viewEvent.postValue(ShowUndoDeletePrompt(game))
+        return index
     }
 
     private fun showError() = viewEvent.postValue(AlertNoTextEntered())
 
-    private fun startNewGame(name: String, strategy: GameStrategy): Game {
-        return Game(name = name, strategy = strategy).also { game ->
-            game.start()
-            storeGame(game)
+    private fun onNewGameCreated(
+        name: String,
+        strategy: GameStrategy,
+        autoStart: Boolean = false
+    ): Game {
+        with(receiver = Game(name = name, strategy = strategy)) {
+            if (autoStart) start()
+
+            storeGame(this)
+            return this
         }
     }
 
-    private fun storeGame(game: Game) = viewModelScope.launch {
-        kotlin.runCatching { appRepository.storeGame(game) }
-            .onSuccess { viewEvent.postValue(ShowAddPlayersScreen(game)) }
+    private fun storeGame(game: Game, autoStart: Boolean = games.isEmpty()) {
+        viewModelScope.launch {
+            kotlin.runCatching { appRepository.storeGame(game) }
+                .onSuccess {
+                    if (autoStart) {
+                        viewEvent.postValue(ShowAddPlayersScreen(game))
+                    } else {
+                        loadGames()
+                    }
+                }
+        }
     }
 
     private fun GamesWrapper.toViewState(): HomeViewState {

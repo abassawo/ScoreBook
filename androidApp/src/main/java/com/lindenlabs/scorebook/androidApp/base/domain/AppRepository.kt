@@ -26,6 +26,10 @@ class AppRepository(
         dataSource.storeGame(game)
     }
 
+    override suspend fun storeGame(index: Int, game: Game) = withContext(dispatcher) {
+        dataSource.storeGame(index, game)
+    }
+
     override suspend fun roundPlayed(game: Game, lastPlayer: Player, newScore: Int) =
         withContext(dispatcher) {
             dataSource.roundPlayed(game, lastPlayer, newScore)

@@ -8,6 +8,7 @@ interface GameDataSource {
     suspend fun load(): List<Game>
     suspend fun getGameById(id: UUID) : Game?
     suspend fun storeGame(game: Game)
+    suspend fun storeGame(index: Int, game: Game)
     suspend fun roundPlayed(game: Game, lastPlayer: Player, newScore: Int)
     suspend fun updateGame(game: Game)
     suspend fun deleteGame(game: Game)

@@ -1,8 +1,6 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import android.app.Activity
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -12,8 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.LinearSnapHelper
 import com.google.android.material.snackbar.Snackbar
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
@@ -21,13 +20,11 @@ import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.databinding.HomeFragmentBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction
-import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction.*
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction.GameDetailsEntered
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction.UndoDelete
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewState
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameAdapter
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameViewHolder
 import com.lindenlabs.scorebook.androidApp.views.rv.SwipeToDismissCallback
 import javax.inject.Inject
 
@@ -74,7 +71,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         return HomeFragmentBinding.bind(rootView)
     }
 
-
     private fun processViewEvent(event: HomeViewEvent) {
         when (event) {
             is HomeViewEvent.AlertNoTextEntered -> showError(event)
@@ -83,14 +79,15 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             is HomeViewEvent.ShowActiveGame -> findNavController().showActiveGame(event.game)
                 .also { hideKeyboard() }
             is HomeViewEvent.ShowUndoDeletePrompt -> showUndoPrompt(event)
+            is HomeViewEvent.DeletedGameRestored -> gameAdapter.restoreItem(event.gameRowEntity, event.restoreIndex)
         }
     }
 
     private fun showUndoPrompt(event: HomeViewEvent.ShowUndoDeletePrompt) =
         Snackbar.make(requireView(), "You've deleted " + event.game.name, Snackbar.LENGTH_SHORT)
             .setAction(R.string.undo) {
-                viewModel.handleInteraction(UndoDelete(event.game))
-            }
+                viewModel.handleInteraction(UndoDelete(event.game, event.restoreIndex))
+            }.show()
 
     private fun hideKeyboard() {
         val imm: InputMethodManager =
@@ -113,29 +110,37 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     }
 
     private fun HomeFragmentBinding.updateUi() {
-        ItemTouchHelper(SwipeToDismissCallback())
-            .attachToRecyclerView(gamesRecyclerView)
+        gamesRecyclerView.run {
+            this.adapter = gameAdapter
+            this.itemAnimator = DefaultItemAnimator()
 
-        gamesRecyclerView.adapter = gameAdapter
-
-        fun IncludeHomeScreenBinding.bind() =
-            with(gameRuleSwitch) {
-                textOff = getString(R.string.high_score)
-                textOn = getString(R.string.low_score)
-                newGameButton.setOnClickListener {
-                    val enteredText = enterNewGameEditText.text.toString()
-                    viewModel.handleInteraction(
-                        GameDetailsEntered(
-                            enteredText,
-                            isChecked
-                        )
-                    )
-                    enterNewGameEditText.setText("")
-                }
+            val undoDeleteIcon = ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_delete)
+            undoDeleteIcon?.let { icon ->
+                val itemTouchHelper = ItemTouchHelper(SwipeToDismissCallback(icon, gameAdapter))
+                itemTouchHelper.attachToRecyclerView(this)
+                LinearSnapHelper().attachToRecyclerView(this)
             }
-
-        gameBinding.bind()
+        }.also {
+            gameBinding.bind()
+        }
     }
+
+    fun IncludeHomeScreenBinding.bind() =
+        with(gameRuleSwitch) {
+            textOff = getString(R.string.high_score)
+            textOn = getString(R.string.low_score)
+            newGameButton.setOnClickListener {
+                val enteredText = enterNewGameEditText.text.toString()
+                viewModel.handleInteraction(
+                    GameDetailsEntered(
+                        enteredText,
+                        isChecked
+                    )
+                )
+                enterNewGameEditText.setText("")
+            }
+        }
+
 
     private fun showGames(viewState: HomeViewState) =
         gameAdapter.setData(viewState.entities)

@@ -20,4 +20,5 @@
     <string name="settings">Home</string>
     <string name="home">Home</string>
     <string name="undo">Undo</string>
+    <string name="delete">Delete</string>
 </resources>
