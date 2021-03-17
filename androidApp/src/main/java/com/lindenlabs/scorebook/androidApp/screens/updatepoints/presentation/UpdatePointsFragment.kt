@@ -1,8 +1,11 @@
 package com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
@@ -21,7 +24,7 @@ import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdateP
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewState
 import javax.inject.Inject
 
-class UpdatePointsFragment : Fragment(R.layout.update_points_fragment) {
+class UpdatePointsFragment : DialogFragment() {
     private val binding: UpdatePointsFragmentBinding by lazy { viewBinding() }
     private val viewModel: UpdatePointsViewModel by lazy { viewModelFactory.makeViewModel(this, UpdatePointsViewModel::class.java)  }
     private val args: UpdatePointsFragmentArgs by navArgs()
@@ -31,6 +34,15 @@ class UpdatePointsFragment : Fragment(R.layout.update_points_fragment) {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.update_points_fragment, container, false)
+    }
+
 
     private fun viewBinding(): UpdatePointsFragmentBinding {
         val rootView = requireView().findViewById<View>(R.id.addPointsRoot)
@@ -59,15 +71,16 @@ class UpdatePointsFragment : Fragment(R.layout.update_points_fragment) {
         viewModel.viewState.observe(this as LifecycleOwner, ::processState)
         viewModel.viewEvent.observe(this as LifecycleOwner, ::processEvent)
         binding.updatePointsButton.setOnClickListener {
-            val points = Integer.parseInt(binding.pointsEditText.text.toString())
-            viewModel.handleInteraction(AddPointsInteraction.AddScore(points))
+            val text = binding.pointsEditText.text.toString()
+            viewModel.handleInteraction(AddPointsInteraction.ScoreAdded(text))
         }
     }
 
-    private fun processEvent(viewEvent: UpdatePointsViewEvent?) {
+    private fun processEvent(viewEvent: UpdatePointsViewEvent) {
         with(viewEvent) {
             when (this) {
                 is ScoreUpdated -> findNavController().navigateBackToDetailScreen(this.game)
+                is AlertNoTextEntered -> binding.playerName.setError("Must add point")
             }
         }
     }
@@ -77,7 +90,7 @@ class UpdatePointsFragment : Fragment(R.layout.update_points_fragment) {
 
     private fun processState(viewState: UpdatePointsViewState?) {
         when (viewState) {
-            is UpdatePointsViewState.ScreenOpened -> binding.toolbar.title = viewState.player.name
+            is UpdatePointsViewState.ScreenOpened -> binding.playerName.text = viewState.player.name
         }
     }
 }
