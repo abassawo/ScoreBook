@@ -16,6 +16,7 @@ data class Game(
     @ColumnInfo(name="id")
     val id: UUID = UUID.randomUUID(),
     val name: String,
+    val dateCreated: Long = Date().time,
     var isClosed: Boolean = false,
     var strategy: GameStrategy = GameStrategy.HighestScoreWins,
     var players: List<Player> = mutableListOf()

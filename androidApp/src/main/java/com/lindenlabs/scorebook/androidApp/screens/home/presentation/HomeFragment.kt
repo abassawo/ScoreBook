@@ -24,7 +24,7 @@ import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction.UndoDelete
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewState
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameAdapter
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv.GameAdapter
 import com.lindenlabs.scorebook.androidApp.views.rv.SwipeToDismissCallback
 import javax.inject.Inject
 
@@ -79,12 +79,11 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             is HomeViewEvent.ShowActiveGame -> findNavController().showActiveGame(event.game)
                 .also { hideKeyboard() }
             is HomeViewEvent.ShowUndoDeletePrompt -> showUndoPrompt(event)
-            is HomeViewEvent.DeletedGameRestored -> gameAdapter.restoreItem(event.gameRowEntity, event.restoreIndex)
         }
     }
 
     private fun showUndoPrompt(event: HomeViewEvent.ShowUndoDeletePrompt) =
-        Snackbar.make(requireView(), "You've deleted " + event.game.name, Snackbar.LENGTH_SHORT)
+        Snackbar.make(requireView(), "You've deleted your game: " + event.game.name, Snackbar.LENGTH_SHORT)
             .setAction(R.string.undo) {
                 viewModel.handleInteraction(UndoDelete(event.game, event.restoreIndex))
             }.show()

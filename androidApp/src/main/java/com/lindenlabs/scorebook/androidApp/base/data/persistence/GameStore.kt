@@ -7,10 +7,10 @@ import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 @Dao
 interface GameStore {
 
-    @Query("SELECT * FROM games")
+    @Query("SELECT * FROM games ORDER BY dateCreated")
     suspend fun loadAll() : List<Game>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(game: Game)
 
     @Query("SELECT * FROM games WHERE id = :id")

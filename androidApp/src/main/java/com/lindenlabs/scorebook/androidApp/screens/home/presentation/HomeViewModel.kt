@@ -72,8 +72,8 @@ class HomeViewModel(val appRepository: AppRepository) : ViewModel() {
             runCatching { appRepository.storeGame(interaction.restoreIndex, interaction.game) }
                 .onSuccess {
                     with(interaction) {
-                        val gameRowEntity = game.toBodyRow()
-                        viewEvent.postValue(DeletedGameRestored(restoreIndex, gameRowEntity))
+                        appRepository.storeGame(interaction.restoreIndex, game)
+                        loadGames()
                     }
                 }.onFailure { Timber.e("error trying to re-add game$it") }
         }

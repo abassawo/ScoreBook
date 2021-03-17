@@ -24,11 +24,10 @@ dependencies {
     implementation("com.facebook.stetho:stetho:1.5.1")
 
     val daggerVersion=2.33
-
-    implementation("com.google.dagger:dagger-android:2.33")
-    implementation("com.google.dagger:dagger:2.33")
+//    implementation("com.google.dagger:dagger:2.33")
 
     implementation("com.google.dagger:dagger:$daggerVersion")
+    implementation("com.google.dagger:dagger-android:2.33")
     kapt("com.google.dagger:dagger-android-processor:$daggerVersion")
     kapt("com.google.dagger:dagger-compiler:$daggerVersion")
 
