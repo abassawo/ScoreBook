@@ -89,7 +89,7 @@ class UpdatePointsFragment : DialogFragment() {
 
     private fun processState(viewState: UpdatePointsViewState?) {
         when (viewState) {
-            is UpdatePointsViewState.ScreenOpened -> binding.toolbar.title = viewState.player.name
+            is UpdatePointsViewState.ScreenOpened -> binding.playerName.text = viewState.player.name
         }
     }
 }
