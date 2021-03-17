@@ -71,15 +71,16 @@ class UpdatePointsFragment : DialogFragment() {
         viewModel.viewState.observe(this as LifecycleOwner, ::processState)
         viewModel.viewEvent.observe(this as LifecycleOwner, ::processEvent)
         binding.updatePointsButton.setOnClickListener {
-            val points = Integer.parseInt(binding.pointsEditText.text.toString())
-            viewModel.handleInteraction(AddPointsInteraction.AddScore(points))
+            val text = binding.pointsEditText.text.toString()
+            viewModel.handleInteraction(AddPointsInteraction.ScoreAdded(text))
         }
     }
 
-    private fun processEvent(viewEvent: UpdatePointsViewEvent?) {
+    private fun processEvent(viewEvent: UpdatePointsViewEvent) {
         with(viewEvent) {
             when (this) {
                 is ScoreUpdated -> findNavController().navigateBackToDetailScreen(this.game)
+                is AlertNoTextEntered -> binding.playerName.setError("Must add point")
             }
         }
     }
