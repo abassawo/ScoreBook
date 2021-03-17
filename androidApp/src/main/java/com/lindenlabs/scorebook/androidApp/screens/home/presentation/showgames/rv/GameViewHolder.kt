@@ -1,0 +1,37 @@
+package com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv
+
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
+import com.lindenlabs.scorebook.androidApp.databinding.GameItemRowBinding
+import com.lindenlabs.scorebook.androidApp.databinding.HeaderItemRowBinding
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity
+import com.lindenlabs.scorebook.androidApp.views.rv.SwipableViewHolder
+
+sealed class GameViewHolder(binding: ViewBinding) :
+    RecyclerView.ViewHolder(binding.root) {
+
+    internal class HeaderViewHolder(private val binding: HeaderItemRowBinding) :
+        GameViewHolder(binding) {
+
+        fun bind(row: GameRowEntity.HeaderType) = with(binding.text1) { text = row.title }
+    }
+
+    internal class BodyViewHolder(private val binding: GameItemRowBinding) :
+        GameViewHolder(binding), SwipableViewHolder {
+
+        private lateinit var row: GameRowEntity.BodyType
+
+        fun bind(row: GameRowEntity.BodyType) {
+            this.row = row
+            with(binding.gameName) { text = row.game.name }
+            itemView.setOnClickListener {
+                row.clickAction(GameInteraction.GameClicked(row.game))
+            }
+        }
+
+        override fun onItemSwiped(position: Int) {
+            row.swipeAction(GameInteraction.SwipeToDelete(row.game))
+        }
+    }
+}
