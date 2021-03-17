@@ -105,7 +105,7 @@
     </fragment>
 
 
-    <fragment
+    <dialog
         android:id="@+id/navUpdatePoints"
         android:name="com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsFragment"
         tools:layout="@layout/update_points_fragment">
@@ -121,7 +121,7 @@
         <action
             android:id="@+id/navigateBackToGameDetail"
             app:destination="@id/navScoreGame"/>
-    </fragment>
+    </dialog>
 
     <fragment
         android:id="@+id/navVictoryFragment"
