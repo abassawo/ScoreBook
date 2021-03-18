@@ -18,13 +18,10 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
-    implementation("nl.dionsegijn:konfetti:1.2.6")
-
-
+    implementation("com.airbnb.android:lottie:3.6.1")
     implementation("com.facebook.stetho:stetho:1.5.1")
 
     val daggerVersion=2.33
-//    implementation("com.google.dagger:dagger:2.33")
 
     implementation("com.google.dagger:dagger:$daggerVersion")
     implementation("com.google.dagger:dagger-android:2.33")

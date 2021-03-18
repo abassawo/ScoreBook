@@ -7,8 +7,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <nl.dionsegijn.konfetti.KonfettiView
-        android:id="@+id/viewKonfetti"
+    <com.airbnb.lottie.LottieAnimationView
+        app:lottie_rawRes="@raw/celebration"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
