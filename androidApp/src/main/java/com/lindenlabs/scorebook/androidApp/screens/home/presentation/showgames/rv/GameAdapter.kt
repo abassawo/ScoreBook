@@ -4,17 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 import com.lindenlabs.scorebook.androidApp.databinding.GameItemRowBinding
 import com.lindenlabs.scorebook.androidApp.databinding.HeaderItemRowBinding
-import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity.BodyType
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity.HeaderType
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv.GameViewHolder.BodyViewHolder
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv.GameViewHolder.HeaderViewHolder
 import com.lindenlabs.scorebook.androidApp.views.rv.ItemTouchHelperAdapter
-import com.lindenlabs.scorebook.androidApp.views.rv.SwipableViewHolder
 
 internal class GameAdapter : RecyclerView.Adapter<GameViewHolder>(), ItemTouchHelperAdapter {
     val data: MutableList<GameRowEntity> = mutableListOf()
