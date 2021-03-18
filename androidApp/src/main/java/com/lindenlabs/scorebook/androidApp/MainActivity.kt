@@ -13,9 +13,10 @@ import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.lindenlabs.scorebook.androidApp.databinding.ActivityMainBinding
+import com.lindenlabs.scorebook.androidApp.views.MainMenuBottomSheet
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var  appBarConfiguration : AppBarConfiguration
+    private lateinit var appBarConfiguration: AppBarConfiguration
     private val binding: ActivityMainBinding by lazy { viewBinding() }
 
     private fun viewBinding(): ActivityMainBinding {
@@ -26,7 +27,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         binding.toolbar.title = "Score Book"
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.let { ab ->
+            ab.setHomeAsUpIndicator(R.drawable.ic_menu)
+            ab.setDisplayHomeAsUpEnabled(true)
+        }
 
         val host: NavHostFragment = supportFragmentManager
             .findFragmentById(R.id.container) as NavHostFragment? ?: return
@@ -35,24 +42,19 @@ class MainActivity : AppCompatActivity() {
         val navController = host.navController
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBar(navController, appBarConfiguration)
-        setupNavigationMenu(navController)
     }
 
-    private fun setupNavigationMenu(navController: NavController) =
-        binding.navView.setupWithNavController(navController)
-
-    private fun setupActionBar(navController: NavController, appBarConfig : AppBarConfiguration) {
+    private fun setupActionBar(navController: NavController, appBarConfig: AppBarConfiguration) {
         // This allows NavigationUI to decide what label to show in the action bar
         // By using appBarConfig, it will also determine whether to
         // show the up arrow or drawer menu icon
         setupActionBarWithNavController(navController, appBarConfig)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        return super.onCreateOptionsMenu(menu)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> MainMenuBottomSheet().show(supportFragmentManager, MainActivity::class.java.simpleName)
+        }
         return super.onOptionsItemSelected(item)
         // Have the NavigationUI look for an action or destination matching the menu
         // item id and navigate there if found.

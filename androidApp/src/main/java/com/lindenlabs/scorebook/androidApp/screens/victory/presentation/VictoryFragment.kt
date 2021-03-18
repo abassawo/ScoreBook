@@ -87,8 +87,5 @@ class VictoryFragment : Fragment(R.layout.fragment_victory) {
                 else -> false
             }
         }
-        val runnable =
-            Runnable { findNavController().navigate(VictoryFragmentDirections.navigateHome()) }
-        Handler().postDelayed(runnable, 10000)
     }
 }
