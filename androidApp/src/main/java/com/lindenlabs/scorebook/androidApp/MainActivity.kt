@@ -1,7 +1,6 @@
 package com.lindenlabs.scorebook.androidApp
 
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -9,9 +8,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.lindenlabs.scorebook.androidApp.databinding.ActivityMainBinding
 import com.lindenlabs.scorebook.androidApp.views.MainMenuBottomSheet
 
