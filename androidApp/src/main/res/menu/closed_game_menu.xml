@@ -10,6 +10,6 @@
     <item
         android:id="@+id/restartGameMenuItem"
         android:title="@string/restart_game"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 
 </menu>

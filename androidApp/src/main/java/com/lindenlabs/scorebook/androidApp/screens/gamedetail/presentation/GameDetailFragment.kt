@@ -1,8 +1,8 @@
 package com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -15,14 +15,16 @@ import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailFragmentBinding
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.di.GameScoreModule
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailEvent
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailInteraction
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailEvent.*
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailViewState
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.PlayerDataEntity
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameDetailFragmentDirections.Companion.navigateToAddPlayersScreen
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameDetailFragmentDirections.Companion.navigateToUpdatePoints
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showplayers.PlayerAdapter
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
@@ -61,12 +63,13 @@ open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+    private fun addToolbarListener() = binding.toolbar.setOnMenuItemClickListener {
+        when (it.itemId) {
             R.id.endGameMenuItem -> {
                 viewModel.handleInteraction(GameDetailInteraction.EndGameClicked)
                 true
             }
+
             R.id.restartGameMenuItem -> {
                 viewModel.handleInteraction(GameDetailInteraction.RestartGameClicked)
                 true
@@ -75,6 +78,7 @@ open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
         }
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.run {
@@ -82,6 +86,7 @@ open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
             viewEvent.observe(viewLifecycleOwner, ::processViewEvent)
         }
         binding.updateUi()
+        addToolbarListener()
 
     }
 
@@ -93,39 +98,44 @@ open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
 
     }
 
-    private fun processViewEvent(event: GameDetailEvent) {
+    private fun processViewEvent(event: GameDetailViewEvent) =
         when (event) {
-            is ActiveGame.GoBackHome -> navigateHome()
-            is ActiveGame.AddPlayersClicked -> navigateToAddPlayers(event.game)
-            is ActiveGame.EditScoreForPlayer -> navigateToUpdatePlayerScore(event)
-            is ActiveGame.EndGame -> endGame(event.game)
-            is ClosedGame.RestartGame -> Unit //todo
+            is GoBackHome -> navigateHome()
+            is AddPlayersClicked -> navigateToAddPlayers(event.game)
+            is EditScoreForPlayer -> navigateToUpdatePlayerScore(event)
+            is EndGame -> endGame(event.game)
+            is ShowRestartingGameMessage -> Toast.makeText(
+                requireContext(), "${event.game.name} restarting", Toast.LENGTH_SHORT).show()
         }
-    }
 
 
     private fun navigateHome() = navController.navigate(GameDetailFragmentDirections.navigateHome())
 
-    private fun navigateToUpdatePlayerScore(event: ActiveGame.EditScoreForPlayer) =
+    private fun navigateToUpdatePlayerScore(event: EditScoreForPlayer) =
         navController.navigate(navigateToUpdatePoints(event.game, event.player))
 
     private fun navigateToAddPlayers(game: Game) =
         navController.navigate(navigateToAddPlayersScreen(game))
 
     private fun showGameState(state: GameDetailViewState) {
-        binding.toolbar.title = state.gameName
+        binding.toolbar.title = state.game.name
+        binding.toolbar.subtitle = SimpleDateFormat("MMM d, yyyy")
+            .format(Date(state.game.dateCreated))
 
         when (state) {
             is GameDetailViewState.NotStarted -> {
                 binding.showEmptyState()
             }
             is GameDetailViewState.StartedWithPlayers -> {
+                requireActivity().invalidateOptionsMenu()
+                binding.toolbar.menu.clear()
                 binding.toolbar.inflateMenu(R.menu.active_game_menu)
-                binding.showGame(state.playerData)
+                binding.showGame(state.playerDataEntities)
             }
             is GameDetailViewState.ClosedGame -> {
+                binding.toolbar.menu.clear()
                 binding.toolbar.inflateMenu(R.menu.closed_game_menu)
-                binding.showGame(state.playerData)
+                binding.showGame(state.playerDataEntities)
             }
         }
     }

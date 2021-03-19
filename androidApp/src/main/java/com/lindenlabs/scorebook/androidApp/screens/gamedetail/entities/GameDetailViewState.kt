@@ -1,15 +1,16 @@
 package com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities
 
-sealed class GameDetailViewState(open val gameName: String) {
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 
-    data class NotStarted(override val gameName: String) : GameDetailViewState(gameName)
+sealed class GameDetailViewState(open val game: Game) {
 
-
-    data class StartedWithPlayers(val playerData: List<PlayerDataEntity>, override val gameName: String) :
-        GameDetailViewState(gameName)
+    data class NotStarted(override val game: Game) : GameDetailViewState(game)
 
 
-    data class ClosedGame(val playerData: List<PlayerDataEntity>, override val gameName: String) :
-        GameDetailViewState(gameName)
+    data class StartedWithPlayers(val playerDataEntities: List<PlayerDataEntity>, override val game: Game) :
+        GameDetailViewState(game)
 
+
+    data class ClosedGame(val playerDataEntities: List<PlayerDataEntity>, override val game: Game) :
+        GameDetailViewState(game)
 }
