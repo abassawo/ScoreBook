@@ -1,13 +1,13 @@
-package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail
+package com.lindenlabs.scorebook.androidApp.screens.gamedetail
 
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.BaseViewModelTest
 import com.lindenlabs.scorebook.androidApp.utils.game
 import com.lindenlabs.scorebook.androidApp.utils.gameWithPlayers
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.GameDetailFragmentArgs
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.GameViewModel
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.ScoreBookInteraction
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailEvent
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameDetailFragmentArgs
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameViewModel
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
@@ -26,7 +26,7 @@ class GameViewModelTest : BaseViewModelTest() {
     fun `test game just created as noted by empty players list`() = runBlockingTest {
         MainScope().launch {
             val emittedEvent = underTest.viewEvent.value
-            assert(emittedEvent is ScoreBookViewEvent.AddPlayersClicked)
+            assert(emittedEvent is GameDetailEvent.AddPlayersClicked)
         }
     }
 
@@ -45,7 +45,7 @@ class GameViewModelTest : BaseViewModelTest() {
         MainScope().launch {
             underTest.handleInteraction(ScoreBookInteraction.GoBack)
             val emittedEvent = underTest.viewEvent.value
-            assert(emittedEvent is ScoreBookViewEvent.GoBackHome)
+            assert(emittedEvent is GameDetailEvent.GoBackHome)
         }
     }
 
@@ -54,7 +54,7 @@ class GameViewModelTest : BaseViewModelTest() {
         MainScope().launch {
             underTest.handleInteraction(ScoreBookInteraction.EndGameClicked)
             val emittedEvent = underTest.viewEvent.value
-            assert(emittedEvent is ScoreBookViewEvent.EndGame)
+            assert(emittedEvent is GameDetailEvent.EndGame)
         }
     }
 

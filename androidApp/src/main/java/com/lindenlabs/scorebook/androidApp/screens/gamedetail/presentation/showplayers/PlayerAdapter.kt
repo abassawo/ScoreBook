@@ -1,11 +1,11 @@
-package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.showplayers
+package com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showplayers
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lindenlabs.scorebook.androidApp.databinding.PlayerRowItemBinding
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookEntity
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.ScoreBookEntity
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.ScoreBookInteraction
 
 class PlayerAdapter : RecyclerView.Adapter<PlayerViewHolder>() {
     private val scoreBooks: MutableList<ScoreBookEntity> = mutableListOf()

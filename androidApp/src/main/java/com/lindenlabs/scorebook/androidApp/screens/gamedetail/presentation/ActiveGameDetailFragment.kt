@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation
+package com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation
 
 import android.os.Bundle
 import android.view.Menu
@@ -17,25 +17,21 @@ import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailFragmentBinding
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.di.GameScoreModule
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookInteraction
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewEvent.*
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities.ScoreBookViewState
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.GameDetailFragmentDirections.Companion.navigateToAddPlayersScreen
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.GameDetailFragmentDirections.Companion.navigateToUpdatePoints
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.showplayers.PlayerAdapter
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.ScoreBookInteraction
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailEvent.*
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.ScoreBookViewState
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.ActiveGameDetailFragmentDirections.Companion.navigateToAddPlayersScreen
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.ActiveGameDetailFragmentDirections.Companion.navigateToUpdatePoints
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showplayers.PlayerAdapter
 import javax.inject.Inject
 
-class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
+open class ActiveGameDetailFragment : Fragment(R.layout.game_detail_fragment) {
     private val adapter: PlayerAdapter = PlayerAdapter()
     private val binding: GameDetailFragmentBinding by lazy { viewBinding() }
-    private val viewModel: GameViewModel by lazy {
-        viewModelFactory.makeViewModel(
-            this,
-            GameViewModel::class.java
-        )
+    val viewModel: GameViewModel by lazy {
+        viewModelFactory.makeViewModel(this, GameViewModel::class.java)
     }
-    private val args: GameDetailFragmentArgs by navArgs()
+    private val args: ActiveGameDetailFragmentArgs by navArgs()
     private val navController: NavController by lazy { findNavController() }
 
     @Inject
@@ -49,9 +45,10 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
         appComponent().value
             .gameScoreComponentBuilder()
-            .plus(GameScoreModule((args)))
+            .plus(GameScoreModule(args))
             .build()
             .inject(this)
 
@@ -65,7 +62,7 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) =
-        inflater.inflate(R.menu.menu_score_game, menu)
+        inflater.inflate(R.menu.active_game_menu, menu)
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -82,7 +79,11 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.run {
             viewState.observe(viewLifecycleOwner, ::showGameState)
-            viewEvent.observe(viewLifecycleOwner, ::processViewEvent)
+            viewEvent.observe(viewLifecycleOwner, {
+                if(it !is ClosedGame) {
+                    processViewEvent(it as ActiveGame)
+                }
+            })
         }
         binding.updateUi()
 
@@ -96,21 +97,20 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
         this.bottomAppbar.setNavigationOnClickListener {
             viewModel.handleInteraction(ScoreBookInteraction.EndGameClicked)
         }
-
     }
 
-    private fun processViewEvent(event: ScoreBookViewEvent) {
+    private fun processViewEvent(event: ActiveGame) {
         when (event) {
-            is GoBackHome -> navigateHome()
-            is AddPlayersClicked -> navigateToAddPlayers(event.game)
-            is EditScoreForPlayer -> navigateToUpdatePlayerScore(event)
-            is EndGame -> endGame(event.game)
+            is ActiveGame.GoBackHome -> navigateHome()
+            is ActiveGame.AddPlayersClicked -> navigateToAddPlayers(event.game)
+            is ActiveGame.EditScoreForPlayer -> navigateToUpdatePlayerScore(event)
+            is ActiveGame.EndGame -> endGame(event.game)
         }
     }
 
-    private fun navigateHome() = navController.navigate(GameDetailFragmentDirections.navigateHome())
+    private fun navigateHome() = navController.navigate(ActiveGameDetailFragmentDirections.navigateHome())
 
-    private fun navigateToUpdatePlayerScore(event: EditScoreForPlayer) =
+    private fun navigateToUpdatePlayerScore(event: ActiveGame.EditScoreForPlayer) =
         navController.navigate(navigateToUpdatePoints(event.game, event.player))
 
     private fun navigateToAddPlayers(game: Game) =
@@ -125,7 +125,7 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
     }
 
     private fun endGame(game: Game) {
-        val directions = GameDetailFragmentDirections.navigateToVictoryScreen(game)
+        val directions = ActiveGameDetailFragmentDirections.navigateToVictoryScreen(game)
         findNavController().navigate(directions)
     }
 

@@ -12,7 +12,7 @@
 
         <action
             android:id="@+id/navigateHome"
-            app:destination="@id/navHomeFragment"/>
+            app:destination="@id/navHomeFragment" />
 
         <action
             android:id="@+id/navigateToAddPlayersScreen"
@@ -21,17 +21,28 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game"/>
+                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
 
         </action>
         <action
             android:id="@+id/navigateToScoreGameScreen"
-            app:destination="@id/navScoreGame"
+            app:destination="@id/navActiveGame"
             app:enterAnim="@anim/fragment_fade_exit">
 
             <argument
                 android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game"/>
+                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+
+        </action>
+
+        <action
+            android:id="@+id/navigateToClosedGame"
+            app:destination="@id/navClosedGame"
+            app:enterAnim="@anim/fragment_fade_exit">
+
+            <argument
+                android:name="gameArg"
+                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
 
         </action>
     </fragment>
@@ -43,31 +54,51 @@
 
         <argument
             android:name="gameArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game"/>
+            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
 
         <action
             android:id="@+id/navigateToScoreGameScreen"
-            app:destination="@id/navScoreGame">
+            app:destination="@id/navActiveGame">
 
             <argument
                 android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game"/>
+                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
 
         </action>
 
         <action
             android:id="@+id/navigateBackHome"
-            app:destination="@id/navHomeFragment"/>
+            app:destination="@id/navHomeFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/navScoreGame"
-        android:name="com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.GameDetailFragment"
+        android:id="@+id/navClosedGame"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.ClosedGameDetailFragment"
         tools:layout="@layout/game_detail_fragment">
 
         <argument
             android:name="gameArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game"/>
+            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+
+
+        <action
+            android:id="@+id/restartGame"
+            app:destination="@id/navActiveGame" />
+
+        <action
+            android:id="@+id/navigateHome"
+            app:destination="@id/navHomeFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navActiveGame"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.ActiveGameDetailFragment"
+        tools:layout="@layout/game_detail_fragment">
+
+        <argument
+            android:name="gameArg"
+            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
 
         <action
             android:id="@+id/navigateToAddPlayersScreen"
@@ -75,33 +106,33 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game"/>
+                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
 
         </action>
 
 
         <action
-                android:id="@+id/navigateToUpdatePoints"
-                app:destination="@id/navUpdatePoints">
+            android:id="@+id/navigateToUpdatePoints"
+            app:destination="@id/navUpdatePoints">
 
-                <argument
-                    android:name="gameArg"
-                    app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game"/>
+            <argument
+                android:name="gameArg"
+                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
 
-                <argument
-                    android:name="playerArg"
-                    app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Player"/>
+            <argument
+                android:name="playerArg"
+                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Player" />
 
         </action>
 
         <action
             android:id="@+id/navigateToVictoryScreen"
-            app:destination="@+id/navVictoryFragment"/>
+            app:destination="@+id/navVictoryFragment" />
 
-<!--        temporary-->
+        <!--        temporary-->
         <action
             android:id="@+id/navigateHome"
-            app:destination="@id/navHomeFragment"/>
+            app:destination="@id/navHomeFragment" />
     </fragment>
 
 
@@ -112,15 +143,15 @@
 
         <argument
             android:name="gameArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game"/>
+            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
 
         <argument
             android:name="playerArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Player"/>
+            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Player" />
 
         <action
             android:id="@+id/navigateBackToGameDetail"
-            app:destination="@id/navScoreGame"/>
+            app:destination="@id/navActiveGame" />
     </dialog>
 
     <fragment
@@ -130,11 +161,11 @@
 
         <argument
             android:name="gameArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game"/>
+            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
 
         <action
             android:id="@+id/navigateHome"
-            app:destination="@id/navHomeFragment"/>
+            app:destination="@id/navHomeFragment" />
 
     </fragment>
 

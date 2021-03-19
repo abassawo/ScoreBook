@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.entities
+package com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities
 
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 
