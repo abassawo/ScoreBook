@@ -12,7 +12,7 @@ import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdateP
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class UpdatePointsViewModel(val appRepository: AppRepository, args: UpdatePointsFragmentArgs) :
+class UpdatePointsViewModel(val appRepository: AppRepository, args: UpdatePointsDialogFragmentArgs) :
     ViewModel() {
     private val game: Game = args.gameArg
     private val player: Player = args.playerArg

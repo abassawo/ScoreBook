@@ -17,7 +17,6 @@ sealed class GameDetailEvent {
     }
 
     sealed class ClosedGame : GameDetailEvent() {
-        object GoBackHome : ClosedGame()
 
         data class RestartGame(val game: Game) : ClosedGame()
     }

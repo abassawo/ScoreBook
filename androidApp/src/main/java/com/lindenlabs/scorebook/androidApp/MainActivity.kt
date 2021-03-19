@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         binding.toolbar.title = "Score Book"
-        setSupportActionBar(binding.toolbar)
         supportActionBar?.let { ab ->
             ab.setHomeAsUpIndicator(R.drawable.ic_menu)
             ab.setDisplayHomeAsUpEnabled(true)

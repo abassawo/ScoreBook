@@ -3,8 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/editGameMenuItem"
+        android:title="@string/edit_game"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/restartGameMenuItem"
         android:title="@string/restart_game"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 
 </menu>

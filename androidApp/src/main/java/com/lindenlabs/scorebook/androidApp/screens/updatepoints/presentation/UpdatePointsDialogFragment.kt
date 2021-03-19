@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -15,19 +13,20 @@ import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
-import com.lindenlabs.scorebook.androidApp.databinding.UpdatePointsFragmentBinding
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
+import com.lindenlabs.scorebook.androidApp.databinding.UpdatePointsFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.UpdatePointsModule
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsViewModel.*
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewState
+import com.lindenlabs.scorebook.androidApp.views.BaseDialogFragment
 import javax.inject.Inject
 
-class UpdatePointsFragment : DialogFragment() {
+class UpdatePointsDialogFragment : BaseDialogFragment() {
     private val binding: UpdatePointsFragmentBinding by lazy { viewBinding() }
     private val viewModel: UpdatePointsViewModel by lazy { viewModelFactory.makeViewModel(this, UpdatePointsViewModel::class.java)  }
-    private val args: UpdatePointsFragmentArgs by navArgs()
+    private val args: UpdatePointsDialogFragmentArgs by navArgs()
 
     @Inject
     lateinit var appRepository: AppRepository
@@ -42,7 +41,6 @@ class UpdatePointsFragment : DialogFragment() {
     ): View? {
         return inflater.inflate(R.layout.update_points_fragment, container, false)
     }
-
 
     private fun viewBinding(): UpdatePointsFragmentBinding {
         val rootView = requireView().findViewById<View>(R.id.addPointsRoot)
@@ -86,7 +84,7 @@ class UpdatePointsFragment : DialogFragment() {
     }
 
     private fun NavController.navigateBackToDetailScreen(game: Game) =
-        navigate(UpdatePointsFragmentDirections.navigateBackToGameDetail(game))
+        navigate(UpdatePointsDialogFragmentDirections.navigateBackToGameDetail(game))
 
     private fun processState(viewState: UpdatePointsViewState?) {
         when (viewState) {

@@ -8,8 +8,9 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.lindenlabs.scorebook.androidApp.databinding.WelcomeFragmentBinding
+import com.lindenlabs.scorebook.androidApp.views.BaseDialogFragment
 
-class WelcomeDialogFragment(val action: () -> Unit) : DialogFragment() {
+class WelcomeDialogFragment(val action: () -> Unit) : BaseDialogFragment() {
     private lateinit var binding: WelcomeFragmentBinding
 
     override fun onCreateView(
@@ -25,13 +26,6 @@ class WelcomeDialogFragment(val action: () -> Unit) : DialogFragment() {
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        val params: ViewGroup.LayoutParams = dialog!!.window!!.attributes
-        params.width = 800
-        params.height = 800
-        dialog!!.window!!.attributes = params as WindowManager.LayoutParams
-    }
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)

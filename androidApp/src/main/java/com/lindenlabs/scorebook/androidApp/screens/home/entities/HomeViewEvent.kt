@@ -12,9 +12,7 @@ sealed class HomeViewEvent {
 
     data class ShowAddPlayersScreen(val game: Game) : HomeViewEvent()
 
-    data class ShowActiveGame(val game: Game) : HomeViewEvent()
-
-    data class ShowClosedGame(val game: Game) : HomeViewEvent()
+    data class ShowGameDetail(val game: Game) : HomeViewEvent()
 
     class ShowUndoDeletePrompt(val game: Game, val restoreIndex: Int) : HomeViewEvent()
 }

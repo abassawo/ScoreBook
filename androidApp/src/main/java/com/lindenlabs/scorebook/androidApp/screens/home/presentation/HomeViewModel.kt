@@ -73,11 +73,7 @@ class HomeViewModel(val appRepository: AppRepository) :
     }
 
     private fun onGameClicked(game: Game) =
-        if (game.isClosed) {
-            viewEvent.postValue(ShowClosedGame(game))
-        } else {
-            viewEvent.postValue(ShowActiveGame(game))
-        }
+            viewEvent.postValue(ShowGameDetail(game))
 
     private fun restoreDeletedGame(interaction: UndoDelete) {
         games.add(interaction.restoreIndex, interaction.game)

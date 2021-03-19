@@ -6,17 +6,17 @@ import androidx.lifecycle.viewModelScope
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.ScoreBookInteraction
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.ScoreBookInteraction.*
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailInteraction
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailInteraction.*
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailEvent
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailEvent.*
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.ScoreBookViewState
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailViewState
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showplayers.GameViewEntityMapper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-open class GameViewModel @Inject constructor(val appRepository: AppRepository, args: ActiveGameDetailFragmentArgs) : ViewModel() {
-    val viewState: MutableLiveData<ScoreBookViewState> = MutableLiveData()
+open class GameViewModel @Inject constructor(val appRepository: AppRepository, args: GameDetailFragmentArgs) : ViewModel() {
+    val viewState: MutableLiveData<GameDetailViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<GameDetailEvent> = MutableLiveData()
     private val mapper: GameViewEntityMapper = GameViewEntityMapper()
     private val game: Game = args.gameArg
@@ -25,20 +25,25 @@ open class GameViewModel @Inject constructor(val appRepository: AppRepository, a
     private var isFirstRun: Boolean = true
 
     init {
-        if (isFirstRun && players.isNullOrEmpty()) {
-            isFirstRun = false
-            viewEvent.postValue(ActiveGame.AddPlayersClicked(game)) // Bypass home screen, just add
-        } else if (players.isNullOrEmpty())
-            viewState.postValue(ScoreBookViewState.EmptyState(game.name))
-        else if (players.isNotEmpty()) {
-            val playerEntities = mapper.map(players) { interaction ->
-                handleInteraction(interaction)
+        when {
+            isFirstRun && players.isNullOrEmpty() -> {
+                isFirstRun = false
+                viewEvent.postValue(ActiveGame.AddPlayersClicked(game)) // Bypass home screen, just add
             }
-            viewState.postValue(ScoreBookViewState.ActiveGame(playerEntities, game.name))
+            players.isNullOrEmpty() -> viewState.postValue(GameDetailViewState.NotStarted(game.name))
+            players.isNotEmpty() -> {
+                val playerEntities = mapper.map(players) { interaction ->
+                    handleInteraction(interaction)
+                }
+                if(game.isClosed)
+                    viewState.postValue(GameDetailViewState.ClosedGame(playerEntities, game.name))
+                else
+                    viewState.postValue(GameDetailViewState.StartedWithPlayers(playerEntities, game.name))
+            }
         }
     }
 
-    fun handleInteraction(interaction: ScoreBookInteraction) {
+    fun handleInteraction(interaction: GameDetailInteraction) {
         when (interaction) {
             is PlayerClicked -> viewEvent.postValue(
                 ActiveGame.EditScoreForPlayer(
