@@ -3,7 +3,7 @@ package com.lindenlabs.scorebook.androidApp.di
 import com.lindenlabs.scorebook.androidApp.di.scope.FragmentScope
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeFragment
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersFragment
-import com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation.GameDetailFragment
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.ActiveGameDetailFragment
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsFragment
 import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryFragment
 import dagger.Subcomponent
@@ -31,7 +31,7 @@ interface SubComponents {
     @FragmentScope
     @Subcomponent(modules= [GameScoreModule::class])
     interface GameScoreComponent {
-        fun inject(fragment: GameDetailFragment)
+        fun inject(fragment: ActiveGameDetailFragment)
 
         @Subcomponent.Builder
         interface Builder {

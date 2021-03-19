@@ -24,4 +24,5 @@
     <string name="welcome_title">Welcome!</string>
     <string name="welcome_subtitle">Keep score of several games at a time. Name your game, add players, and record points.</string>
     <string name="get_started">Get Started</string>
+    <string name="restart_game">Restart Game</string>
 </resources>

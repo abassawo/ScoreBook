@@ -59,7 +59,7 @@ class HomeViewModel(val appRepository: AppRepository) :
                 onNewGameCreated(interaction.name, strategy, autoStart = games.isEmpty())
             }
         }
-        is GameClicked -> viewEvent.postValue(ShowActiveGame(interaction.game))
+        is GameClicked -> onGameClicked(interaction.game)
         is SwipeToDelete -> viewModelScope.launch {
             runCatching { deleteGame(interaction.game) }
                 .onSuccess {
@@ -71,6 +71,13 @@ class HomeViewModel(val appRepository: AppRepository) :
         is UndoDelete -> restoreDeletedGame(interaction)
         DismissWelcome -> viewEvent.postValue(HomeViewEvent.DismissWelcomeMessage)
     }
+
+    private fun onGameClicked(game: Game) =
+        if (game.isClosed) {
+            viewEvent.postValue(ShowClosedGame(game))
+        } else {
+            viewEvent.postValue(ShowActiveGame(game))
+        }
 
     private fun restoreDeletedGame(interaction: UndoDelete) {
         games.add(interaction.restoreIndex, interaction.game)
