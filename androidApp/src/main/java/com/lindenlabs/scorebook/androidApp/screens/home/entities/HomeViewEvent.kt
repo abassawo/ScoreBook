@@ -1,9 +1,10 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.entities
 
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity
 
 sealed class HomeViewEvent {
+
+    object ShowWelcomeScreen : HomeViewEvent()
 
     data class AlertNoTextEntered(val errorText: String = "Enter a game name to begin") : HomeViewEvent()
 

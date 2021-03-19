@@ -14,25 +14,32 @@ import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GamesMapper
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GamesWrapper
+import com.lindenlabs.scorebook.androidApp.settings.UserSettings
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class HomeViewModel(val appRepository: AppRepository) : ViewModel() {
+class HomeViewModel(val appRepository: AppRepository) :
+    ViewModel() {
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
     private val gamesMapper: GamesMapper = GamesMapper()
     private val games: MutableList<Game> = mutableListOf()
 
     init {
+//        if (appRepository.isFirstRun())
+            showWelcomeScreen()
+
         loadGames()
+        appRepository.clearFirstRun()
     }
+
+    private fun showWelcomeScreen() = viewEvent.postValue(ShowWelcomeScreen)
 
     private fun loadGames() = viewModelScope.launch {
         runCatching { appRepository.load() }
             .onSuccess(::showGames)
             .onFailure { }
     }
-
 
     private fun showGames(games: List<Game>) {
         this.games.run {
@@ -60,7 +67,7 @@ class HomeViewModel(val appRepository: AppRepository) : ViewModel() {
                     loadGames()
                     viewEvent.postValue(ShowUndoDeletePrompt(interaction.game, it))
                 }
-                .onFailure { }
+                .onFailure { Timber.e(it) }
         }
         is UndoDelete -> restoreDeletedGame(interaction)
     }

@@ -19,6 +19,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
     implementation("com.airbnb.android:lottie:3.6.1")
+    implementation("nl.dionsegijn:konfetti:1.2.6")
+
+
+
     implementation("com.facebook.stetho:stetho:1.5.1")
 
     val daggerVersion=2.33

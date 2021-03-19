@@ -1,6 +1,7 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import android.app.Activity
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -25,7 +26,11 @@ import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewState
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv.GameAdapter
+import com.lindenlabs.scorebook.androidApp.screens.home.presentation.welcome.WelcomeDialogFragment
 import com.lindenlabs.scorebook.androidApp.views.rv.SwipeToDismissCallback
+import nl.dionsegijn.konfetti.emitters.StreamEmitter
+import nl.dionsegijn.konfetti.models.Shape
+import nl.dionsegijn.konfetti.models.Size
 import javax.inject.Inject
 
 class HomeFragment : Fragment(R.layout.home_fragment) {
@@ -79,11 +84,16 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             is HomeViewEvent.ShowActiveGame -> findNavController().showActiveGame(event.game)
                 .also { hideKeyboard() }
             is HomeViewEvent.ShowUndoDeletePrompt -> showUndoPrompt(event)
+            HomeViewEvent.ShowWelcomeScreen -> showWelcomeConfetti()
         }
     }
 
     private fun showUndoPrompt(event: HomeViewEvent.ShowUndoDeletePrompt) =
-        Snackbar.make(requireView(), "You've deleted your game: " + event.game.name, Snackbar.LENGTH_SHORT)
+        Snackbar.make(
+            requireView(),
+            "You've deleted your game: " + event.game.name,
+            Snackbar.LENGTH_SHORT
+        )
             .setAction(R.string.undo) {
                 viewModel.handleInteraction(UndoDelete(event.game, event.restoreIndex))
             }.show()
@@ -108,12 +118,34 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         gameBinding.enterNewGameEditText.setError(errorPair.first, errorPair.second)
     }
 
+    private fun showWelcomeConfetti() {
+        binding.viewKonfetti.run {
+            build()
+                .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA, Color.RED, Color.BLUE)
+                .setDirection(degrees = 5.5)
+                .setSpeed(1f, 5f)
+                .setFadeOutEnabled(true)
+                .setTimeToLive(2000L)
+                .addShapes(Shape.Square, Shape.Circle)
+                .addSizes(Size(4))
+                .setPosition(
+                    minX = width / 2f,
+                    maxX = width + 0f,
+                    minY = -50f,
+                    maxY = width + 50f
+                )
+                .streamFor(particlesPerSecond = 30, emittingTime = StreamEmitter.INDEFINITE)
+        }
+        WelcomeDialogFragment().show(requireFragmentManager(), HomeFragment::class.java.simpleName)
+    }
+
     private fun HomeFragmentBinding.updateUi() {
         gamesRecyclerView.run {
             this.adapter = gameAdapter
             this.itemAnimator = DefaultItemAnimator()
 
-            val undoDeleteIcon = ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_delete)
+            val undoDeleteIcon =
+                ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_delete)
             undoDeleteIcon?.let { icon ->
                 val itemTouchHelper = ItemTouchHelper(SwipeToDismissCallback(icon, gameAdapter))
                 itemTouchHelper.attachToRecyclerView(this)
