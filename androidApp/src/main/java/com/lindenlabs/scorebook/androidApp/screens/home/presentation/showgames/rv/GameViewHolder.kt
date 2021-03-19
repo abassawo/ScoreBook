@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.lindenlabs.scorebook.androidApp.databinding.GameItemRowBinding
 import com.lindenlabs.scorebook.androidApp.databinding.HeaderItemRowBinding
-import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity
 import com.lindenlabs.scorebook.androidApp.views.rv.SwipableViewHolder
 
@@ -26,12 +26,12 @@ sealed class GameViewHolder(binding: ViewBinding) :
             this.row = row
             with(binding.gameName) { text = row.game.name }
             itemView.setOnClickListener {
-                row.clickAction(GameInteraction.GameClicked(row.game))
+                row.clickAction(HomeInteraction.GameClicked(row.game))
             }
         }
 
         override fun onItemSwiped(position: Int) {
-            row.swipeAction(GameInteraction.SwipeToDelete(row.game))
+            row.swipeAction(HomeInteraction.SwipeToDelete(row.game))
         }
     }
 }

@@ -2,13 +2,11 @@ package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.BaseViewModelTest
-import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeInteraction
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent
-import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewState
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity
 import com.nhaarman.mockitokotlin2.verify
 import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -57,7 +55,7 @@ class HomeViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `creating a new game triggers add player screens`() {
-        val interaction = GameInteraction.GameDetailsEntered("Game1")
+        val interaction = HomeInteraction.GameDetailsEntered("Game1")
         underTest.handleInteraction(interaction)
         val emittedEvent = requireNotNull(underTest.viewEvent.value)
         assert(emittedEvent is HomeViewEvent.ShowAddPlayersScreen)
@@ -65,7 +63,7 @@ class HomeViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `entering empty game name should trigger error`() {
-        val interaction = GameInteraction.GameDetailsEntered("")
+        val interaction = HomeInteraction.GameDetailsEntered("")
         underTest.handleInteraction(interaction)
         val emittedEvent = requireNotNull(underTest.viewEvent.value)
         assert(emittedEvent is HomeViewEvent.AlertNoTextEntered)
@@ -74,7 +72,7 @@ class HomeViewModelTest : BaseViewModelTest() {
     @Test
     fun `clicking on a game triggers ShowActiveGame state`() {
         val game = Game(name = "test")
-        val interaction = GameInteraction.GameClicked(game)
+        val interaction = HomeInteraction.GameClicked(game)
         underTest.handleInteraction(interaction)
         val emittedEvent = requireNotNull(underTest.viewEvent.value)
         with(emittedEvent as HomeViewEvent.ShowActiveGame) {
@@ -89,7 +87,7 @@ class HomeViewModelTest : BaseViewModelTest() {
                 val openGames = listOf(Game(name = "test1"))
                 arrangeBuilder.withGamesLoaded(openGames)
                 val game = openGames.first()
-                underTest.handleInteraction(GameInteraction.SwipeToDelete(game))
+                underTest.handleInteraction(HomeInteraction.SwipeToDelete(game))
                 verify(mockRepo).deleteGame(game)
             }
         }

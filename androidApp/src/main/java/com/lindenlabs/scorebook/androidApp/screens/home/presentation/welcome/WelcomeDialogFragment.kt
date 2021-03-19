@@ -1,5 +1,6 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation.welcome
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,5 +31,10 @@ class WelcomeDialogFragment(val action: () -> Unit) : DialogFragment() {
         params.width = 800
         params.height = 800
         dialog!!.window!!.attributes = params as WindowManager.LayoutParams
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        action()
     }
 }

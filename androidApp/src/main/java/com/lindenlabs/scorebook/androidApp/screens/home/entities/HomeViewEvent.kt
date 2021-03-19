@@ -6,6 +6,8 @@ sealed class HomeViewEvent {
 
     object ShowWelcomeScreen : HomeViewEvent()
 
+    object DismissWelcomeMessage : HomeViewEvent()
+
     data class AlertNoTextEntered(val errorText: String = "Enter a game name to begin") : HomeViewEvent()
 
     data class ShowAddPlayersScreen(val game: Game) : HomeViewEvent()

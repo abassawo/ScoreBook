@@ -2,6 +2,7 @@ package com.lindenlabs.scorebook.androidApp.screens.victory.presentation
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -11,6 +12,8 @@ import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.databinding.FragmentVictoryBinding
 import com.lindenlabs.scorebook.androidApp.di.VictoryModule
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction
+import com.lindenlabs.scorebook.androidApp.screens.victory.entities.VictoryInteraction
 import com.lindenlabs.scorebook.androidApp.screens.victory.entities.VictoryState
 import javax.inject.Inject
 
@@ -32,6 +35,15 @@ class VictoryFragment : Fragment(R.layout.fragment_victory) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true /* enabled by default */) {
+                override fun handleOnBackPressed() {
+                    viewModel.handleInteraction(VictoryInteraction.GoHome)
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+
         appComponent().value
             .victoryFragmentComponentBuilder()
             .plus(VictoryModule(args))

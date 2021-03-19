@@ -52,7 +52,7 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
                 override fun handleOnBackPressed() {
-                    viewModel.handleInteraction(AddPlayerInteraction.GoBackHome)
+                    viewModel.handleInteraction(GoBackHome)
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)

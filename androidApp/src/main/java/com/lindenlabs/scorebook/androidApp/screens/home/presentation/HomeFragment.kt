@@ -21,8 +21,9 @@ import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.databinding.HomeFragmentBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction.GameDetailsEntered
-import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction.UndoDelete
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeInteraction
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeInteraction.GameDetailsEntered
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeInteraction.UndoDelete
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewState
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv.GameAdapter
@@ -49,6 +50,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         appComponent().value.homeFragmentComponent().inject(this)
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
@@ -85,6 +87,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                 .also { hideKeyboard() }
             is HomeViewEvent.ShowUndoDeletePrompt -> showUndoPrompt(event)
             HomeViewEvent.ShowWelcomeScreen -> showWelcomeConfetti()
+            HomeViewEvent.DismissWelcomeMessage -> binding.viewKonfetti.stopGracefully()
         }
     }
 
@@ -136,8 +139,8 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                 )
                 .streamFor(particlesPerSecond = 30, emittingTime = StreamEmitter.INDEFINITE)
         }
-        val action = { binding.viewKonfetti.stopGracefully() }
-        WelcomeDialogFragment(action).show(requireFragmentManager(), HomeFragment::class.java.simpleName)
+        val dialog = WelcomeDialogFragment { viewModel.handleInteraction(HomeInteraction.DismissWelcome) }
+        dialog.show(requireFragmentManager(), HomeFragment::class.java.simpleName)
     }
 
     private fun HomeFragmentBinding.updateUi() {
