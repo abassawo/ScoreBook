@@ -8,14 +8,21 @@ import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.lindenlabs.scorebook.androidApp.databinding.WelcomeFragmentBinding
 
-class WelcomeDialogFragment : DialogFragment() {
-
+class WelcomeDialogFragment(val action: () -> Unit) : DialogFragment() {
+    private lateinit var binding: WelcomeFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = WelcomeFragmentBinding.inflate(inflater).root
+    ): View {
+        binding = WelcomeFragmentBinding.inflate(inflater)
+        binding.exitWelcomeBtn.setOnClickListener {
+            action()
+            this.dismiss()
+        }
+        return binding.root
+    }
 
     override fun onResume() {
         super.onResume()

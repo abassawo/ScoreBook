@@ -136,7 +136,8 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                 )
                 .streamFor(particlesPerSecond = 30, emittingTime = StreamEmitter.INDEFINITE)
         }
-        WelcomeDialogFragment().show(requireFragmentManager(), HomeFragment::class.java.simpleName)
+        val action = { binding.viewKonfetti.stopGracefully() }
+        WelcomeDialogFragment(action).show(requireFragmentManager(), HomeFragment::class.java.simpleName)
     }
 
     private fun HomeFragmentBinding.updateUi() {

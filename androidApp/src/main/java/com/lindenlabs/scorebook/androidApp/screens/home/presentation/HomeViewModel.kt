@@ -26,7 +26,7 @@ class HomeViewModel(val appRepository: AppRepository) :
     private val games: MutableList<Game> = mutableListOf()
 
     init {
-//        if (appRepository.isFirstRun())
+        if (appRepository.isFirstRun())
             showWelcomeScreen()
 
         loadGames()
