@@ -24,7 +24,7 @@ class UpdatePointsViewModelTest : BaseViewModelTest() {
     fun `test adding points for first player`() =
         runBlockingTest {
             MainScope().launch {
-                underTest.handleInteraction(UpdatePointsViewModel.AddPointsInteraction.AddScore(20))
+                underTest.handleInteraction(UpdatePointsViewModel.UpdatePointsInteraction.AddScore(20))
                 val emittedEvent = underTest.viewEvent.value
                 assert(emittedEvent is UpdatePointsViewEvent.ScoreUpdated)
                 verify(appRepository.dataSource).updateGame(any())

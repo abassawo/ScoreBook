@@ -18,8 +18,8 @@ import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.AddPlayersArgsModule
-import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewState.*
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewState.*
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewState
@@ -70,7 +70,7 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
     private fun processViewState(viewState: AddPlayersViewState) = when (viewState) {
         is TextEntryError -> binding.enterNewPlayerEditText.setError("Enter a valid name")
         is UpdateCurrentPlayersText -> {
-            binding.updatePointsButton.visibility = View.VISIBLE
+            binding.addPlayersButton.visibility = View.VISIBLE
             binding.playersText.text = viewState.playersText
             binding.enterNewPlayerEditText.setText("")
         }
@@ -80,7 +80,7 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
                 visibility = if (isEnabled) View.VISIBLE else View.GONE
             }
         }
-        TypingState -> binding.updatePointsButton.visibility = View.GONE
+        TypingState -> binding.addPlayersButton.visibility = View.GONE
         is LoadAutocompleteAdapter -> {
             val adapter = ArrayAdapter(
                 requireContext(),
@@ -112,7 +112,7 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
     }
 
     private fun AddPlayersFragmentBinding.updateUI() {
-        this.updatePointsButton.setOnClickListener {
+        this.addPlayersButton.setOnClickListener {
             val name = binding.enterNewPlayerEditText.text.toString()
             viewModel.handleInteraction(SavePlayerDataAndExit(name)) // new player routes back to Game Detail Screen
         }
