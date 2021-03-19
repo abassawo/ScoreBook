@@ -26,4 +26,6 @@
     <string name="get_started">Get Started</string>
     <string name="restart_game">Restart Game</string>
     <string name="edit_game">Edit Game</string>
+    <string name="common_no">No</string>
+    <string name="common_yes">Yes</string>
 </resources>

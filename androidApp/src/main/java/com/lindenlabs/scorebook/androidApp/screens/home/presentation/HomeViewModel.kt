@@ -56,7 +56,7 @@ class HomeViewModel(val appRepository: AppRepository) :
             else {
                 val strategy =
                     if (interaction.lowestScoreWins) LowestScoreWins else HighestScoreWins
-                onNewGameCreated(interaction.name, strategy, autoStart = games.isEmpty())
+                onNewGameCreated(interaction.name, strategy)
             }
         }
         is GameClicked -> onGameClicked(interaction.game)
@@ -100,17 +100,16 @@ class HomeViewModel(val appRepository: AppRepository) :
     private fun onNewGameCreated(
         name: String,
         strategy: GameStrategy,
-        autoStart: Boolean = false
+        autoStart: Boolean = true
     ): Game {
         with(receiver = Game(name = name, strategy = strategy)) {
             if (autoStart) start()
-
-            storeGame(this)
+            storeGame(this, autoStart)
             return this
         }
     }
 
-    private fun storeGame(game: Game, autoStart: Boolean = games.isEmpty()) {
+    private fun storeGame(game: Game, autoStart: Boolean) {
         viewModelScope.launch {
             kotlin.runCatching { appRepository.storeGame(game) }
                 .onSuccess {

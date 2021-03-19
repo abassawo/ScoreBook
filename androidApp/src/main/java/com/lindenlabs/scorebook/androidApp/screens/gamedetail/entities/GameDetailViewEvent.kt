@@ -9,7 +9,11 @@ sealed class GameDetailViewEvent {
 
     data class EditScoreForPlayer(val game: Game, val player: Player) : GameDetailViewEvent()
 
+    data class PromptToRestartGame(val game: Game) : GameDetailViewEvent()
+
     object GoBackHome : GameDetailViewEvent()
+
+    object ConfirmEndGame : GameDetailViewEvent()
 
     data class EndGame(val game: Game) : GameDetailViewEvent()
 

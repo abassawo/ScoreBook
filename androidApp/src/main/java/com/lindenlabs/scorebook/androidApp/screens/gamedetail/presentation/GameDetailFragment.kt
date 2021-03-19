@@ -1,5 +1,6 @@
 package com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -9,14 +10,15 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lindenlabs.scorebook.androidApp.R
-import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailFragmentBinding
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.di.GameScoreModule
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailViewEvent
+import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailInteraction
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailViewState
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.PlayerDataEntity
@@ -28,12 +30,12 @@ import java.util.*
 import javax.inject.Inject
 
 open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
-    private val adapter: PlayerAdapter = PlayerAdapter()
     private val binding: GameDetailFragmentBinding by lazy { viewBinding() }
     val viewModel: GameViewModel by lazy {
         viewModelFactory.makeViewModel(this, GameViewModel::class.java)
     }
     private val args: GameDetailFragmentArgs by navArgs()
+    private val adapter: PlayerAdapter = PlayerAdapter()
     private val navController: NavController by lazy { findNavController() }
 
     @Inject
@@ -105,8 +107,26 @@ open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
             is EditScoreForPlayer -> navigateToUpdatePlayerScore(event)
             is EndGame -> endGame(event.game)
             is ShowRestartingGameMessage -> Toast.makeText(
-                requireContext(), "${event.game.name} restarting", Toast.LENGTH_SHORT).show()
+                requireContext(), "${event.game.name} restarting", Toast.LENGTH_SHORT
+            ).show()
+            is PromptToRestartGame -> showRestartGamePrompt()
+            ConfirmEndGame -> ConfirmEndGameBottomView {
+                viewModel.handleInteraction(GameDetailInteraction.EndGameConfirmed)
+            }.show(requireFragmentManager(), GameDetailFragment::class.java.simpleName)
         }
+
+    private fun showRestartGamePrompt() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage("Would you like you to restart this game?")
+            .setPositiveButton(
+                R.string.common_yes
+            ) { _, _ ->
+                viewModel.handleInteraction(GameDetailInteraction.RestartGameClicked)
+            }
+            .setNegativeButton( R.string.common_no) { _, _ -> }
+            .create()
+            .show()
+    }
 
 
     private fun navigateHome() = navController.navigate(GameDetailFragmentDirections.navigateHome())
@@ -130,12 +150,12 @@ open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
                 requireActivity().invalidateOptionsMenu()
                 binding.toolbar.menu.clear()
                 binding.toolbar.inflateMenu(R.menu.active_game_menu)
-                binding.showGame(state.playerDataEntities)
+                binding.showScoreBoard(state.playerDataEntities)
             }
             is GameDetailViewState.ClosedGame -> {
                 binding.toolbar.menu.clear()
                 binding.toolbar.inflateMenu(R.menu.closed_game_menu)
-                binding.showGame(state.playerDataEntities)
+                binding.showScoreBoard(state.playerDataEntities)
             }
         }
     }
@@ -149,7 +169,7 @@ open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
         emptyStateTextView.run { this.visibility = View.VISIBLE }
 
 
-    private fun GameDetailFragmentBinding.showGame(players: List<PlayerDataEntity>) {
+    private fun GameDetailFragmentBinding.showScoreBoard(players: List<PlayerDataEntity>) {
         emptyStateTextView.visibility = View.GONE
         gameParticipantsRv.visibility = View.VISIBLE
         adapter.setData(players)

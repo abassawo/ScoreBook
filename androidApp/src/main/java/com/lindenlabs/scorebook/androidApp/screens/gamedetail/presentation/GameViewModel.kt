@@ -15,7 +15,10 @@ import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showp
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-open class GameViewModel @Inject constructor(val appRepository: AppRepository, val args: GameDetailFragmentArgs) : ViewModel() {
+open class GameViewModel @Inject constructor(
+    val appRepository: AppRepository,
+    val args: GameDetailFragmentArgs
+) : ViewModel() {
     val viewState: MutableLiveData<GameDetailViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<GameDetailViewEvent> = MutableLiveData()
     private val mapper: GameViewEntityMapper = GameViewEntityMapper()
@@ -38,10 +41,15 @@ open class GameViewModel @Inject constructor(val appRepository: AppRepository, v
                 val playerEntities = mapper.map(players) { interaction ->
                     handleInteraction(interaction)
                 }
-                if(game.isClosed)
+                if (game.isClosed)
                     viewState.postValue(GameDetailViewState.ClosedGame(playerEntities, game))
                 else
-                    viewState.postValue(GameDetailViewState.StartedWithPlayers(playerEntities, game))
+                    viewState.postValue(
+                        GameDetailViewState.StartedWithPlayers(
+                            playerEntities,
+                            game
+                        )
+                    )
             }
         }
     }
@@ -49,13 +57,12 @@ open class GameViewModel @Inject constructor(val appRepository: AppRepository, v
     fun handleInteraction(interaction: GameDetailInteraction) {
         val game = args.gameArg
         when (interaction) {
-            is PlayerClicked -> viewEvent.postValue(
-                EditScoreForPlayer(
-                    game,
-                    interaction.player
-                )
-            )
-            is EndGameClicked -> viewEvent.postValue(EndGame(game))
+            is PlayerClicked -> if (!game.isClosed) {
+                viewEvent.postValue(EditScoreForPlayer(game, interaction.player))
+            } else {
+               viewEvent.postValue(PromptToRestartGame(game))
+            }
+            is EndGameClicked -> confirmEndGame()
             GoBack -> viewEvent.postValue(GoBackHome)
             RestartGameClicked -> {
                 game.start()
@@ -65,10 +72,15 @@ open class GameViewModel @Inject constructor(val appRepository: AppRepository, v
                 launch(game)
                 viewEvent.postValue(ShowRestartingGameMessage(game))
             }
+            EndGameConfirmed -> endGame(game)
         }
     }
 
+    private fun confirmEndGame() = viewEvent.postValue(ConfirmEndGame)
+
+    private fun endGame(game: Game) =  viewEvent.postValue(EndGame(game))
+
     fun navigateToAddPlayerPage() =
-       viewEvent.postValue(AddPlayersClicked(args.gameArg))
+        viewEvent.postValue(AddPlayersClicked(args.gameArg))
 
 }

@@ -6,5 +6,6 @@ sealed class GameDetailInteraction {
     data class PlayerClicked(val player : Player) : GameDetailInteraction()
     object GoBack : GameDetailInteraction()
     object EndGameClicked : GameDetailInteraction()
+    object EndGameConfirmed : GameDetailInteraction()
     object RestartGameClicked : GameDetailInteraction()
 }
