@@ -52,7 +52,6 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <!-- Other components and views -->
-
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottomAppbar"
             android:layout_width="match_parent"

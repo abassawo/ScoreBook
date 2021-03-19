@@ -14,6 +14,7 @@ import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.Upd
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsViewModel
 import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryViewModel
+import com.lindenlabs.scorebook.androidApp.settings.UserSettingsStore
 import javax.inject.Inject
 
 class ViewModelFactory @Inject constructor(private val appRepository: AppRepository, val navArgs: NavArgs) :
