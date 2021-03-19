@@ -9,12 +9,11 @@ import com.lindenlabs.scorebook.androidApp.base.data.raw.GameStrategy
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.*
 import com.lindenlabs.scorebook.androidApp.base.data.raw.GameStrategy.HighestScoreWins
 import com.lindenlabs.scorebook.androidApp.base.data.raw.GameStrategy.LowestScoreWins
-import com.lindenlabs.scorebook.androidApp.screens.home.entities.GameInteraction.*
+import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeInteraction.*
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GamesMapper
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GamesWrapper
-import com.lindenlabs.scorebook.androidApp.settings.UserSettings
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -50,7 +49,7 @@ class HomeViewModel(val appRepository: AppRepository) :
         viewState.postValue(wrapper.toViewState())
     }
 
-    internal fun handleInteraction(interaction: GameInteraction) = when (interaction) {
+    internal fun handleInteraction(interaction: HomeInteraction) = when (interaction) {
         is GameDetailsEntered -> {
             if (interaction.name.isNullOrEmpty())
                 showError()
@@ -70,6 +69,7 @@ class HomeViewModel(val appRepository: AppRepository) :
                 .onFailure { Timber.e(it) }
         }
         is UndoDelete -> restoreDeletedGame(interaction)
+        DismissWelcome -> viewEvent.postValue(HomeViewEvent.DismissWelcomeMessage)
     }
 
     private fun restoreDeletedGame(interaction: UndoDelete) {

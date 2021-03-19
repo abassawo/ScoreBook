@@ -1,6 +1,9 @@
 package com.lindenlabs.scorebook.androidApp.screens.scorebookdetail.presentation
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
@@ -26,7 +29,12 @@ import javax.inject.Inject
 class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
     private val adapter: PlayerAdapter = PlayerAdapter()
     private val binding: GameDetailFragmentBinding by lazy { viewBinding() }
-    private val viewModel: GameViewModel by lazy { viewModelFactory.makeViewModel(this, GameViewModel::class.java) }
+    private val viewModel: GameViewModel by lazy {
+        viewModelFactory.makeViewModel(
+            this,
+            GameViewModel::class.java
+        )
+    }
     private val args: GameDetailFragmentArgs by navArgs()
     private val navController: NavController by lazy { findNavController() }
 
@@ -40,6 +48,7 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         appComponent().value
             .gameScoreComponentBuilder()
             .plus(GameScoreModule((args)))
@@ -54,6 +63,20 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) =
+        inflater.inflate(R.menu.menu_score_game, menu)
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.endGameMenuItem -> {
+                viewModel.handleInteraction(ScoreBookInteraction.EndGameClicked)
+                true
+            }
+            else -> false
+        }
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -73,10 +96,7 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
         this.bottomAppbar.setNavigationOnClickListener {
             viewModel.handleInteraction(ScoreBookInteraction.EndGameClicked)
         }
-        this.bottomAppbar.setOnMenuItemClickListener {
-            viewModel.handleInteraction(ScoreBookInteraction.EndGameClicked)
-            true
-        }
+
     }
 
     private fun processViewEvent(event: ScoreBookViewEvent) {
@@ -93,7 +113,8 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
     private fun navigateToUpdatePlayerScore(event: EditScoreForPlayer) =
         navController.navigate(navigateToUpdatePoints(event.game, event.player))
 
-    private fun navigateToAddPlayers(game: Game) = navController.navigate(navigateToAddPlayersScreen(game))
+    private fun navigateToAddPlayers(game: Game) =
+        navController.navigate(navigateToAddPlayersScreen(game))
 
     private fun showGameState(state: ScoreBookViewState) {
         binding.toolbar.title = state.gameName
