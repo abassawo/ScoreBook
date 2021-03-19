@@ -2,8 +2,8 @@ package com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities
 
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 
-data class ScoreBookEntity(
+data class PlayerDataEntity(
     val player: Player,
-    val clickAction: (interaction: ScoreBookInteraction) -> Unit,
-    val isPlayersTurn: Boolean = player.isPlayerTurn
+    val clickAction: (interaction: GameDetailInteraction) -> Unit,
+    val isPlayersTurn: Boolean = player.isPlayerTurn,
 )

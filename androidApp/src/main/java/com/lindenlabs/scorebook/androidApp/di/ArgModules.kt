@@ -3,9 +3,9 @@ package com.lindenlabs.scorebook.androidApp.di
 import androidx.navigation.NavArgs
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.di.scope.FragmentScope
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.ActiveGameDetailFragmentArgs
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameDetailFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersFragmentArgs
-import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsFragmentArgs
+import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryFragmentArgs
 import dagger.Module
 import dagger.Provides
@@ -34,7 +34,7 @@ class AddPlayersArgsModule(private val addPlayerArgs: AddPlayersFragmentArgs) {
 
 
 @Module
-class UpdatePointsModule(private val updatePointsArgs: UpdatePointsFragmentArgs) {
+class UpdatePointsModule(private val updatePointsArgs: UpdatePointsDialogFragmentArgs) {
 
     @Provides
     @FragmentScope
@@ -48,7 +48,7 @@ class UpdatePointsModule(private val updatePointsArgs: UpdatePointsFragmentArgs)
 
 
 @Module
-class GameScoreModule(private val gameDetailFragmentArgs: ActiveGameDetailFragmentArgs) {
+class GameScoreModule(private val gameDetailFragmentArgs: GameDetailFragmentArgs) {
 
     @Provides
     @FragmentScope

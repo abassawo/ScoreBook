@@ -1,14 +1,14 @@
 package com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showplayers
 
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.ScoreBookEntity
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.ScoreBookInteraction
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.PlayerDataEntity
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailInteraction
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 
 class GameViewEntityMapper {
 
-    fun map(players: List<Player>, interaction: (ScoreBookInteraction)-> Unit) : List<ScoreBookEntity>{
+    fun map(players: List<Player>, interaction: (GameDetailInteraction)-> Unit) : List<PlayerDataEntity>{
         return players.map{  player ->
-            ScoreBookEntity(player, { interaction(it) })
+            PlayerDataEntity(player, { interaction(it) })
         }
     }
 }

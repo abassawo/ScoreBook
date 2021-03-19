@@ -24,6 +24,7 @@ data class Game(
 
     fun start() {
       isClosed = false
+        players.forEach { it.resetScore() }
     }
 
     fun end(): String {

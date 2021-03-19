@@ -12,7 +12,7 @@ import java.util.*
 data class Player(
     val name: String,
     var scoreTotal: Int = 0,
-    var rounds: List<Round> = emptyList(),
+    var rounds: List<Round> = mutableListOf(),
     var isPlayerTurn: Boolean = false,
     @PrimaryKey
     val id: UUID = UUID.randomUUID()
@@ -21,6 +21,11 @@ data class Player(
     fun addToScore(score: Int) {
         this.rounds += Round(score = score)
         this.scoreTotal += score
+    }
+
+    fun resetScore() {
+        this.rounds = mutableListOf()
+        this.scoreTotal = 0
     }
 }
 

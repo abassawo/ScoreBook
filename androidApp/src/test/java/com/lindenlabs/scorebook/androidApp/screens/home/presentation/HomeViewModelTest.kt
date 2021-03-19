@@ -75,7 +75,7 @@ class HomeViewModelTest : BaseViewModelTest() {
         val interaction = HomeInteraction.GameClicked(game)
         underTest.handleInteraction(interaction)
         val emittedEvent = requireNotNull(underTest.viewEvent.value)
-        with(emittedEvent as HomeViewEvent.ShowActiveGame) {
+        with(emittedEvent as HomeViewEvent.ShowGameDetail) {
             assertEquals(this.game, game)
         }
     }

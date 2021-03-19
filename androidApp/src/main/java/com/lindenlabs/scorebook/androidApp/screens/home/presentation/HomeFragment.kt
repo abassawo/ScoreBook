@@ -83,12 +83,11 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             is HomeViewEvent.AlertNoTextEntered -> showError(event)
             is HomeViewEvent.ShowAddPlayersScreen -> findNavController().showAddPlayersScreen(event.game)
                 .also { hideKeyboard() }
-            is HomeViewEvent.ShowActiveGame -> findNavController().showActiveGame(event.game)
+            is HomeViewEvent.ShowGameDetail -> findNavController().showActiveGame(event.game)
                 .also { hideKeyboard() }
             is HomeViewEvent.ShowUndoDeletePrompt -> showUndoPrompt(event)
             HomeViewEvent.ShowWelcomeScreen -> showWelcomeConfetti()
             HomeViewEvent.DismissWelcomeMessage -> binding.viewKonfetti.stopGracefully()
-            is HomeViewEvent.ShowClosedGame -> findNavController().showClosedGame(event.game)
         }
 
     private fun showUndoPrompt(event: HomeViewEvent.ShowUndoDeletePrompt) =
@@ -113,8 +112,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     private fun NavController.showActiveGame(game: Game) =
         navigate(HomeFragmentDirections.navigateToScoreGameScreen(game))
 
-    private fun NavController.showClosedGame(game: Game) =
-        navigate(HomeFragmentDirections.navigateToClosedGame(game))
 
     private fun showError(event: HomeViewEvent.AlertNoTextEntered) {
         val errorPair = event.errorText to ContextCompat.getDrawable(

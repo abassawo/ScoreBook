@@ -35,16 +35,6 @@
 
         </action>
 
-        <action
-            android:id="@+id/navigateToClosedGame"
-            app:destination="@id/navClosedGame"
-            app:enterAnim="@anim/fragment_fade_exit">
-
-            <argument
-                android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
-
-        </action>
     </fragment>
 
     <fragment
@@ -71,29 +61,10 @@
             app:destination="@id/navHomeFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/navClosedGame"
-        android:name="com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.ClosedGameDetailFragment"
-        tools:layout="@layout/game_detail_fragment">
-
-        <argument
-            android:name="gameArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
-
-
-        <action
-            android:id="@+id/restartGame"
-            app:destination="@id/navActiveGame" />
-
-        <action
-            android:id="@+id/navigateHome"
-            app:destination="@id/navHomeFragment" />
-
-    </fragment>
 
     <fragment
         android:id="@+id/navActiveGame"
-        android:name="com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.ActiveGameDetailFragment"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameDetailFragment"
         tools:layout="@layout/game_detail_fragment">
 
         <argument
@@ -138,7 +109,7 @@
 
     <dialog
         android:id="@+id/navUpdatePoints"
-        android:name="com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsFragment"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragment"
         tools:layout="@layout/update_points_fragment">
 
         <argument
