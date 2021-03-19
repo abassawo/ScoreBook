@@ -68,9 +68,13 @@ class UpdatePointsDialogFragment : BaseDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.viewState.observe(this as LifecycleOwner, ::processState)
         viewModel.viewEvent.observe(this as LifecycleOwner, ::processEvent)
-        binding.updatePointsButton.setOnClickListener {
+        binding.addPointsButton.setOnClickListener {
             val text = binding.pointsEditText.text.toString()
-            viewModel.handleInteraction(AddPointsInteraction.ScoreAdded(text))
+            viewModel.handleInteraction(UpdatePointsInteraction.ScoreIncreaseBy(text))
+        }
+        binding.deductPointsButton.setOnClickListener {
+            val text = binding.pointsEditText.text.toString()
+            viewModel.handleInteraction(UpdatePointsInteraction.ScoreLoweredBy(text))
         }
     }
 

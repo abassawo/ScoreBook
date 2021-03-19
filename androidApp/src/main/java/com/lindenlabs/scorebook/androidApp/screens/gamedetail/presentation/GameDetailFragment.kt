@@ -139,7 +139,7 @@ open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
 
     private fun showGameState(state: GameDetailViewState) {
         binding.toolbar.title = state.game.name
-        binding.toolbar.subtitle = SimpleDateFormat("MMM d, yyyy")
+        binding.toolbar.subtitle = SimpleDateFormat("MMM dd, yyyy", Locale.US)
             .format(Date(state.game.dateCreated))
 
         when (state) {

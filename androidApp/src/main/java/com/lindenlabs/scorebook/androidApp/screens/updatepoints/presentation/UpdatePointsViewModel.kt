@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
-import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewState
 import kotlinx.coroutines.launch
@@ -19,13 +18,14 @@ class UpdatePointsViewModel(val appRepository: AppRepository, args: UpdatePoints
     val viewState: MutableLiveData<UpdatePointsViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<UpdatePointsViewEvent> = MutableLiveData()
 
-    fun handleInteraction(interaction: AddPointsInteraction) {
+    fun handleInteraction(interaction: UpdatePointsInteraction) {
         when (interaction) {
-            is AddPointsInteraction.ScoreAdded -> updateScore(interaction)
+            is UpdatePointsInteraction.ScoreIncreaseBy -> processAddToScoreAction(interaction)
+            is UpdatePointsInteraction.ScoreLoweredBy -> processSubtractFromScoreAction(interaction)
         }
     }
 
-    private fun updateScore(interaction: AddPointsInteraction.ScoreAdded) {
+    private fun processAddToScoreAction(interaction: UpdatePointsInteraction.ScoreIncreaseBy) {
         if(interaction.point.isNullOrEmpty()) {
             viewEvent.postValue(UpdatePointsViewEvent.AlertNoTextEntered())
         } else {
@@ -44,10 +44,30 @@ class UpdatePointsViewModel(val appRepository: AppRepository, args: UpdatePoints
         }
     }
 
+    private fun processSubtractFromScoreAction(interaction: UpdatePointsInteraction.ScoreLoweredBy) {
+        if(interaction.point.isNullOrEmpty()) {
+            viewEvent.postValue(UpdatePointsViewEvent.AlertNoTextEntered())
+        } else {
+            try {
+                player.deductFromScore(Integer.parseInt(interaction.point))
+            } catch (e: Exception) {
+
+            }
+
+            viewModelScope.launch {
+                withContext(appRepository.dispatcher) {
+                    runCatching { appRepository.updateGame(game) }
+                        .onSuccess { onScoreUpdated(player, game) }
+                }
+            }
+        }
+    }
+
     private fun onScoreUpdated(player: Player, game: Game) =
         viewEvent.postValue(UpdatePointsViewEvent.ScoreUpdated(player, game))
 
-    sealed class AddPointsInteraction {
-        data class ScoreAdded(val point: String) : AddPointsInteraction()
+    sealed class UpdatePointsInteraction {
+        data class ScoreIncreaseBy(val point: String) : UpdatePointsInteraction()
+        data class ScoreLoweredBy(val point: String) : UpdatePointsInteraction()
     }
 }
