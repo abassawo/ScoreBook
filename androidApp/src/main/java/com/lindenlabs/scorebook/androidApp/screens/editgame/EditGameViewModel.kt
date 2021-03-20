@@ -14,8 +14,8 @@ class EditGameViewModel @Inject constructor(
     val appRepository: AppRepository,
     val args: EditGameFragmentArgs
 ) : ViewModel() {
-    private val viewState: MutableLiveData<EditGameViewState> = makeInitialState()
-    private val viewEvent: MutableLiveData<EditGameViewEvent> = MutableLiveData<EditGameViewEvent>()
+    val viewState: MutableLiveData<EditGameViewState> = makeInitialState()
+    val viewEvent: MutableLiveData<EditGameViewEvent> = MutableLiveData<EditGameViewEvent>()
 
     private fun makeInitialState(): MutableLiveData<EditGameViewState> =
         MutableLiveData(EditGameViewState.Initial(args.gameArg))

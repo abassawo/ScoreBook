@@ -3,10 +3,8 @@ package com.lindenlabs.scorebook.androidApp.views
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.Checkable
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.GameStrategySwitchBinding
 
@@ -14,7 +12,7 @@ class GameStrategySwitchView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), Checkable {
 
-//    private var binding: GameStrategySwitchBinding = GameStrategySwitchBinding.inflate(LayoutInflater.from(context))
+    private var binding: GameStrategySwitchBinding = GameStrategySwitchBinding.inflate(LayoutInflater.from(context))
 
 
     init {
@@ -31,11 +29,11 @@ class GameStrategySwitchView @JvmOverloads constructor(
         }
 
     override fun setChecked(checked: Boolean) {
-//        binding.gameRuleSwitch.isChecked = checked
+        binding.gameRuleSwitch.isChecked = checked
     }
 
-    override fun isChecked(): Boolean =  true // binding.gameRuleSwitch.isChecked
+    override fun isChecked(): Boolean =  binding.gameRuleSwitch.isChecked
 
 
-    override fun toggle() = Unit // binding.gameRuleSwitch.toggle()
+    override fun toggle() = binding.gameRuleSwitch.toggle()
 }

@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavArgs
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
+import com.lindenlabs.scorebook.androidApp.screens.editgame.EditGameFragmentArgs
+import com.lindenlabs.scorebook.androidApp.screens.editgame.EditGameViewModel
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameDetailFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersViewModel
@@ -16,7 +18,7 @@ import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryF
 import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryViewModel
 import javax.inject.Inject
 
-class ViewModelFactory @Inject constructor(private val appRepository: AppRepository, val navArgs: NavArgs) :
+class ViewModelFactory @Inject constructor(private val appRepository: AppRepository, private val navArgs: NavArgs) :
     ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
@@ -26,6 +28,7 @@ class ViewModelFactory @Inject constructor(private val appRepository: AppReposit
             AddPlayersViewModel::class.java -> AddPlayersViewModel(appRepository, navArgs as AddPlayersFragmentArgs) as T
             UpdatePointsViewModel::class.java -> UpdatePointsViewModel(appRepository, navArgs as UpdatePointsDialogFragmentArgs) as T
             VictoryViewModel::class.java -> VictoryViewModel(appRepository, navArgs as VictoryFragmentArgs) as T
+            EditGameViewModel::class.java -> EditGameViewModel(appRepository, navArgs as EditGameFragmentArgs) as T
             else -> throw Exception()
         }
 
