@@ -54,14 +54,6 @@ class UpdatePointsDialogFragment : BaseDialogFragment() {
             .plus(UpdatePointsModule(args))
             .build()
             .inject(this)
-
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true /* enabled by default */) {
-                override fun handleOnBackPressed() {
-                   findNavController().navigate(R.id.navHomeFragment)
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

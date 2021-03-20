@@ -29,4 +29,6 @@
     <string name="common_no">No</string>
     <string name="common_yes">Yes</string>
     <string name="deduct_points">Deduct points</string>
+    <string name="game_name_header">Game name:</string>
+    <string name="save_game_button_text">Save game</string>
 </resources>

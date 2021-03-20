@@ -1,11 +1,14 @@
 package com.lindenlabs.scorebook.androidApp.screens.editgame
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
-import androidx.core.widget.addTextChangedListener
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
+import com.lindenlabs.scorebook.androidApp.base.data.raw.GameStrategy
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.databinding.EditGameFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.EditGameModule
@@ -22,6 +25,14 @@ class EditGameFragment : Fragment(R.layout.edit_game_fragment) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true /* enabled by default */) {
+                override fun handleOnBackPressed() {
+                   findNavController().navigate(EditGameFragmentDirections.navigateBackToGame(args.gameArg))
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+
         appComponent().value
             .editGameComponentBuilder()
             .plus(EditGameModule(args))
@@ -35,7 +46,15 @@ class EditGameFragment : Fragment(R.layout.edit_game_fragment) {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val text = binding.editGameField.editableText.toString()
-        binding.editGameField.addTextChangedListener { viewModel.handleInteraction(EditGameInteraction.EditGameName(text)) }
+        with(binding) {
+            saveGameButton.setOnClickListener {
+                val enteredText = editGameName.text.toString()
+                val isChecked = gameRuleSwitchView.isChecked
+                val newGameStrategy = if(isChecked) GameStrategy.LowestScoreWins else GameStrategy.HighestScoreWins
+                viewModel.handleInteraction(EditGameInteraction.SaveChanges(enteredText, newGameStrategy))
+            }
+        }
     }
+
+
 }

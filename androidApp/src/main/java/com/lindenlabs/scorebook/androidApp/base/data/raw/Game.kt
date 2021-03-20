@@ -15,7 +15,7 @@ data class Game(
     @PrimaryKey
     @ColumnInfo(name="id")
     val id: UUID = UUID.randomUUID(),
-    val name: String,
+    var name: String,
     val dateCreated: Long = Date().time,
     var isClosed: Boolean = false,
     var strategy: GameStrategy = GameStrategy.HighestScoreWins,

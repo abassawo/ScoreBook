@@ -1,5 +1,6 @@
 package com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -30,7 +31,7 @@ import javax.inject.Inject
 
 open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
     private val binding: GameDetailFragmentBinding by lazy { viewBinding() }
-    val viewModel: GameViewModel by lazy {
+    private val viewModel: GameViewModel by lazy {
         viewModelFactory.makeViewModel(this, GameViewModel::class.java)
     }
     private val args: GameDetailFragmentArgs by navArgs()
@@ -48,6 +49,13 @@ open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true /* enabled by default */) {
+                override fun handleOnBackPressed() {
+                   findNavController().navigate(GameDetailFragmentDirections.navigateHome())
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
 
         appComponent().value
             .gameScoreComponentBuilder()
@@ -55,13 +63,6 @@ open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
             .build()
             .inject(this)
 
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true /* enabled by default */) {
-                override fun handleOnBackPressed() {
-                    viewModel.handleInteraction(GameDetailInteraction.GoBack)
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
     private fun addToolbarListener() = binding.toolbar.setOnMenuItemClickListener {
