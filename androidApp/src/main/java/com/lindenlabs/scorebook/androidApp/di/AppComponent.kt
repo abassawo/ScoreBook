@@ -12,4 +12,5 @@ interface AppComponent {
     fun updatePointsComponentBuilder(): UpdatePointsFragmentComponent.Builder
     fun victoryFragmentComponentBuilder(): VictoryFragmentComponent.Builder
     fun gameScoreComponentBuilder(): GameScoreComponent.Builder
+    fun editGameComponentBuilder() : EditGameComponent.Builder
 }

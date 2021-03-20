@@ -1,5 +1,6 @@
 package com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities
 
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 
 sealed class GameDetailInteraction {
@@ -8,4 +9,5 @@ sealed class GameDetailInteraction {
     object EndGameClicked : GameDetailInteraction()
     object EndGameConfirmed : GameDetailInteraction()
     object RestartGameClicked : GameDetailInteraction()
+    object EditGameClicked : GameDetailInteraction()
 }

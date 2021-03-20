@@ -73,6 +73,7 @@ open class GameViewModel @Inject constructor(
                 viewEvent.postValue(ShowRestartingGameMessage(game))
             }
             EndGameConfirmed -> endGame(game)
+            EditGameClicked -> viewEvent.postValue(NavigateToEditHome(game))
         }
     }
 

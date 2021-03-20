@@ -1,6 +1,5 @@
 package com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -76,6 +75,10 @@ open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
                 viewModel.handleInteraction(GameDetailInteraction.RestartGameClicked)
                 true
             }
+            R.id.editGameMenuItem -> {
+                viewModel.handleInteraction(GameDetailInteraction.EditGameClicked)
+                true
+            }
             else -> false
         }
     }
@@ -113,7 +116,11 @@ open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
             ConfirmEndGame -> ConfirmEndGameBottomView {
                 viewModel.handleInteraction(GameDetailInteraction.EndGameConfirmed)
             }.show(requireFragmentManager(), GameDetailFragment::class.java.simpleName)
+            is NavigateToEditHome -> launchEditGameScreen(event.game)
         }
+
+    private fun launchEditGameScreen(game: Game) =
+        navController.navigate(GameDetailFragmentDirections.navigateToEditGameScreen(game))
 
     private fun showRestartGamePrompt() {
         MaterialAlertDialogBuilder(requireContext())

@@ -19,4 +19,6 @@ sealed class GameDetailViewEvent {
 
     data class ShowRestartingGameMessage(val game: Game) : GameDetailViewEvent()
 
+    data class NavigateToEditHome(val game: Game) : GameDetailViewEvent()
+
 }
