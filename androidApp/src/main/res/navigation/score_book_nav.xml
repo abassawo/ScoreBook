@@ -11,10 +11,6 @@
         tools:layout="@layout/home_fragment">
 
         <action
-            android:id="@+id/navigateHome"
-            app:destination="@id/navHomeFragment" />
-
-        <action
             android:id="@+id/navigateToAddPlayersScreen"
             app:destination="@id/navAddPlayers"
             app:enterAnim="@anim/fragment_fade_exit">
@@ -61,6 +57,18 @@
             app:destination="@id/navHomeFragment" />
     </fragment>
 
+    <fragment
+        android:id="@+id/navEditGame"
+        android:name="com.lindenlabs.scorebook.androidApp.screens.editgame.EditGameFragment"
+        tools:layout="@layout/edit_game_fragment">
+
+        <argument
+            android:name="gameArg"
+            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+
+
+    </fragment>
+
 
     <fragment
         android:id="@+id/navActiveGame"
@@ -80,6 +88,18 @@
                 app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
 
         </action>
+
+        <action
+            android:id="@+id/navigateToEditGameScreen"
+            app:destination="@+id/navEditGame"
+            app:enterAnim="@anim/fragment_fade_exit">
+
+            <argument
+                android:name="gameArg"
+                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+
+        </action>
+
 
 
         <action
@@ -120,9 +140,6 @@
             android:name="playerArg"
             app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Player" />
 
-        <action
-            android:id="@+id/navigateBackToGameDetail"
-            app:destination="@id/navActiveGame" />
     </dialog>
 
     <fragment

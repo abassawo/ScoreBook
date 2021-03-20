@@ -3,6 +3,7 @@ package com.lindenlabs.scorebook.androidApp.di
 import androidx.navigation.NavArgs
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.di.scope.FragmentScope
+import com.lindenlabs.scorebook.androidApp.screens.editgame.EditGameFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameDetailFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragmentArgs
@@ -58,6 +59,20 @@ class GameScoreModule(private val gameDetailFragmentArgs: GameDetailFragmentArgs
     @FragmentScope
     fun provideViewModelFactory(appRepository: AppRepository): ViewModelFactory =
         ViewModelFactory(appRepository, gameDetailFragmentArgs)
+}
+
+@Module
+class EditGameModule(private val editGameFragmentArgs: EditGameFragmentArgs) {
+
+    @Provides
+    @FragmentScope
+    fun provideArg(): NavArgs = editGameFragmentArgs
+
+    @Provides
+    @FragmentScope
+    fun provideViewModelFactory(appRepository: AppRepository): ViewModelFactory =
+        ViewModelFactory(appRepository, editGameFragmentArgs)
+
 }
 
 @Module

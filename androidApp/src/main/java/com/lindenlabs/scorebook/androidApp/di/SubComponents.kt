@@ -1,6 +1,7 @@
 package com.lindenlabs.scorebook.androidApp.di
 
 import com.lindenlabs.scorebook.androidApp.di.scope.FragmentScope
+import com.lindenlabs.scorebook.androidApp.screens.editgame.EditGameFragment
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeFragment
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersFragment
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameDetailFragment
@@ -37,6 +38,18 @@ interface SubComponents {
         interface Builder {
             fun plus(module: GameScoreModule): Builder
             fun build(): GameScoreComponent
+        }
+    }
+
+    @FragmentScope
+    @Subcomponent(modules= [EditGameModule::class])
+    interface EditGameComponent {
+        fun inject(fragment: EditGameFragment)
+
+        @Subcomponent.Builder
+        interface Builder {
+            fun plus(module: EditGameModule): Builder
+            fun build():  EditGameComponent
         }
     }
 

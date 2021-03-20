@@ -81,14 +81,11 @@ class UpdatePointsDialogFragment : BaseDialogFragment() {
     private fun processEvent(viewEvent: UpdatePointsViewEvent) {
         with(viewEvent) {
             when (this) {
-                is ScoreUpdated -> findNavController().navigateBackToDetailScreen(this.game)
+                is ScoreUpdated -> dismiss()
                 is AlertNoTextEntered -> binding.playerName.setError("Must add point")
             }
         }
     }
-
-    private fun NavController.navigateBackToDetailScreen(game: Game) =
-        navigate(UpdatePointsDialogFragmentDirections.navigateBackToGameDetail(game))
 
     private fun processState(viewState: UpdatePointsViewState?) {
         when (viewState) {
