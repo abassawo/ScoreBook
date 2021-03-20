@@ -66,6 +66,16 @@
             android:name="gameArg"
             app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
 
+        <action
+            android:id="@+id/navigateBackToGame"
+            app:destination="@id/navActiveGame">
+
+            <argument
+                android:name="gameArg"
+                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+
+        </action>
+
 
     </fragment>
 

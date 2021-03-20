@@ -160,21 +160,18 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         }
     }
 
-    fun IncludeHomeScreenBinding.bind() =
-        with(gameRuleSwitch) {
-            textOff = getString(R.string.high_score)
-            textOn = getString(R.string.low_score)
-            newGameButton.setOnClickListener {
-                val enteredText = enterNewGameEditText.text.toString()
-                viewModel.handleInteraction(
-                    GameDetailsEntered(
-                        enteredText,
-                        isChecked
-                    )
+    fun IncludeHomeScreenBinding.bind() {
+        newGameButton.setOnClickListener {
+            val enteredText = enterNewGameEditText.text.toString()
+            viewModel.handleInteraction(
+                GameDetailsEntered(
+                    enteredText,
+                    gameRuleSwitchView.isChecked
                 )
-                enterNewGameEditText.setText("")
-            }
+            )
+            enterNewGameEditText.setText("")
         }
+    }
 
 
     private fun showGames(viewState: HomeViewState) =

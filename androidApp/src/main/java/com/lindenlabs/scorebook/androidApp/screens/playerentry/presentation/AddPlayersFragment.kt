@@ -13,16 +13,15 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
-import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
+import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.AddPlayersArgsModule
-import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction
-import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewState.*
+import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewState
+import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewState.*
 import javax.inject.Inject
 
 class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
@@ -43,19 +42,20 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true /* enabled by default */) {
+                override fun handleOnBackPressed() {
+                    (requireActivity() as Activity).onBackPressed()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+
         appComponent().value
             .addPlayersComponentBuilder()
             .plus(AddPlayersArgsModule(args))
             .build()
             .inject(this)
 
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true /* enabled by default */) {
-                override fun handleOnBackPressed() {
-                    viewModel.handleInteraction(GoBackHome)
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
