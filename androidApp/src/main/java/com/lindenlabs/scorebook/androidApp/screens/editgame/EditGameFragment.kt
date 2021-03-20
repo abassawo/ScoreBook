@@ -81,6 +81,8 @@ class EditGameFragment : Fragment(R.layout.edit_game_fragment) {
                     )
                 )
             }
+
+            cancelEditButton.setOnClickListener { viewModel.handleInteraction(EditGameInteraction.Cancel) }
         }
     }
 
