@@ -1,6 +1,7 @@
 package com.lindenlabs.scorebook.androidApp.base.data.raw
 
 import android.os.Parcelable
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.lindenlabs.scorebook.androidApp.base.data.persistence.Converters
@@ -9,13 +10,15 @@ import java.util.*
 
 @Parcelize
 @TypeConverters(Converters.PlayerConverter::class)
+@Entity(tableName = "players")
 data class Player(
     val name: String,
     var scoreTotal: Int = 0,
     var rounds: List<Round> = mutableListOf(),
     var isPlayerTurn: Boolean = false,
     @PrimaryKey
-    val id: UUID = UUID.randomUUID()
+    val id: UUID = UUID.randomUUID(),
+    val dateCreated: Long = Date().time
 ): Parcelable {
 
     fun addToScore(score: Int) {

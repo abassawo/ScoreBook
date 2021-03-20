@@ -45,7 +45,7 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
                 override fun handleOnBackPressed() {
-                    (requireActivity() as Activity).onBackPressed()
+                    findNavController().navigate(AddPlayersFragmentDirections.navigateBackHome())
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)

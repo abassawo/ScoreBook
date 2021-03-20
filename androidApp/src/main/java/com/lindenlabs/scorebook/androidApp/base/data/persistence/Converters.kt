@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken
 import com.lindenlabs.scorebook.androidApp.base.data.raw.GameOutcome
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 import com.lindenlabs.scorebook.androidApp.base.data.raw.GameStrategy
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Round
 import org.json.JSONObject
 import timber.log.Timber
 import java.lang.reflect.Type
@@ -15,6 +16,11 @@ import java.util.*
 fun JSONObject.toPlayer(): Player {
     Timber.d("Converter player $this")
     return Gson().fromJson(this.toString(), Player::class.java)
+}
+
+fun JSONObject.toRound(): Round {
+    Timber.d("Converter player $this")
+    return Gson().fromJson(this.toString(), Round::class.java)
 }
 
 internal inline fun <reified T> Gson.fromJsonAsList(json: String) =
@@ -56,6 +62,33 @@ interface Converters {
         }
     }
 
+    @TypeConverters
+    class RoundConverter {
+
+        @TypeConverter
+        fun roundToString(round: Round): String = Gson().toJson(round)
+
+        @TypeConverter
+        fun stringToRounds(roundString: String): Round {
+            val jsonObject = JSONObject(roundString)
+            return jsonObject.toRound()
+        }
+    }
+
+    @TypeConverters
+    class RoundListConverter {
+
+        @TypeConverter
+        fun roundsToString(rounds: List<Round>): String = Gson().toJson(rounds.toTypedArray())
+
+        @TypeConverter
+        fun stringToRounds(roundsString: String): List<Round> {
+            Timber.e("Round string $roundsString")
+            val roundsListType: Type = object : TypeToken<ArrayList<Round?>?>() {}.type
+            return Gson().fromJson(roundsString, roundsListType)
+        }
+    }
+
 
     @TypeConverters
     class PlayerListConverter {
@@ -64,7 +97,7 @@ interface Converters {
         fun playerToString(players: List<Player>): String = Gson().toJson(players.toTypedArray())
 
         @TypeConverter
-        fun stringToPlayer(playerString: String): List<Player> {
+        fun stringToPlayers(playerString: String): List<Player> {
             Timber.e("Player string $playerString")
             val playerListType: Type = object : TypeToken<ArrayList<Player?>?>() {}.type
             return Gson().fromJson(playerString, playerListType)
