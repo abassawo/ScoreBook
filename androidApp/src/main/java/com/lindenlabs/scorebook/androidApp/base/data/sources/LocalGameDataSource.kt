@@ -4,7 +4,7 @@ import com.lindenlabs.scorebook.androidApp.base.data.persistence.GameStore
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import java.util.*
 
-open class LocalGameDataSource(private val gamesDao: GameStore) : GameDataSource {
+class LocalGameDataSource(private val gamesDao: GameStore) : GameDataSource {
     var games: MutableList<Game> = mutableListOf()
 
     fun games() = games

@@ -30,12 +30,12 @@ class AddPlayersViewModel @Inject constructor(
     }
 
     private fun populateAutocompleteAdapter() {
-        val setOfNames: MutableSet<String> = mutableSetOf()
+//        val setOfNames: MutableSet<String> = mutableSetOf()
         viewModelScope.launch {
             runCatching { appRepository.load() }
                 .onSuccess { games ->
-                    games.map { it.players.map { player -> setOfNames += player.name } }
-                    viewState.postValue(LoadAutocompleteAdapter(setOfNames.toList()))
+                    val players = appRepository.getPlayers()
+                    viewState.postValue(LoadAutocompleteAdapter(players.map { it.name }))
                 }
                 .onFailure { }
         }
@@ -70,6 +70,9 @@ class AddPlayersViewModel @Inject constructor(
         else {
             val player = Player(playerName)
             currentGame.players += player
+            viewModelScope.launch {
+                appRepository.addPlayer(player)
+            }
             val playersText = currentGame.players.toText()
             viewState.postValue(UpdateCurrentPlayersText(playersText))
         }
