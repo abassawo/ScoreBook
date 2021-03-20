@@ -24,7 +24,6 @@ class AddPlayersViewModel @Inject constructor(
     val viewEvent: MutableLiveData<AddPlayersViewEvent> = MutableLiveData()
     private val currentGame: Game = args.gameArg
 
-
     init {
         populateAutocompleteAdapter()
         showPlayers(currentGame.players)

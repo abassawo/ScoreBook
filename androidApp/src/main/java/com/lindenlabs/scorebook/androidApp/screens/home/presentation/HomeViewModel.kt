@@ -79,13 +79,9 @@ class HomeViewModel(val appRepository: AppRepository) :
         games.add(interaction.restoreIndex, interaction.game)
 
         viewModelScope.launch {
-            runCatching { appRepository.storeGame(interaction.restoreIndex, interaction.game) }
-                .onSuccess {
-                    with(interaction) {
-                        appRepository.storeGame(interaction.restoreIndex, game)
-                        loadGames()
-                    }
-                }.onFailure { Timber.e("error trying to re-add game$it") }
+            runCatching { appRepository.storeGame(interaction.game) }
+                .onSuccess { loadGames() }
+                .onFailure { Timber.e("error trying to re-add game$it") }
         }
     }
 

@@ -3,49 +3,39 @@ package com.lindenlabs.scorebook.androidApp.base.domain
 import com.lindenlabs.scorebook.androidApp.base.data.sources.GameDataSource
 import com.lindenlabs.scorebook.androidApp.base.utils.DefaultDispatcherProvider
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 import com.lindenlabs.scorebook.androidApp.settings.UserSettings
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.util.*
 
 class AppRepository(
-    val dataSource: GameDataSource,
+    private val gameDataSource: GameDataSource,
     private val settings: UserSettings,
     val dispatcher: CoroutineDispatcher = DefaultDispatcherProvider().default(),
-) : GameDataSource, UserSettings by settings {
+) : UserSettings by settings {
 
-    override suspend fun load(): List<Game> =
+    suspend fun load(): List<Game> =
         withContext(dispatcher) {
-            dataSource.load()
+            gameDataSource.load()
         }
 
-    override suspend fun getGameById(id: UUID): Game? = withContext(dispatcher) {
-        dataSource.getGameById(id)
+   suspend fun getGameById(id: UUID): Game? = withContext(dispatcher) {
+        gameDataSource.get(id)
     }
 
-    override suspend fun storeGame(game: Game) = withContext(dispatcher) {
-        dataSource.storeGame(game)
+   suspend fun storeGame(game: Game) = withContext(dispatcher) {
+        gameDataSource.store(game)
     }
 
-    override suspend fun storeGame(index: Int, game: Game) = withContext(dispatcher) {
-        dataSource.storeGame(index, game)
+   suspend fun updateGame(game: Game) = withContext(dispatcher) {
+        gameDataSource.update(game)
     }
 
-    override suspend fun roundPlayed(game: Game, lastPlayer: Player, newScore: Int) =
-        withContext(dispatcher) {
-            dataSource.roundPlayed(game, lastPlayer, newScore)
-        }
-
-    override suspend fun updateGame(game: Game) = withContext(dispatcher) {
-        dataSource.updateGame(game)
+   suspend fun deleteGame(game: Game) = withContext(dispatcher) {
+        gameDataSource.delete(game)
     }
 
-    override suspend fun deleteGame(game: Game) = withContext(dispatcher) {
-        dataSource.deleteGame(game)
-    }
-
-    override suspend fun clear() = withContext(dispatcher) {
-        dataSource.clear()
+   suspend fun clearGames() = withContext(dispatcher) {
+        gameDataSource.clear()
     }
 }
