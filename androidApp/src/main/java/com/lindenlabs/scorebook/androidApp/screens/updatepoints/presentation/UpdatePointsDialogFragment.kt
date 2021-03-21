@@ -4,18 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
+import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 import com.lindenlabs.scorebook.androidApp.databinding.UpdatePointsFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.UpdatePointsModule
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameDetailFragmentDirections
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsViewModel.*
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewEvent
@@ -23,7 +22,7 @@ import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdateP
 import com.lindenlabs.scorebook.androidApp.views.BaseDialogFragment
 import javax.inject.Inject
 
-class UpdatePointsDialogFragment : BaseDialogFragment() {
+class UpdatePointsDialogFragment(val refreshAction: () -> Unit) : BaseDialogFragment() {
     private val binding: UpdatePointsFragmentBinding by lazy { viewBinding() }
     private val viewModel: UpdatePointsViewModel by lazy { viewModelFactory.makeViewModel(this, UpdatePointsViewModel::class.java)  }
     private val args: UpdatePointsDialogFragmentArgs by navArgs()
@@ -38,9 +37,7 @@ class UpdatePointsDialogFragment : BaseDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.update_points_fragment, container, false)
-    }
+    ): View = inflater.inflate(R.layout.update_points_fragment, container, false)
 
     private fun viewBinding(): UpdatePointsFragmentBinding {
         val rootView = requireView().findViewById<View>(R.id.addPointsRoot)
@@ -63,11 +60,14 @@ class UpdatePointsDialogFragment : BaseDialogFragment() {
         binding.addPointsButton.setOnClickListener {
             val text = binding.pointsEditText.text.toString()
             viewModel.handleInteraction(UpdatePointsInteraction.ScoreIncreaseBy(text))
+            refreshAction()
         }
         binding.deductPointsButton.setOnClickListener {
             val text = binding.pointsEditText.text.toString()
             viewModel.handleInteraction(UpdatePointsInteraction.ScoreLoweredBy(text))
+            refreshAction()
         }
+
     }
 
     private fun processEvent(viewEvent: UpdatePointsViewEvent) {
@@ -82,6 +82,15 @@ class UpdatePointsDialogFragment : BaseDialogFragment() {
     private fun processState(viewState: UpdatePointsViewState?) {
         when (viewState) {
             is UpdatePointsViewState.ScreenOpened -> binding.playerName.text = viewState.player.name
+        }
+    }
+
+    companion object {
+        fun newInstance(game: Game, player: Player, refreshAction: () -> Unit): UpdatePointsDialogFragment {
+            val directions = GameDetailFragmentDirections.navigateToUpdatePoints(game, player)
+            return UpdatePointsDialogFragment(refreshAction).apply {
+                arguments = directions.arguments
+            }
         }
     }
 }

@@ -24,12 +24,16 @@ open class GameViewModel @Inject constructor(
     private val mapper: GameViewEntityMapper = GameViewEntityMapper()
 
     private var isFirstRun: Boolean = true
+    private lateinit var game: Game
+    private lateinit var players: List<Player>
 
     init {
         launch(args.gameArg)
     }
 
     fun launch(game: Game) {
+        this.game = game
+        this.players = game.players
         val players: List<Player> = game.players
         when {
             isFirstRun && players.isNullOrEmpty() -> {
@@ -37,21 +41,23 @@ open class GameViewModel @Inject constructor(
                 viewEvent.postValue(AddPlayersClicked(game)) // Bypass home screen, just add
             }
             players.isNullOrEmpty() -> viewState.postValue(GameDetailViewState.NotStarted(game))
-            players.isNotEmpty() -> {
-                val playerEntities = mapper.map(players) { interaction ->
-                    handleInteraction(interaction)
-                }
-                if (game.isClosed)
-                    viewState.postValue(GameDetailViewState.ClosedGame(playerEntities, game))
-                else
-                    viewState.postValue(
-                        GameDetailViewState.StartedWithPlayers(
-                            playerEntities,
-                            game
-                        )
-                    )
-            }
+            players.isNotEmpty() -> refreshScore()
         }
+    }
+
+    fun refreshScore() {
+        val playerEntities = mapper.map(players) { interaction ->
+            handleInteraction(interaction)
+        }
+        if (game.isClosed)
+            viewState.postValue(GameDetailViewState.ClosedGame(playerEntities, game))
+        else
+            viewState.postValue(
+                GameDetailViewState.StartedWithPlayers(
+                    playerEntities,
+                    game
+                )
+            )
     }
 
     fun handleInteraction(interaction: GameDetailInteraction) {

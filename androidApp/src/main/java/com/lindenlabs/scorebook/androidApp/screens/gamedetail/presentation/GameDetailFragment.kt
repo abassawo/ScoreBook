@@ -1,6 +1,5 @@
 package com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -23,13 +22,13 @@ import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetai
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailViewState
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.PlayerDataEntity
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameDetailFragmentDirections.Companion.navigateToAddPlayersScreen
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameDetailFragmentDirections.Companion.navigateToUpdatePoints
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showplayers.PlayerAdapter
+import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragment
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
+class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
     private val binding: GameDetailFragmentBinding by lazy { viewBinding() }
     private val viewModel: GameViewModel by lazy {
         viewModelFactory.makeViewModel(this, GameViewModel::class.java)
@@ -52,7 +51,7 @@ open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
                 override fun handleOnBackPressed() {
-                   findNavController().navigate(GameDetailFragmentDirections.navigateHome())
+                    findNavController().navigate(GameDetailFragmentDirections.navigateHome())
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
@@ -131,7 +130,7 @@ open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
             ) { _, _ ->
                 viewModel.handleInteraction(GameDetailInteraction.RestartGameClicked)
             }
-            .setNegativeButton( R.string.common_no) { _, _ -> }
+            .setNegativeButton(R.string.common_no) { _, _ -> }
             .create()
             .show()
     }
@@ -139,8 +138,13 @@ open class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
 
     private fun navigateHome() = navController.navigate(GameDetailFragmentDirections.navigateHome())
 
-    private fun navigateToUpdatePlayerScore(event: EditScoreForPlayer) =
-        navController.navigate(navigateToUpdatePoints(event.game, event.player))
+    private fun navigateToUpdatePlayerScore(event: EditScoreForPlayer) {
+        val refreshAction = { viewModel.refreshScore() }
+        val updatePointsDialog = with(event) {
+            UpdatePointsDialogFragment.newInstance(game, player, refreshAction)
+        }
+        updatePointsDialog.show(requireFragmentManager(), GameDetailFragment::class.java.name)
+    }
 
     private fun navigateToAddPlayers(game: Game) =
         navController.navigate(navigateToAddPlayersScreen(game))

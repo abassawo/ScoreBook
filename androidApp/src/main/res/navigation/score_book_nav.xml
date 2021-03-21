@@ -136,6 +136,8 @@
             app:destination="@id/navHomeFragment" />
     </fragment>
 
+<!--    Dialog is unreachable by graph due to listener argument, but is represented for
+        documentation of all possible destinations and for compile-safe args-->
 
     <dialog
         android:id="@+id/navUpdatePoints"
