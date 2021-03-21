@@ -30,6 +30,7 @@ class EditGameFragment : Fragment(R.layout.edit_game_fragment) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         appComponent().value
             .editGameComponentBuilder()
             .plus(EditGameModule(args))

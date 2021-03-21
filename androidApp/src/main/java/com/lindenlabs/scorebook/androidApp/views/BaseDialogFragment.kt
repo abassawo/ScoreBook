@@ -1,6 +1,5 @@
 package com.lindenlabs.scorebook.androidApp.views
 
-import android.app.ActionBar
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment

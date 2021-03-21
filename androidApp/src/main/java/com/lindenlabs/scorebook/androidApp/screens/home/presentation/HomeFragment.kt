@@ -1,6 +1,7 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearSnapHelper
 import com.google.android.material.snackbar.Snackbar
+import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
@@ -52,13 +54,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         super.onCreate(savedInstanceState)
 
         appComponent().value.homeFragmentComponent().inject(this)
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true /* enabled by default */) {
-                override fun handleOnBackPressed() {
-                    (requireActivity() as Activity).onBackPressed()
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,6 +63,11 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         binding.updateUi()
         viewModel.viewState.observe(this as LifecycleOwner, this::showGames)
         viewModel.viewEvent.observe(this as LifecycleOwner, this::processViewEvent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as MainActivity).setNavigationIcon(R.drawable.ic_menu) { }
     }
 
     private fun View.homeScreenBinding() =
