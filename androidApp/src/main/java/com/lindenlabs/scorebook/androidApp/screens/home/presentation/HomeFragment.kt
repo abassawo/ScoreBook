@@ -151,7 +151,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             val undoDeleteIcon =
                 ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_delete)
             undoDeleteIcon?.let { icon ->
-                val itemTouchHelper = ItemTouchHelper(SwipeToDismissCallback(icon, gameAdapter))
+                val itemTouchHelper = ItemTouchHelper(SwipeToDismissCallback(icon))
                 itemTouchHelper.attachToRecyclerView(this)
                 LinearSnapHelper().attachToRecyclerView(this)
             }
