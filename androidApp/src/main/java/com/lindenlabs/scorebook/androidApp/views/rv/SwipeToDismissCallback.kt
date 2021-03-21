@@ -8,7 +8,7 @@ import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
-class SwipeToDismissCallback(private val deleteIcon: Drawable, private val adapter: ItemTouchHelperAdapter) : ItemTouchHelper.SimpleCallback(
+class SwipeToDismissCallback(private val deleteIcon: Drawable) : ItemTouchHelper.SimpleCallback(
     ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
     ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
 ) {
@@ -25,6 +25,14 @@ class SwipeToDismissCallback(private val deleteIcon: Drawable, private val adapt
         (viewHolder as SwipableViewHolder).onItemSwiped(viewHolder.adapterPosition)
     }
 
+    override fun getMovementFlags(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder
+    ): Int {
+        if (viewHolder !is SwipableViewHolder) return 0;
+        return super.getMovementFlags(recyclerView, viewHolder)
+    }
+
     override fun onChildDraw(
         c: Canvas,
         recyclerView: RecyclerView,
@@ -35,7 +43,6 @@ class SwipeToDismissCallback(private val deleteIcon: Drawable, private val adapt
         isCurrentlyActive: Boolean
     ) {
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-
         val itemView = viewHolder.itemView
         val iconMargin: Int = (itemView.height - deleteIcon.intrinsicHeight) / 2
         val iconTop: Int = itemView.top + (itemView.height - deleteIcon.intrinsicHeight) / 2
