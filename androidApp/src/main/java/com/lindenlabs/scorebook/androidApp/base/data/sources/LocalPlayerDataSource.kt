@@ -1,8 +1,6 @@
 package com.lindenlabs.scorebook.androidApp.base.data.sources
 
-import com.lindenlabs.scorebook.androidApp.base.data.persistence.GameStore
 import com.lindenlabs.scorebook.androidApp.base.data.persistence.PlayerStore
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 import java.util.*
 

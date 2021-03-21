@@ -23,39 +23,29 @@ class AppRepository(
             gameDataSource.load()
         }
 
-   suspend fun getGameById(id: UUID): Game? = withContext(dispatcher) {
-        gameDataSource.get(id)
-    }
-
-   suspend fun storeGame(game: Game) = withContext(dispatcher) {
+    suspend fun storeGame(game: Game) = withContext(dispatcher) {
         gameDataSource.store(game)
-        val newPlayers = game.players
-        val playersInDB = getPlayers()
-       for(player in game.players) {
-           if(!playersInDB.contains(player)) {
-               addPlayer(player)
-           }
-       }
+
+        game.players.forEach { player ->
+            addPlayer(player)
+        }
     }
 
     suspend fun updateGame(game: Game) = withContext(dispatcher) {
         gameDataSource.update(game)
     }
 
-   suspend fun deleteGame(game: Game) = withContext(dispatcher) {
+    suspend fun deleteGame(game: Game) = withContext(dispatcher) {
         gameDataSource.delete(game)
     }
 
-   suspend fun clearGames() = withContext(dispatcher) {
-        gameDataSource.clear()
-    }
-
-    suspend fun getPlayers() = withContext(dispatcher) {
+    suspend fun getPlayers(): List<Player> = withContext(dispatcher) {
         playersDataSource.load()
     }
 
-    suspend fun addPlayer(player: Player)  = withContext(dispatcher) {
-        if(playersDataSource.get(player.id) == null) {
+    suspend fun addPlayer(player: Player) = withContext(dispatcher) {
+        val playersInDB = getPlayers()
+        if (playersInDB.find { it.name == player.name } == null) {
             playersDataSource.store(player)
         }
     }
