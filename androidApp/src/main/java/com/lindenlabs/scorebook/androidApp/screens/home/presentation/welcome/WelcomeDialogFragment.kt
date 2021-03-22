@@ -26,6 +26,14 @@ class WelcomeDialogFragment(val action: () -> Unit) : BaseDialogFragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        val params: ViewGroup.LayoutParams = dialog!!.window!!.attributes
+        params.width = 1000
+        params.height = 1000
+        dialog!!.window!!.attributes = params as WindowManager.LayoutParams
+    }
+
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
