@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -24,7 +27,7 @@ import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlaye
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewState.*
 import javax.inject.Inject
 
-class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
+class AddPlayersFragment : DialogFragment() {
     private val binding: AddPlayersFragmentBinding by lazy { viewBinding() }
     private val viewModel: AddPlayersViewModel by lazy { viewModelFactory.makeViewModel(this, AddPlayersViewModel::class.java) }
     private val args: AddPlayersFragmentArgs by navArgs()
@@ -42,21 +45,19 @@ class AddPlayersFragment : Fragment(R.layout.add_players_fragment) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true /* enabled by default */) {
-                override fun handleOnBackPressed() {
-                    findNavController().navigate(AddPlayersFragmentDirections.navigateBackHome())
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
 
         appComponent().value
             .addPlayersComponentBuilder()
             .plus(AddPlayersArgsModule(args))
             .build()
             .inject(this)
-
     }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = inflater.inflate(R.layout.add_players_fragment, container ,false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -22,7 +22,7 @@ class EditGameViewModel @Inject constructor(
 
     fun handleInteraction(interaction: EditGameInteraction) {
         if (interaction is EditGameInteraction.Cancel)
-            viewEvent.postValue(EditGameViewEvent.Exit)
+            viewEvent.postValue(EditGameViewEvent.ReturnToGameDetail(args.gameArg))
         else if (interaction is EditGameInteraction.SaveChanges) {
             val enteredText = interaction.newlyEnteredGameName
             if (enteredText.isNullOrEmpty()) {
@@ -33,7 +33,7 @@ class EditGameViewModel @Inject constructor(
                 viewModelScope.launch {
                     appRepository.updateGame(args.gameArg)
                 }
-                viewEvent.postValue(EditGameViewEvent.Exit)
+                viewEvent.postValue(EditGameViewEvent.ReturnToGameDetail(args.gameArg))
             }
         }
     }

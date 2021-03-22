@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -13,6 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
+import com.lindenlabs.scorebook.androidApp.base.BaseFragment
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailFragmentBinding
@@ -30,7 +30,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
+class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
     private val binding: GameDetailFragmentBinding by lazy { viewBinding() }
     private val viewModel: GameViewModel by lazy {
         viewModelFactory.makeViewModel(this, GameViewModel::class.java)
@@ -56,21 +56,16 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
             .plus(GameScoreModule(args))
             .build()
             .inject(this)
-
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true /* enabled by default */) {
-                override fun handleOnBackPressed() {
-                    findNavController().navigate(GameDetailFragmentDirections.navigateHome())
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-
-        (requireActivity() as MainActivity).setNavigationIcon(R.drawable.ic_arrow_back) { callback.handleOnBackPressed() }
+        (requireActivity() as MainActivity).setNavigationIcon(R.drawable.ic_arrow_back) {
+            handleBackPress()
+        }
     }
+
+
 
     private fun addToolbarListener() = binding.toolbar.setOnMenuItemClickListener {
         when (it.itemId) {
@@ -100,8 +95,11 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
         }
         binding.updateUi()
         addToolbarListener()
-
     }
+
+//    override fun handleBackPress() {
+//        findNavController().navigate(GameDetailFragmentDirections.navigateHome())
+//    }
 
     private fun GameDetailFragmentBinding.updateUi() {
         this.addNewPlayerButton.setOnClickListener { viewModel.navigateToAddPlayerPage() }
@@ -144,7 +142,7 @@ class GameDetailFragment : Fragment(R.layout.game_detail_fragment) {
     }
 
 
-    private fun navigateHome() = navController.navigate(GameDetailFragmentDirections.navigateHome())
+    private fun navigateHome() = (activity as MainActivity).navigateFirstTabWithClearStack()
 
     private fun navigateToUpdatePlayerScore(event: EditScoreForPlayer) {
         val refreshAction = { viewModel.refreshScore() }

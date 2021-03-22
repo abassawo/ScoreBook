@@ -57,6 +57,9 @@ class UpdatePointsDialogFragment(val refreshAction: () -> Unit) : BaseDialogFrag
         super.onViewCreated(view, savedInstanceState)
         viewModel.viewState.observe(this as LifecycleOwner, ::processState)
         viewModel.viewEvent.observe(this as LifecycleOwner, ::processEvent)
+
+        binding.pointsEditText.requestFocus()
+
         binding.addPointsButton.setOnClickListener {
             val text = binding.pointsEditText.text.toString()
             viewModel.handleInteraction(UpdatePointsInteraction.ScoreIncreaseBy(text))

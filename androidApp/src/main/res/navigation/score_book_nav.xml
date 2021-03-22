@@ -130,10 +130,6 @@
             android:id="@+id/navigateToVictoryScreen"
             app:destination="@+id/navVictoryFragment" />
 
-        <!--        temporary-->
-        <action
-            android:id="@+id/navigateHome"
-            app:destination="@id/navHomeFragment" />
     </fragment>
 
 <!--    Dialog is unreachable by graph due to listener argument, but is represented for
@@ -162,10 +158,6 @@
         <argument
             android:name="gameArg"
             app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
-
-        <action
-            android:id="@+id/navigateHome"
-            app:destination="@id/navHomeFragment" />
 
     </fragment>
 

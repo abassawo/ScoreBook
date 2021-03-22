@@ -2,13 +2,14 @@ package com.lindenlabs.scorebook.androidApp.screens.editgame
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
+import com.lindenlabs.scorebook.androidApp.base.BaseFragment
 import com.lindenlabs.scorebook.androidApp.base.data.raw.GameStrategy
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.databinding.EditGameFragmentBinding
@@ -19,7 +20,7 @@ import com.lindenlabs.scorebook.androidApp.screens.editgame.entities.EditGameVie
 import com.lindenlabs.scorebook.androidApp.screens.editgame.entities.EditGameViewState
 import javax.inject.Inject
 
-class EditGameFragment : Fragment(R.layout.edit_game_fragment) {
+class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     private val args: EditGameFragmentArgs by navArgs()
@@ -36,16 +37,9 @@ class EditGameFragment : Fragment(R.layout.edit_game_fragment) {
             .plus(EditGameModule(args))
             .build()
             .inject(this)
-
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true /* enabled by default */) {
-                override fun handleOnBackPressed() {
-                    findNavController().navigate(EditGameFragmentDirections.navigateBackToGame(args.gameArg))
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
+    override fun handleBackPress() = viewModel.handleInteraction(EditGameInteraction.Cancel)
 
     private fun viewBinding(): EditGameFragmentBinding {
         val view: View = requireView().findViewById(R.id.editGameRoot)
@@ -97,7 +91,10 @@ class EditGameFragment : Fragment(R.layout.edit_game_fragment) {
                 drawable?.let { binding.editGameName.setError("", drawable) }
 
             }
-            EditGameViewEvent.Exit -> requireActivity().onBackPressed()
+            is EditGameViewEvent.ReturnToGameDetail ->{
+//                (requireActivity() as MainActivity).navigateFirstTabWithClearStack()
+                findNavController().navigate(EditGameFragmentDirections.navigateBackToGame(viewEvent.game))
+            }
         }
     }
 }
