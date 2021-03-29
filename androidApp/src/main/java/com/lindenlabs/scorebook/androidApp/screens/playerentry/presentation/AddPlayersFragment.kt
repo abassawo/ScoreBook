@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
@@ -57,6 +58,7 @@ class AddPlayersFragment : DialogFragment() {
         viewModel.run {
             viewState.observe(viewLifecycleOwner, ::processViewState)
             viewEvent.observe(viewLifecycleOwner, ::processViewEvent)
+            launch(0)
         }
         binding.updateUI()
     }
@@ -89,9 +91,7 @@ class AddPlayersFragment : DialogFragment() {
         Log.d("APA", "Viewevent processed")
         when (viewEvent) {
             is AddPlayersViewEvent.NavigateToGameDetail -> {
-                val bundle = bundleOf("gameArg" to viewEvent.game)
-//                val directions =
-//                    AddPlayersFragmentDirections.navigateToScoreGameScreen(viewEvent.game)
+                val bundle = bundleOf("gameArg" to viewEvent.game.id)
                 findNavController().navigate(R.id.navActiveGame, bundle).also { hideKeyboard() }
             }
             is AddPlayersViewEvent.NavigateHome -> {

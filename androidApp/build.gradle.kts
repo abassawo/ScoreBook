@@ -18,7 +18,6 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
-
     implementation("com.airbnb.android:lottie:3.6.1")
     implementation("nl.dionsegijn:konfetti:1.2.6")
 
@@ -55,10 +54,10 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines")
 
     // testImplementation for pure JVM unit tests
-//    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines")
 
     // androidTestImplementation for Android instrumentation tests
-//    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines")
 
     testImplementation("androidx.test.ext:junit:1.1.2-alpha03")
     testImplementation("org.mockito:mockito-core:3.0.0")

@@ -20,6 +20,7 @@
                 app:argType="long" />
 
         </action>
+
         <action
             android:id="@+id/navigateToScoreGameScreen"
             app:destination="@id/navActiveGame"
