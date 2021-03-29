@@ -1,12 +1,10 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -16,11 +14,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearSnapHelper
 import com.google.android.material.snackbar.Snackbar
-import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
-import com.lindenlabs.scorebook.androidApp.base.BaseFragment
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.databinding.HomeFragmentBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
@@ -32,6 +26,7 @@ import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewState
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv.GameAdapter
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.welcome.WelcomeDialogFragment
 import com.lindenlabs.scorebook.androidApp.views.rv.SwipeToDismissCallback
+import com.lindenlabs.scorebook.shared.raw.Game
 import nl.dionsegijn.konfetti.emitters.StreamEmitter
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
@@ -39,7 +34,7 @@ import javax.inject.Inject
 
 class HomeFragment : Fragment(R.layout.home_fragment) {
     private val viewModel: HomeViewModel by lazy {
-        viewModelFactory.makeViewModel(
+        ViewModelFactory().makeViewModel(
             this,
             HomeViewModel::class.java
         )
@@ -48,12 +43,12 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     private lateinit var gameBinding: IncludeHomeScreenBinding
     private val gameAdapter = GameAdapter()
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+//    @Inject
+//    lateinit var viewModelFactory: ViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appComponent().value.homeFragmentComponent().inject(this)
+//        appComponent().value.homeFragmentComponent().inject(this)
     }
 
     override fun onResume() {
@@ -108,11 +103,11 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 
-    private fun NavController.showAddPlayersScreen(game: Game) =
-        navigate(HomeFragmentDirections.navigateToAddPlayersScreen(game))
+    private fun NavController.showAddPlayersScreen(game: Game) = Unit
+       // navigate(HomeFragmentDirections.navigateToAddPlayersScreen(game))
 
-    private fun NavController.showActiveGame(game: Game) =
-        navigate(HomeFragmentDirections.navigateToScoreGameScreen(game))
+    private fun NavController.showActiveGame(game: Game) = Unit
+       //  navigate(HomeFragmentDirections.navigateToScoreGameScreen(game))
 
 
     private fun showError(event: HomeViewEvent.AlertNoTextEntered) {

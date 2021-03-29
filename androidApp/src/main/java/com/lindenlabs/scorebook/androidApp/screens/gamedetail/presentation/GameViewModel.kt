@@ -3,21 +3,19 @@ package com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
-import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailInteraction
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailInteraction.*
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailViewState
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showplayers.GameViewEntityMapper
+import com.lindenlabs.scorebook.shared.raw.Game
+import com.lindenlabs.scorebook.shared.raw.Player
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 open class GameViewModel @Inject constructor(
-    val appRepository: AppRepository,
-    val args: GameDetailFragmentArgs
+//    val args: GameDetailFragmentArgs
 ) : ViewModel() {
     val viewState: MutableLiveData<GameDetailViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<GameDetailViewEvent> = MutableLiveData()
@@ -28,7 +26,7 @@ open class GameViewModel @Inject constructor(
     private lateinit var players: List<Player>
 
     init {
-        launch(args.gameArg)
+//        launch(args.gameArg)
     }
 
     fun launch(game: Game) {
@@ -61,7 +59,7 @@ open class GameViewModel @Inject constructor(
     }
 
     fun handleInteraction(interaction: GameDetailInteraction) {
-        val game = args.gameArg
+//        val game = args.gameArg
         when (interaction) {
             is PlayerClicked -> if (!game.isClosed) {
                 viewEvent.postValue(EditScoreForPlayer(game, interaction.player))
@@ -73,7 +71,7 @@ open class GameViewModel @Inject constructor(
             RestartGameClicked -> {
                 game.start()
                 viewModelScope.launch {
-                    appRepository.updateGame(game)
+//                    appRepository.updateGame(game)
                 }
                 launch(game)
                 viewEvent.postValue(ShowRestartingGameMessage(game))
@@ -87,7 +85,7 @@ open class GameViewModel @Inject constructor(
 
     private fun endGame(game: Game) =  viewEvent.postValue(EndGame(game))
 
-    fun navigateToAddPlayerPage() =
-        viewEvent.postValue(AddPlayersClicked(args.gameArg))
+    fun navigateToAddPlayerPage() = Unit
+//        viewEvent.postValue(AddPlayersClicked(args.gameArg))
 
 }

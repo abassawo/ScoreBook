@@ -1,6 +1,6 @@
 package com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities
 
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
+import com.lindenlabs.scorebook.shared.raw.Player
 
 data class PlayerDataEntity(
     val player: Player,

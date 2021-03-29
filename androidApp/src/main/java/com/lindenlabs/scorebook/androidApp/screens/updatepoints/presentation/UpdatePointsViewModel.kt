@@ -3,18 +3,16 @@ package com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewState
+import com.lindenlabs.scorebook.shared.raw.Game
+import com.lindenlabs.scorebook.shared.raw.Player
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class UpdatePointsViewModel(val appRepository: AppRepository, args: UpdatePointsDialogFragmentArgs) :
+class UpdatePointsViewModel() :
     ViewModel() {
-    private val game: Game = args.gameArg
-    private val player: Player = args.playerArg
+//    private var game: Game
+//    private var player: Player
     val viewState: MutableLiveData<UpdatePointsViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<UpdatePointsViewEvent> = MutableLiveData()
 
@@ -30,16 +28,16 @@ class UpdatePointsViewModel(val appRepository: AppRepository, args: UpdatePoints
             viewEvent.postValue(UpdatePointsViewEvent.AlertNoTextEntered())
         } else {
             try {
-                player.addToScore(Integer.parseInt(interaction.point))
+//                player.addToScore(Integer.parseInt(interaction.point))
             } catch (e: Exception) {
 
             }
 
             viewModelScope.launch {
-                withContext(appRepository.dispatcher) {
-                    runCatching { appRepository.updateGame(game) }
-                        .onSuccess { onScoreUpdated(player, game) }
-                }
+//                withContext(appRepository.dispatcher) {
+//                    runCatching { appRepository.updateGame(game) }
+//                        .onSuccess { onScoreUpdated(player, game) }
+//                }
             }
         }
     }
@@ -49,16 +47,16 @@ class UpdatePointsViewModel(val appRepository: AppRepository, args: UpdatePoints
             viewEvent.postValue(UpdatePointsViewEvent.AlertNoTextEntered())
         } else {
             try {
-                player.deductFromScore(Integer.parseInt(interaction.point))
+//                player.deductFromScore(Integer.parseInt(interaction.point))
             } catch (e: Exception) {
 
             }
 
             viewModelScope.launch {
-                withContext(appRepository.dispatcher) {
-                    runCatching { appRepository.updateGame(game) }
-                        .onSuccess { onScoreUpdated(player, game) }
-                }
+//                withContext(appRepository.dispatcher) {
+//                    runCatching { appRepository.updateGame(game) }
+//                        .onSuccess { onScoreUpdated(player, game) }
+//                }
             }
         }
     }

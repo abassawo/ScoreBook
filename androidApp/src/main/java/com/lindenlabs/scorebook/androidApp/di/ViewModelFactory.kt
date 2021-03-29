@@ -3,32 +3,24 @@ package com.lindenlabs.scorebook.androidApp.di
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavArgs
-import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
-import com.lindenlabs.scorebook.androidApp.screens.editgame.EditGameFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.editgame.EditGameViewModel
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameDetailFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeViewModel
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersViewModel
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameViewModel
-import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersFragmentArgs
-import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsViewModel
-import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryViewModel
 import javax.inject.Inject
 
-class ViewModelFactory @Inject constructor(private val appRepository: AppRepository, private val navArgs: NavArgs) :
-    ViewModelProvider.NewInstanceFactory() {
+class ViewModelFactory  : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
         when (modelClass) {
-            HomeViewModel::class.java -> HomeViewModel(appRepository) as T
-            GameViewModel::class.java -> GameViewModel(appRepository, navArgs as GameDetailFragmentArgs) as T
-            AddPlayersViewModel::class.java -> AddPlayersViewModel(appRepository, navArgs as AddPlayersFragmentArgs) as T
-            UpdatePointsViewModel::class.java -> UpdatePointsViewModel(appRepository, navArgs as UpdatePointsDialogFragmentArgs) as T
-            VictoryViewModel::class.java -> VictoryViewModel(appRepository, navArgs as VictoryFragmentArgs) as T
-            EditGameViewModel::class.java -> EditGameViewModel(appRepository, navArgs as EditGameFragmentArgs) as T
+            HomeViewModel::class.java -> HomeViewModel() as T
+            GameViewModel::class.java -> GameViewModel() as T
+            AddPlayersViewModel::class.java -> AddPlayersViewModel() as T
+            UpdatePointsViewModel::class.java -> UpdatePointsViewModel() as T
+            VictoryViewModel::class.java -> VictoryViewModel() as T
+            EditGameViewModel::class.java -> EditGameViewModel() as T
             else -> throw Exception()
         }
 

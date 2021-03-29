@@ -2,7 +2,7 @@ package com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.show
 
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.PlayerDataEntity
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailInteraction
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
+import com.lindenlabs.scorebook.shared.raw.Player
 
 class GameViewEntityMapper {
 

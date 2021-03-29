@@ -1,7 +1,7 @@
 package com.lindenlabs.scorebook.androidApp.base.data.sources
 
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
+import com.lindenlabs.scorebook.shared.raw.Game
+import com.lindenlabs.scorebook.shared.raw.Player
 import java.util.*
 
 interface GameDataSource : DataSource<Game>

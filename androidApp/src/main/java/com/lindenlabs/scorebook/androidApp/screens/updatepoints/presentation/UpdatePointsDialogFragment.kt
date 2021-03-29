@@ -5,33 +5,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
-import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
 import com.lindenlabs.scorebook.androidApp.databinding.UpdatePointsFragmentBinding
-import com.lindenlabs.scorebook.androidApp.di.UpdatePointsModule
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameDetailFragmentDirections
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsViewModel.*
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewState
 import com.lindenlabs.scorebook.androidApp.views.BaseDialogFragment
+import com.lindenlabs.scorebook.shared.raw.Game
+import com.lindenlabs.scorebook.shared.raw.Player
 import javax.inject.Inject
 
 class UpdatePointsDialogFragment(val refreshAction: () -> Unit) : BaseDialogFragment() {
     private val binding: UpdatePointsFragmentBinding by lazy { viewBinding() }
-    private val viewModel: UpdatePointsViewModel by lazy { viewModelFactory.makeViewModel(this, UpdatePointsViewModel::class.java)  }
-    private val args: UpdatePointsDialogFragmentArgs by navArgs()
+    private val viewModel: UpdatePointsViewModel by lazy { ViewModelFactory().makeViewModel(this, UpdatePointsViewModel::class.java)  }
+//    private val args: UpdatePointsDialogFragmentArgs by navArgs()
 
-    @Inject
-    lateinit var appRepository: AppRepository
+//    @Inject
+//    lateinit var appRepository: AppRepository
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+//    @Inject
+//    lateinit var viewModelFactory: ViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,11 +41,11 @@ class UpdatePointsDialogFragment(val refreshAction: () -> Unit) : BaseDialogFrag
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appComponent().value
-            .updatePointsComponentBuilder()
-            .plus(UpdatePointsModule(args))
-            .build()
-            .inject(this)
+//        appComponent().value
+//            .updatePointsComponentBuilder()
+//            .plus(UpdatePointsModule())
+//            .build()
+//            .inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -90,10 +85,11 @@ class UpdatePointsDialogFragment(val refreshAction: () -> Unit) : BaseDialogFrag
 
     companion object {
         fun newInstance(game: Game, player: Player, refreshAction: () -> Unit): UpdatePointsDialogFragment {
-            val directions = GameDetailFragmentDirections.navigateToUpdatePoints(game, player)
-            return UpdatePointsDialogFragment(refreshAction).apply {
-                arguments = directions.arguments
-            }
+            return UpdatePointsDialogFragment(refreshAction)
+//            val directions = GameDetailFragmentDirections.navigateToUpdatePoints(game, player)
+//            return UpdatePointsDialogFragment(refreshAction).apply {
+//                arguments = directions.arguments
+//            }
         }
     }
 }

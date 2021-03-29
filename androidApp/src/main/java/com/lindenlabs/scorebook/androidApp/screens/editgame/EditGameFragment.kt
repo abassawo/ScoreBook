@@ -5,15 +5,9 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseFragment
-import com.lindenlabs.scorebook.androidApp.base.data.raw.GameStrategy
-import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.databinding.EditGameFragmentBinding
-import com.lindenlabs.scorebook.androidApp.di.EditGameModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.screens.editgame.entities.EditGameInteraction
 import com.lindenlabs.scorebook.androidApp.screens.editgame.entities.EditGameViewEvent
@@ -23,7 +17,7 @@ import javax.inject.Inject
 class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    private val args: EditGameFragmentArgs by navArgs()
+//    private val args: EditGameFragmentArgs by navArgs()
     private val viewModel: EditGameViewModel by lazy {
         viewModelFactory.makeViewModel(this, EditGameViewModel::class.java)
     }
@@ -32,11 +26,11 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        appComponent().value
-            .editGameComponentBuilder()
-            .plus(EditGameModule(args))
-            .build()
-            .inject(this)
+//        appComponent().value
+//            .editGameComponentBuilder()
+//            .plus(EditGameModule(args))
+//            .build()
+//            .inject(this)
     }
 
     override fun handleBackPress() = viewModel.handleInteraction(EditGameInteraction.Cancel)
@@ -50,16 +44,16 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
         when (viewState) {
             is EditGameViewState.Initial -> {
                 binding.editGameName.setText(viewState.game.name)
-                binding.gameRuleSwitchView.isChecked = viewState.game.strategy == GameStrategy.LowestScoreWins
+//                binding.gameRuleSwitchView.isChecked = viewState.game.strategy == GameStrategy.LowestScoreWins
             }
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.viewState.observe(this as LifecycleOwner, {
-            handleViewState(it)
-        })
+//        viewModel.viewState.observe(this as LifecycleOwner, {
+//            handleViewState(it)
+//        })
         viewModel.viewEvent.observe(this as LifecycleOwner, {
             handleViewEvent(it)
         })
@@ -67,14 +61,14 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
             saveGameButton.setOnClickListener {
                 val enteredText = editGameName.text.toString()
                 val isChecked = gameRuleSwitchView.isChecked
-                val newGameStrategy =
-                    if (isChecked) GameStrategy.LowestScoreWins else GameStrategy.HighestScoreWins
-                viewModel.handleInteraction(
-                    EditGameInteraction.SaveChanges(
-                        enteredText,
-                        newGameStrategy
-                    )
-                )
+//                val newGameStrategy =
+//                    if (isChecked) GameStrategy.LowestScoreWins else GameStrategy.HighestScoreWins
+//                viewModel.handleInteraction(
+//                    EditGameInteraction.SaveChanges(
+//                        enteredText,
+//                        newGameStrategy
+//                    )
+//                )
             }
 
             cancelEditButton.setOnClickListener { viewModel.handleInteraction(EditGameInteraction.Cancel) }
@@ -93,7 +87,7 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
             }
             is EditGameViewEvent.ReturnToGameDetail ->{
 //                (requireActivity() as MainActivity).navigateFirstTabWithClearStack()
-                findNavController().navigate(EditGameFragmentDirections.navigateBackToGame(viewEvent.game))
+//                findNavController().navigate(EditGameFragmentDirections.navigateBackToGame(viewEvent.game))
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.base.data.raw
+package com.lindenlabs.scorebook.shared.raw
 
 enum class GameStrategy {
     HighestScoreWins,

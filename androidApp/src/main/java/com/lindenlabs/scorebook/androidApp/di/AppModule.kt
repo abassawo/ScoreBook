@@ -11,9 +11,5 @@ class AppModule(private val application: ScoreBookApplication) {
 
     @Provides
     @Singleton
-    fun provideEnvironment() = application.appRepository
-
-    @Provides
-    @Singleton
     fun provideUserSettingsStore() = UserSettingsStore(application)
 }

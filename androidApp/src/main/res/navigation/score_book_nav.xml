@@ -10,155 +10,155 @@
         android:name="com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeFragment"
         tools:layout="@layout/home_fragment">
 
-        <action
-            android:id="@+id/navigateToAddPlayersScreen"
-            app:destination="@id/navAddPlayers"
-            app:enterAnim="@anim/fragment_fade_exit">
+<!--        <action-->
+<!--            android:id="@+id/navigateToAddPlayersScreen"-->
+<!--            app:destination="@id/navAddPlayers"-->
+<!--            app:enterAnim="@anim/fragment_fade_exit">-->
 
-            <argument
-                android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+<!--            <argument-->
+<!--                android:name="gameArg"-->
+<!--                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />-->
 
-        </action>
-        <action
-            android:id="@+id/navigateToScoreGameScreen"
-            app:destination="@id/navActiveGame"
-            app:enterAnim="@anim/fragment_fade_exit">
+<!--        </action>-->
+<!--        <action-->
+<!--            android:id="@+id/navigateToScoreGameScreen"-->
+<!--            app:destination="@id/navActiveGame"-->
+<!--            app:enterAnim="@anim/fragment_fade_exit">-->
 
-            <argument
-                android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+<!--            <argument-->
+<!--                android:name="gameArg"-->
+<!--                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />-->
 
-        </action>
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/navAddPlayers"
-        android:name="com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersFragment"
-        tools:layout="@layout/add_players_fragment">
-
-        <argument
-            android:name="gameArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
-
-        <action
-            android:id="@+id/navigateToScoreGameScreen"
-            app:destination="@id/navActiveGame">
-
-            <argument
-                android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
-
-        </action>
-
-        <action
-            android:id="@+id/navigateBackHome"
-            app:destination="@id/navHomeFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/navEditGame"
-        android:name="com.lindenlabs.scorebook.androidApp.screens.editgame.EditGameFragment"
-        tools:layout="@layout/edit_game_fragment">
-
-        <argument
-            android:name="gameArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
-
-        <action
-            android:id="@+id/navigateBackToGame"
-            app:destination="@id/navActiveGame">
-
-            <argument
-                android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
-
-        </action>
-
+<!--        </action>-->
 
     </fragment>
 
+<!--    <fragment-->
+<!--        android:id="@+id/navAddPlayers"-->
+<!--        android:name="com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersFragment"-->
+<!--        tools:layout="@layout/add_players_fragment">-->
 
-    <fragment
-        android:id="@+id/navActiveGame"
-        android:name="com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameDetailFragment"
-        tools:layout="@layout/game_detail_fragment">
+<!--        <argument-->
+<!--            android:name="gameArg"-->
+<!--            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />-->
 
-        <argument
-            android:name="gameArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+<!--        <action-->
+<!--            android:id="@+id/navigateToScoreGameScreen"-->
+<!--            app:destination="@id/navActiveGame">-->
 
-        <action
-            android:id="@+id/navigateToAddPlayersScreen"
-            app:destination="@id/navAddPlayers">
+<!--            <argument-->
+<!--                android:name="gameArg"-->
+<!--                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />-->
 
-            <argument
-                android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+<!--        </action>-->
 
-        </action>
+<!--        <action-->
+<!--            android:id="@+id/navigateBackHome"-->
+<!--            app:destination="@id/navHomeFragment" />-->
+<!--    </fragment>-->
 
-        <action
-            android:id="@+id/navigateToEditGameScreen"
-            app:destination="@+id/navEditGame"
-            app:enterAnim="@anim/fragment_fade_exit">
+<!--    <fragment-->
+<!--        android:id="@+id/navEditGame"-->
+<!--        android:name="com.lindenlabs.scorebook.androidApp.screens.editgame.EditGameFragment"-->
+<!--        tools:layout="@layout/edit_game_fragment">-->
 
-            <argument
-                android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+<!--        <argument-->
+<!--            android:name="gameArg"-->
+<!--            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />-->
 
-        </action>
+<!--        <action-->
+<!--            android:id="@+id/navigateBackToGame"-->
+<!--            app:destination="@id/navActiveGame">-->
+
+<!--            <argument-->
+<!--                android:name="gameArg"-->
+<!--                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />-->
+
+<!--        </action>-->
+
+
+<!--    </fragment>-->
+
+
+<!--    <fragment-->
+<!--        android:id="@+id/navActiveGame"-->
+<!--        android:name="com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameDetailFragment"-->
+<!--        tools:layout="@layout/game_detail_fragment">-->
+
+<!--        <argument-->
+<!--            android:name="gameArg"-->
+<!--            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />-->
+
+<!--        <action-->
+<!--            android:id="@+id/navigateToAddPlayersScreen"-->
+<!--            app:destination="@id/navAddPlayers">-->
+
+<!--            <argument-->
+<!--                android:name="gameArg"-->
+<!--                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />-->
+
+<!--        </action>-->
+
+<!--        <action-->
+<!--            android:id="@+id/navigateToEditGameScreen"-->
+<!--            app:destination="@+id/navEditGame"-->
+<!--            app:enterAnim="@anim/fragment_fade_exit">-->
+
+<!--            <argument-->
+<!--                android:name="gameArg"-->
+<!--                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />-->
+
+<!--        </action>-->
 
 
 
-        <action
-            android:id="@+id/navigateToUpdatePoints"
-            app:destination="@id/navUpdatePoints">
+<!--        <action-->
+<!--            android:id="@+id/navigateToUpdatePoints"-->
+<!--            app:destination="@id/navUpdatePoints">-->
 
-            <argument
-                android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+<!--            <argument-->
+<!--                android:name="gameArg"-->
+<!--                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />-->
 
-            <argument
-                android:name="playerArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Player" />
+<!--            <argument-->
+<!--                android:name="playerArg"-->
+<!--                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Player" />-->
 
-        </action>
+<!--        </action>-->
 
-        <action
-            android:id="@+id/navigateToVictoryScreen"
-            app:destination="@+id/navVictoryFragment" />
+<!--        <action-->
+<!--            android:id="@+id/navigateToVictoryScreen"-->
+<!--            app:destination="@+id/navVictoryFragment" />-->
 
-    </fragment>
+<!--    </fragment>-->
 
-<!--    Dialog is unreachable by graph due to listener argument, but is represented for
-        documentation of all possible destinations and for compile-safe args-->
+<!--&lt;!&ndash;    Dialog is unreachable by graph due to listener argument, but is represented for-->
+<!--        documentation of all possible destinations and for compile-safe args&ndash;&gt;-->
 
-    <dialog
-        android:id="@+id/navUpdatePoints"
-        android:name="com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragment"
-        tools:layout="@layout/update_points_fragment">
+<!--    <dialog-->
+<!--        android:id="@+id/navUpdatePoints"-->
+<!--        android:name="com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragment"-->
+<!--        tools:layout="@layout/update_points_fragment">-->
 
-        <argument
-            android:name="gameArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+<!--        <argument-->
+<!--            android:name="gameArg"-->
+<!--            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />-->
 
-        <argument
-            android:name="playerArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Player" />
+<!--        <argument-->
+<!--            android:name="playerArg"-->
+<!--            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Player" />-->
 
-    </dialog>
+<!--    </dialog>-->
 
-    <fragment
-        android:id="@+id/navVictoryFragment"
-        android:name="com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryFragment"
-        tools:layout="@layout/fragment_victory">
+<!--    <fragment-->
+<!--        android:id="@+id/navVictoryFragment"-->
+<!--        android:name="com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryFragment"-->
+<!--        tools:layout="@layout/fragment_victory">-->
 
-        <argument
-            android:name="gameArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+<!--        <argument-->
+<!--            android:name="gameArg"-->
+<!--            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />-->
 
-    </fragment>
+<!--    </fragment>-->
 
 </navigation>

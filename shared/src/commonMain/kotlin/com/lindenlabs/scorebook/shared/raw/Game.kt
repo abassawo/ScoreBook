@@ -1,29 +1,20 @@
-package com.lindenlabs.scorebook.androidApp.base.data.raw
+package com.lindenlabs.scorebook.shared.raw
 
-import android.os.Parcelable
-import androidx.room.*
-import com.lindenlabs.scorebook.androidApp.base.data.persistence.Converters.*
-import kotlinx.android.parcel.Parcelize
-import java.util.*
+import kotlin.collections.List
 
 typealias StalematePair = Pair<Player, Player>
 
-@Parcelize
-@Entity(tableName = "games")
-@TypeConverters(UUIDConverter::class, PlayerConverter::class, OutcomeConverter::class, StrategyConverter::class)
 data class Game(
-    @PrimaryKey
-    @ColumnInfo(name="id")
-    val id: UUID = UUID.randomUUID(),
+    val id: Long = 0,
     var name: String,
-    val dateCreated: Long = Date().time,
+    val dateCreated: Long = 0,
     var isClosed: Boolean = false,
     var strategy: GameStrategy = GameStrategy.HighestScoreWins,
     var players: List<Player> = mutableListOf()
-) : Parcelable {
+) {
 
     fun start() {
-      isClosed = false
+        isClosed = false
         players.forEach { it.resetScore() }
     }
 
@@ -65,11 +56,9 @@ data class Game(
     }
 }
 
-sealed class GameOutcome : Parcelable {
+sealed class GameOutcome {
 
-    @Parcelize
     data class WinnerAnnounced(val player: Player) : GameOutcome()
 
-    @Parcelize
     data class DrawAnnounced(val stalematePair: StalematePair) : GameOutcome()
 }

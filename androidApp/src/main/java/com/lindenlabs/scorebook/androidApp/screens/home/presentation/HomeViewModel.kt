@@ -3,41 +3,39 @@ package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.base.data.raw.GameStrategy
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.*
-import com.lindenlabs.scorebook.androidApp.base.data.raw.GameStrategy.HighestScoreWins
-import com.lindenlabs.scorebook.androidApp.base.data.raw.GameStrategy.LowestScoreWins
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeInteraction.*
 import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GamesMapper
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GamesWrapper
+import com.lindenlabs.scorebook.shared.raw.Game
+import com.lindenlabs.scorebook.shared.raw.GameStrategy
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class HomeViewModel(val appRepository: AppRepository) :
-    ViewModel() {
+class HomeViewModel : ViewModel() {
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
     private val gamesMapper: GamesMapper = GamesMapper()
     private val games: MutableList<Game> = mutableListOf()
 
     init {
-        if (appRepository.isFirstRun())
+//        if (appRepository.isFirstRun())
             showWelcomeScreen()
 
         loadGames()
-        appRepository.clearFirstRun()
+//        appRepository.clearFirstRun()
     }
 
     private fun showWelcomeScreen() = viewEvent.postValue(ShowWelcomeScreen)
 
     private fun loadGames() = viewModelScope.launch {
-        runCatching { appRepository.load() }
-            .onSuccess(::showGames)
-            .onFailure { }
+//        runCatching {
+//            appRepository.load()
+//        }
+//            .onSuccess(::showGames)
+//            .onFailure { }
     }
 
     private fun showGames(games: List<Game>) {
@@ -54,9 +52,9 @@ class HomeViewModel(val appRepository: AppRepository) :
             if (interaction.name.isNullOrEmpty())
                 showError()
             else {
-                val strategy =
-                    if (interaction.lowestScoreWins) LowestScoreWins else HighestScoreWins
-                onNewGameCreated(interaction.name, strategy)
+//                val strategy =
+//                    if (interaction.lowestScoreWins) LowestScoreWins else HighestScoreWins
+//                onNewGameCreated(interaction.name, strategy)
             }
         }
         is GameClicked -> onGameClicked(interaction.game)
@@ -79,15 +77,15 @@ class HomeViewModel(val appRepository: AppRepository) :
         games.add(interaction.restoreIndex, interaction.game)
 
         viewModelScope.launch {
-            runCatching { appRepository.storeGame(interaction.game) }
-                .onSuccess { loadGames() }
-                .onFailure { Timber.e("error trying to re-add game$it") }
+//            runCatching { appRepository.storeGame(interaction.game) }
+//                .onSuccess { loadGames() }
+//                .onFailure { Timber.e("error trying to re-add game$it") }
         }
     }
 
     private suspend fun deleteGame(game: Game): Int {
         val index = games.indexOf(game)
-        appRepository.deleteGame(game)
+//        appRepository.deleteGame(game)
         return index
     }
 
@@ -107,14 +105,14 @@ class HomeViewModel(val appRepository: AppRepository) :
 
     private fun storeGame(game: Game, autoStart: Boolean) {
         viewModelScope.launch {
-            kotlin.runCatching { appRepository.storeGame(game) }
-                .onSuccess {
-                    if (autoStart) {
-                        viewEvent.postValue(ShowAddPlayersScreen(game))
-                    } else {
-                        loadGames()
-                    }
-                }
+//            kotlin.runCatching { appRepository.storeGame(game) }
+//                .onSuccess {
+//                    if (autoStart) {
+//                        viewEvent.postValue(ShowAddPlayersScreen(game))
+//                    } else {
+//                        loadGames()
+//                    }
+//                }
         }
     }
 

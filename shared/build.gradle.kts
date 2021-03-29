@@ -61,3 +61,7 @@ val packForXcode by tasks.creating(Sync::class) {
 }
 
 tasks.getByName("build").dependsOn(packForXcode)
+dependencies {
+    implementation("androidx.room:room-runtime:2.2.6")
+    annotationProcessor("androidx.room:room-compiler:2.2.6")
+}

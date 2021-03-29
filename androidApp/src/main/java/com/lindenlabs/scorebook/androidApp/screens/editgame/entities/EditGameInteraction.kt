@@ -1,6 +1,7 @@
 package com.lindenlabs.scorebook.androidApp.screens.editgame.entities
 
-import com.lindenlabs.scorebook.androidApp.base.data.raw.GameStrategy
+import com.lindenlabs.scorebook.shared.raw.GameStrategy
+
 
 sealed class EditGameInteraction {
     object Cancel : EditGameInteraction()

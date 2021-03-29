@@ -1,7 +1,8 @@
 package com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities
 
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
+import com.lindenlabs.scorebook.shared.raw.Game
+import com.lindenlabs.scorebook.shared.raw.Player
+
 
 sealed class GameDetailViewEvent {
 

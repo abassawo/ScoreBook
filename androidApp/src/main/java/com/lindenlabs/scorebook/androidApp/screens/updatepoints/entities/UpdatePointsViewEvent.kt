@@ -1,8 +1,7 @@
 package com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities
 
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Player
-import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent
+import com.lindenlabs.scorebook.shared.raw.Game
+import com.lindenlabs.scorebook.shared.raw.Player
 
 sealed class UpdatePointsViewEvent {
     data class AlertNoTextEntered(val errorText: String = "Enter a score") : UpdatePointsViewEvent()
