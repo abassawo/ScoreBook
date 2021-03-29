@@ -27,7 +27,7 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="long"  />
+                app:argType="long" />
 
         </action>
 
@@ -40,7 +40,7 @@
 
         <argument
             android:name="gameArg"
-            app:argType="long"  />
+            app:argType="long" />
 
         <action
             android:id="@+id/navigateToScoreGameScreen"
@@ -48,7 +48,7 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="long"  />
+                app:argType="long" />
 
         </action>
 
@@ -64,7 +64,7 @@
 
         <argument
             android:name="gameArg"
-            app:argType="long"  />
+            app:argType="long" />
 
         <action
             android:id="@+id/navigateBackToGame"
@@ -72,7 +72,7 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="long"  />
+                app:argType="long" />
 
         </action>
 
@@ -87,7 +87,7 @@
 
         <argument
             android:name="gameArg"
-            app:argType="long"  />
+            app:argType="long" />
 
         <action
             android:id="@+id/navigateToAddPlayersScreen"
@@ -95,7 +95,7 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="long"  />
+                app:argType="long" />
 
         </action>
 
@@ -106,10 +106,9 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="long"  />
+                app:argType="long" />
 
         </action>
-
 
 
         <action
@@ -118,7 +117,7 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="long"  />
+                app:argType="long" />
 
             <argument
                 android:name="playerArg"
@@ -132,8 +131,8 @@
 
     </fragment>
 
-<!--    Dialog is unreachable by graph due to listener argument, but is represented for
-        documentation of all possible destinations and for compile-safe args-->
+    <!--    Dialog is unreachable by graph due to listener argument, but is represented for
+            documentation of all possible destinations and for compile-safe args-->
 
     <dialog
         android:id="@+id/navUpdatePoints"
@@ -142,7 +141,7 @@
 
         <argument
             android:name="gameArg"
-            app:argType="long"  />
+            app:argType="long" />
 
         <argument
             android:name="playerArg"
@@ -157,7 +156,7 @@
 
         <argument
             android:name="gameArg"
-            app:argType="long"  />
+            app:argType="long" />
 
     </fragment>
 

@@ -5,29 +5,24 @@ import com.lindenlabs.scorebook.shared.common.raw.Player
 
 class GameDataSource : DataSource<Game> {
     val games: MutableList<Game> = mutableListOf()
+
     override var items: MutableList<Game> = games
 
-    override suspend fun load(): List<Game> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun load(): List<Game> = games
 
     override suspend fun get(id: Long): Game {
-        TODO("Not yet implemented")
+        return games.find { it.id == id } ?: throw IllegalStateException()
     }
 
     override suspend fun store(t: Game) {
-        TODO("Not yet implemented")
     }
 
     override suspend fun update(t: Game) {
-        TODO("Not yet implemented")
     }
 
     override suspend fun delete(t: Game) {
-        TODO("Not yet implemented")
     }
 
     override suspend fun clear() {
-        TODO("Not yet implemented")
     }
 }

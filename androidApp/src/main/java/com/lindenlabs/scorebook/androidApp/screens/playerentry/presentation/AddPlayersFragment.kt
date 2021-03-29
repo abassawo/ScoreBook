@@ -8,13 +8,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.findNavController
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewEvent
-import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewState
-import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewState.*
+import com.lindenlabs.scorebook.shared.common.engines.addplayers.entities.AddPlayerInteraction
+import com.lindenlabs.scorebook.shared.common.engines.addplayers.entities.AddPlayersViewEvent
+import com.lindenlabs.scorebook.shared.common.engines.addplayers.entities.AddPlayersViewState
+import com.lindenlabs.scorebook.shared.common.engines.addplayers.entities.AddPlayersViewState.*
 import javax.inject.Inject
 
 class AddPlayersFragment : DialogFragment() {
@@ -86,13 +89,16 @@ class AddPlayersFragment : DialogFragment() {
         Log.d("APA", "Viewevent processed")
         when (viewEvent) {
             is AddPlayersViewEvent.NavigateToGameDetail -> {
+                val bundle = bundleOf("gameArg" to viewEvent.game)
 //                val directions =
 //                    AddPlayersFragmentDirections.navigateToScoreGameScreen(viewEvent.game)
-//                findNavController().navigate(directions).also { hideKeyboard() }
+                findNavController().navigate(R.id.navActiveGame, bundle).also { hideKeyboard() }
             }
-            is AddPlayersViewEvent.NavigateHome -> {  }
+            is AddPlayersViewEvent.NavigateHome -> {
 //                findNavController().navigate(AddPlayersFragmentDirections.navigateBackHome())
-//                    .also { hideKeyboard() }
+//                    .also { hideKeyboard()
+                    }
+            AddPlayersViewEvent.None -> Unit
         }
     }
 
@@ -104,12 +110,12 @@ class AddPlayersFragment : DialogFragment() {
 
     private fun AddPlayersFragmentBinding.updateUI() {
         this.addPlayersButton.setOnClickListener {
-//            val name = binding.enterNewPlayerEditText.text.toString()
-//            viewModel.handleInteraction(SavePlayerDataAndExit(name)) // new player routes back to Game Detail Screen
+            val name = binding.enterNewPlayerEditText.text.toString()
+            viewModel.handleInteraction(AddPlayerInteraction.SavePlayerDataAndExit(name)) // new player routes back to Game Detail Screen
         }
         this.addAnotherPlayer.setOnClickListener { // keeps screen on same screen
-//            val name = binding.enterNewPlayerEditText.text.toString()
-//            viewModel.handleInteraction(AddAnotherPlayer(name))
+            val name = binding.enterNewPlayerEditText.text.toString()
+            viewModel.handleInteraction(AddPlayerInteraction.AddAnotherPlayer(name))
         }
 
         this.enterNewPlayerEditText.addTextChangedListener(object : TextWatcher {
