@@ -1,6 +1,6 @@
 package com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities
 
-import com.lindenlabs.scorebook.shared.raw.Game
+import com.lindenlabs.scorebook.shared.common.raw.Game
 
 
 sealed class GameDetailViewState(open val game: Game) {

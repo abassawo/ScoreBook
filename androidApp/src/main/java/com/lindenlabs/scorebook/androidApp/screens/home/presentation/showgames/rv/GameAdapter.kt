@@ -6,12 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lindenlabs.scorebook.androidApp.databinding.GameItemRowBinding
 import com.lindenlabs.scorebook.androidApp.databinding.HeaderItemRowBinding
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity.BodyType
-import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.GameRowEntity.HeaderType
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv.GameViewHolder.BodyViewHolder
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv.GameViewHolder.HeaderViewHolder
 import com.lindenlabs.scorebook.androidApp.views.rv.ItemTouchHelperAdapter
+import com.lindenlabs.scorebook.shared.common.viewmodel.home.GameRowEntity
 
 internal class GameAdapter : RecyclerView.Adapter<GameViewHolder>(), ItemTouchHelperAdapter {
     val data: MutableList<GameRowEntity> = mutableListOf()
@@ -24,8 +22,8 @@ internal class GameAdapter : RecyclerView.Adapter<GameViewHolder>(), ItemTouchHe
 
     override fun getItemViewType(position: Int): Int {
         return when (data[position]) {
-            is HeaderType -> HEADER_VIEW_TYPE
-            is BodyType -> BODY_VIEW_TYPE
+            is GameRowEntity.HeaderType -> HEADER_VIEW_TYPE
+            is GameRowEntity.BodyType -> BODY_VIEW_TYPE
         }
     }
 
@@ -47,8 +45,8 @@ internal class GameAdapter : RecyclerView.Adapter<GameViewHolder>(), ItemTouchHe
     override fun onBindViewHolder(holder: GameViewHolder, position: Int) {
         val entity = data[position]
         when (holder) {
-            is HeaderViewHolder -> if (entity is HeaderType) holder.bind(entity)
-            is BodyViewHolder -> if (entity is BodyType) holder.bind(entity)
+            is HeaderViewHolder -> if (entity is GameRowEntity.HeaderType) holder.bind(entity)
+            is BodyViewHolder -> if (entity is GameRowEntity.BodyType) holder.bind(entity)
         }
     }
 

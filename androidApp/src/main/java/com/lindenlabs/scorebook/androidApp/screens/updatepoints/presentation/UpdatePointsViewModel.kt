@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewState
-import com.lindenlabs.scorebook.shared.raw.Game
-import com.lindenlabs.scorebook.shared.raw.Player
+import com.lindenlabs.scorebook.shared.common.raw.Game
+import com.lindenlabs.scorebook.shared.common.raw.Player
 import kotlinx.coroutines.launch
 
 class UpdatePointsViewModel() :

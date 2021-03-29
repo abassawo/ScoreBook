@@ -5,7 +5,7 @@
 //import androidx.room.Room
 //import androidx.room.RoomDatabase
 //import androidx.room.TypeConverters
-//import com.lindenlabs.scorebook.shared.raw.Game
+//import com.lindenlabs.scorebook.shared.common.raw.Game
 //
 //@Database(entities = [Game::class], version = 1, exportSchema = false)
 //@TypeConverters(Converters.UUIDConverter::class, Converters.PlayerListConverter::class,  Converters.PlayerConverter::class)

@@ -20,7 +20,7 @@ import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetai
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.PlayerDataEntity
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showplayers.PlayerAdapter
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragment
-import com.lindenlabs.scorebook.shared.raw.Game
+import com.lindenlabs.scorebook.shared.common.raw.Game
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject

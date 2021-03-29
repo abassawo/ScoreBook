@@ -4,10 +4,10 @@ import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.lindenlabs.scorebook.shared.raw.GameOutcome
-import com.lindenlabs.scorebook.shared.raw.GameStrategy
-import com.lindenlabs.scorebook.shared.raw.Player
-import com.lindenlabs.scorebook.shared.raw.Round
+import com.lindenlabs.scorebook.shared.common.raw.GameOutcome
+import com.lindenlabs.scorebook.shared.common.raw.GameStrategy
+import com.lindenlabs.scorebook.shared.common.raw.Player
+import com.lindenlabs.scorebook.shared.common.raw.Round
 import org.json.JSONObject
 import timber.log.Timber
 import java.lang.reflect.Type

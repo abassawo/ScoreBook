@@ -13,9 +13,8 @@ import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.Upd
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewState
 import com.lindenlabs.scorebook.androidApp.views.BaseDialogFragment
-import com.lindenlabs.scorebook.shared.raw.Game
-import com.lindenlabs.scorebook.shared.raw.Player
-import javax.inject.Inject
+import com.lindenlabs.scorebook.shared.common.raw.Game
+import com.lindenlabs.scorebook.shared.common.raw.Player
 
 class UpdatePointsDialogFragment(val refreshAction: () -> Unit) : BaseDialogFragment() {
     private val binding: UpdatePointsFragmentBinding by lazy { viewBinding() }

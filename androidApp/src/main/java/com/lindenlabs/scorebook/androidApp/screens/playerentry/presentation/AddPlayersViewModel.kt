@@ -8,9 +8,8 @@ import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlaye
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayerInteraction.*
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.entities.AddPlayersViewState
-import com.lindenlabs.scorebook.shared.raw.Player
+import com.lindenlabs.scorebook.shared.common.raw.Player
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class AddPlayersViewModel @Inject constructor() : ViewModel() {

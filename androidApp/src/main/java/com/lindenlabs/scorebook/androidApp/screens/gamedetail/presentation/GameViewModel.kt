@@ -9,8 +9,8 @@ import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetai
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailViewEvent.*
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailViewState
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showplayers.GameViewEntityMapper
-import com.lindenlabs.scorebook.shared.raw.Game
-import com.lindenlabs.scorebook.shared.raw.Player
+import com.lindenlabs.scorebook.shared.common.raw.Game
+import com.lindenlabs.scorebook.shared.common.raw.Player
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

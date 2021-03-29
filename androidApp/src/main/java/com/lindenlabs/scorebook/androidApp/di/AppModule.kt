@@ -1,7 +1,7 @@
 package com.lindenlabs.scorebook.androidApp.di
 
 import com.lindenlabs.scorebook.androidApp.ScoreBookApplication
-import com.lindenlabs.scorebook.androidApp.settings.UserSettingsStore
+import com.lindenlabs.scorebook.shared.common.UserSettingsStore
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

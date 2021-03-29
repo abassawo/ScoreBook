@@ -15,7 +15,16 @@ kotlin {
         }
     }
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                // KTOR
+//                api("org.jetbrains.kotlin:kotlin-stdlib-common")
+                // MOKO - MVVM
+//                implementation("dev.icerock.moko:mvvm:1.4.21")
+                // COROUTINES
+//                implementation("io.ktor:ktor-client-core:1.5.3")
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test-common"))
@@ -33,7 +42,20 @@ kotlin {
                 implementation("junit:junit:4.13")
             }
         }
-        val iosMain by getting
+        val iosMain by getting {
+            dependencies {
+//                implementation("org.jetbrains.kotlin:kotlin-stdlib-common:1.4.0")
+
+                // COROUTINE
+//                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-native:1.4.30")
+
+                // SERIALIZATION
+//                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:1.4.30")
+
+                // KTOR
+//                implementation("io.ktor:ktor-client-ios:1.5.3")
+            }
+        }
         val iosTest by getting
     }
 }
@@ -61,7 +83,3 @@ val packForXcode by tasks.creating(Sync::class) {
 }
 
 tasks.getByName("build").dependsOn(packForXcode)
-dependencies {
-    implementation("androidx.room:room-runtime:2.2.6")
-    annotationProcessor("androidx.room:room-compiler:2.2.6")
-}

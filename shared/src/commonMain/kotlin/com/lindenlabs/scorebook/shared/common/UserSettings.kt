@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.androidApp.settings
+package com.lindenlabs.scorebook.shared.common
 
 interface UserSettings {
 

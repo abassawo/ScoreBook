@@ -3,7 +3,6 @@ package com.lindenlabs.scorebook.androidApp
 import android.app.Application
 import com.facebook.stetho.Stetho
 import com.lindenlabs.scorebook.androidApp.di.AppModule
-import com.lindenlabs.scorebook.androidApp.settings.UserSettingsStore
 import timber.log.Timber
 
 class ScoreBookApplication : Application() {
@@ -21,7 +20,7 @@ class ScoreBookApplication : Application() {
 //    }
 
 
-    private fun initSettings() = UserSettingsStore(this)
+//    private fun initSettings() = UserSettingsStore(this)
 
     override fun onCreate() {
         super.onCreate()

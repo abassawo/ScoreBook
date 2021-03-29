@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.shared.raw
+package com.lindenlabs.scorebook.shared.common.raw
 
 enum class GameStrategy {
     HighestScoreWins,

@@ -1,5 +1,4 @@
-package com.lindenlabs.scorebook.shared
-
+package com.lindenlabs.scorebook.shared.common
 
 import platform.UIKit.UIDevice
 

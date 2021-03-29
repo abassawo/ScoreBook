@@ -2,7 +2,7 @@
 //
 //import androidx.lifecycle.LiveData
 //import androidx.room.*
-//import com.lindenlabs.scorebook.shared.raw.Game
+//import com.lindenlabs.scorebook.shared.common.raw.Game
 //
 //@Dao
 //interface GameStore {
