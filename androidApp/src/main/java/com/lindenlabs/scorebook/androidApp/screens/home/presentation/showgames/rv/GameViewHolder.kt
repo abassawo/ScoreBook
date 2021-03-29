@@ -5,8 +5,8 @@ import androidx.viewbinding.ViewBinding
 import com.lindenlabs.scorebook.androidApp.databinding.GameItemRowBinding
 import com.lindenlabs.scorebook.androidApp.databinding.HeaderItemRowBinding
 import com.lindenlabs.scorebook.androidApp.views.rv.SwipableViewHolder
-import com.lindenlabs.scorebook.shared.common.viewmodel.home.GameRowEntity
-import com.lindenlabs.scorebook.shared.common.viewmodel.home.HomeInteraction
+import com.lindenlabs.scorebook.shared.common.engines.home.entities.GameRowEntity
+import com.lindenlabs.scorebook.shared.common.engines.home.entities.HomeInteraction
 
 sealed class GameViewHolder(binding: ViewBinding) :
     RecyclerView.ViewHolder(binding.root) {

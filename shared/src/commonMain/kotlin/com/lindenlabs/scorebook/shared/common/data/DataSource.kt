@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.shared.common
+package com.lindenlabs.scorebook.shared.common.data
 
 interface DataSource<T> {
 

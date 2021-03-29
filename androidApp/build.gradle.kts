@@ -49,15 +49,15 @@ dependencies {
     testImplementation("junit:junit:4.12")
     // Optional -- Robolectric environment
     testImplementation("androidx.test:core:1.0.0")
-    val coroutines = "1.4.3"
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines")
+//    val coroutines = "1.4.3"
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines")
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines")
 
     // testImplementation for pure JVM unit tests
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines")
+//    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines")
 
     // androidTestImplementation for Android instrumentation tests
-    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines")
+//    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines")
 
     testImplementation("androidx.test.ext:junit:1.1.2-alpha03")
     testImplementation("org.mockito:mockito-core:3.0.0")

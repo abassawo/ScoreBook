@@ -17,8 +17,15 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
+                implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
+//                implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3-native-mt"){
+//                    version {
+//                        strictly("1.4.2-native-mt")
+//                    }
+//                }
                 // KTOR
-//                api("org.jetbrains.kotlin:kotlin-stdlib-common")
+                api("org.jetbrains.kotlin:kotlin-stdlib-common")
                 // MOKO - MVVM
 //                implementation("dev.icerock.moko:mvvm:1.4.21")
                 // COROUTINES
@@ -34,6 +41,9 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation("com.google.android.material:material:1.2.1")
+//                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
+//                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines")
+//                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines")
             }
         }
         val androidTest by getting {

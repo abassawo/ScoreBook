@@ -1,11 +1,11 @@
-package com.lindenlabs.scorebook.shared.common
+package com.lindenlabs.scorebook.shared.common.data
 
 import com.lindenlabs.scorebook.shared.common.raw.Game
+import com.lindenlabs.scorebook.shared.common.raw.Player
 
-class GameDataSoource : DataSource<Game> {
-    override var items: MutableList<Game>
-        get() = TODO("Not yet implemented")
-        set(value) {}
+class GameDataSource : DataSource<Game> {
+    val games: MutableList<Game> = mutableListOf()
+    override var items: MutableList<Game> = games
 
     override suspend fun load(): List<Game> {
         TODO("Not yet implemented")

@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.shared.common
+package com.lindenlabs.scorebook.shared.common.domain
 
 import com.lindenlabs.scorebook.shared.common.raw.Game
 

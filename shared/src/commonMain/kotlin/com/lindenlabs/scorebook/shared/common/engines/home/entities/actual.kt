@@ -1,10 +1,21 @@
-package com.lindenlabs.scorebook.shared.common.viewmodel.home
+package com.lindenlabs.scorebook.shared.common.engines.home.entities
 
 import com.lindenlabs.scorebook.shared.common.raw.Game
 
 data class HomeViewState(val entities: List<GameRowEntity>)
 
+sealed class GameRowEntity {
+    data class HeaderType(val title: String) : GameRowEntity()
+
+    data class BodyType(
+        val game: Game,
+        val clickAction: (interaction: HomeInteraction.GameClicked) -> Unit,
+        val swipeAction: (interaction: HomeInteraction.SwipeToDelete) -> Unit
+    ) : GameRowEntity()
+}
+
 sealed class HomeViewEvent {
+    object None : HomeViewEvent()
 
     object ShowWelcomeScreen : HomeViewEvent()
 
@@ -25,15 +36,5 @@ sealed class HomeInteraction {
     data class SwipeToDelete(val game: Game) : HomeInteraction()
     data class UndoDelete(val game: Game, val restoreIndex: Int) : HomeInteraction()
     object DismissWelcome : HomeInteraction()
-}
-
-sealed class GameRowEntity {
-    data class HeaderType(val title: String) : GameRowEntity()
-
-    data class BodyType(
-        val game: Game,
-        val clickAction: (interaction: HomeInteraction.GameClicked) -> Unit,
-        val swipeAction: (interaction: HomeInteraction.SwipeToDelete) -> Unit
-    ) : GameRowEntity()
 }
 

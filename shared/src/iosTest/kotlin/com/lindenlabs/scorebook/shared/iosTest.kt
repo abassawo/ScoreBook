@@ -1,6 +1,6 @@
 package com.lindenlabs.scorebook.shared
 
-import com.lindenlabs.scorebook.shared.common.Greeting
+import com.lindenlabs.scorebook.shared.common.data.Greeting
 import kotlin.test.Test
 import kotlin.test.assertTrue
 

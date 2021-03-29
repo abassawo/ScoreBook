@@ -7,46 +7,40 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearSnapHelper
 import com.google.android.material.snackbar.Snackbar
+import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.HomeFragmentBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv.GameAdapter
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.welcome.WelcomeDialogFragment
 import com.lindenlabs.scorebook.androidApp.views.rv.SwipeToDismissCallback
-import com.lindenlabs.scorebook.shared.common.viewmodel.home.HomeViewEvent
-import com.lindenlabs.scorebook.shared.common.viewmodel.home.HomeViewState
+import com.lindenlabs.scorebook.shared.common.engines.home.entities.HomeInteraction
+import com.lindenlabs.scorebook.shared.common.engines.home.entities.HomeViewEvent
+import com.lindenlabs.scorebook.shared.common.engines.home.entities.HomeViewState
+import com.lindenlabs.scorebook.shared.common.raw.Game
 import nl.dionsegijn.konfetti.emitters.StreamEmitter
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 
 class HomeFragment : Fragment(R.layout.home_fragment) {
-//    private val viewModel: HomeViewModel by lazy {
-//        ViewModelFactory().makeViewModel(
-//            this,
-//            HomeViewModel::class.java
-//        )
-//    }
+    private val viewModel: HomeViewModel by viewModels()
     private lateinit var binding: HomeFragmentBinding
     private lateinit var gameBinding: IncludeHomeScreenBinding
     private val gameAdapter = GameAdapter()
 
-//    @Inject
-//    lateinit var viewModelFactory: ViewModelFactory
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-//        appComponent().value.homeFragmentComponent().inject(this)
-    }
 
     override fun onResume() {
         super.onResume()
-//        (requireActivity() as MainActivity).setNavigationIcon(R.drawable.ic_menu) {
-//            requireActivity().onBackPressed()
-//        }
+        (requireActivity() as MainActivity).setNavigationIcon(R.drawable.ic_menu) {
+            requireActivity().onBackPressed()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,8 +48,8 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         binding = view.viewBinding()
         gameBinding = view.homeScreenBinding()
         binding.updateUi()
-//        viewModel.viewState.observe(this as LifecycleOwner, this::showGames)
-//        viewModel.viewEvent.observe(this as LifecycleOwner, this::processViewEvent)
+        viewModel.viewState.observe(this as LifecycleOwner, this::showGames)
+        viewModel.viewEvent.observe(this as LifecycleOwner, this::processViewEvent)
     }
 
     private fun View.homeScreenBinding() =
@@ -69,14 +63,19 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     private fun processViewEvent(event: HomeViewEvent) =
         when (event) {
             is HomeViewEvent.AlertNoTextEntered -> showError(event)
-            is HomeViewEvent.ShowAddPlayersScreen -> Unit // findNavController().showAddPlayersScreen(event.game)
+            is HomeViewEvent.ShowAddPlayersScreen -> showAddPlayersScreen(event.game)
                 .also { hideKeyboard() }
             is HomeViewEvent.ShowGameDetail -> Unit // findNavController().showActiveGame(event.game)
                 .also { hideKeyboard() }
             is HomeViewEvent.ShowUndoDeletePrompt -> showUndoPrompt(event)
             HomeViewEvent.ShowWelcomeScreen -> showWelcomeConfetti()
             HomeViewEvent.DismissWelcomeMessage -> binding.viewKonfetti.stopGracefully()
+            HomeViewEvent.None -> Unit
         }
+
+    private fun showAddPlayersScreen(game: Game) {
+//        findNavController().navigate(HomeFragmentDirections.navigateToAddPlayersScreen(game.id))
+    }
 
     private fun showUndoPrompt(event: HomeViewEvent.ShowUndoDeletePrompt) =
         Snackbar.make(
@@ -85,7 +84,12 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             Snackbar.LENGTH_SHORT
         )
             .setAction(R.string.undo) {
-//                viewModel.handleInteraction(UndoDelete(event.game, event.restoreIndex))
+                viewModel.handleInteraction(
+                    HomeInteraction.UndoDelete(
+                        event.game,
+                        event.restoreIndex
+                    )
+                )
             }.show()
 
     private fun hideKeyboard() {
@@ -95,10 +99,10 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     }
 
 //    private fun NavController.showAddPlayersScreen(game: Game) = Unit
-       // navigate(HomeFragmentDirections.navigateToAddPlayersScreen(game))
+//        navigate(HomeFragmentDirections.navigateToAddPlayersScreen(game))
 
 //    private fun NavController.showActiveGame(game: Game) = Unit
-       //  navigate(HomeFragmentDirections.navigateToScoreGameScreen(game))
+//         navigate(HomeFragmentDirections.navigateToScoreGameScreen(game))
 
 
     private fun showError(event: HomeViewEvent.AlertNoTextEntered) {
@@ -128,7 +132,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                 .streamFor(particlesPerSecond = 30, emittingTime = StreamEmitter.INDEFINITE)
         }
         val dialog = WelcomeDialogFragment {
-//            viewModel.handleInteraction(HomeInteraction.DismissWelcome)
+            viewModel.handleInteraction(HomeInteraction.DismissWelcome)
         }
         dialog.show(requireFragmentManager(), HomeFragment::class.java.simpleName)
     }
@@ -153,12 +157,12 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     fun IncludeHomeScreenBinding.bind() {
         newGameButton.setOnClickListener {
             val enteredText = enterNewGameEditText.text.toString()
-//            viewModel.handleInteraction(
-//                GameDetailsEntered(
-//                    enteredText,
-//                    gameRuleSwitchView.isChecked
-//                )
-//            )
+            viewModel.handleInteraction(
+                HomeInteraction.GameDetailsEntered(
+                    enteredText,
+                    gameRuleSwitchView.isChecked
+                )
+            )
             enterNewGameEditText.setText("")
         }
     }
