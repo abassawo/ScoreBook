@@ -2,12 +2,41 @@ package com.lindenlabs.scorebook.shared.common.viewmodel.home
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.lindenlabs.scorebook.shared.common.DataSource
 import com.lindenlabs.scorebook.shared.common.GamesMapper
 import com.lindenlabs.scorebook.shared.common.GamesWrapper
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.GameStrategy
+import java.lang.IllegalStateException
 
 actual class HomeViewModel : ViewModel() {
+    private val gamesDataSource: DataSource<Game> = object: DataSource<Game> {
+        private val games: MutableList<Game> = mutableListOf()
+
+        override var items: MutableList<Game> = games
+
+        override suspend fun load(): List<Game> {
+            return games
+        }
+
+        override suspend fun get(id: Long): Game {
+            return games.find { it.id == id } ?: throw IllegalStateException()
+        }
+
+        override suspend fun store(t: Game) {
+
+        }
+
+        override suspend fun update(t: Game) {
+        }
+
+        override suspend fun delete(t: Game) {
+        }
+
+        override suspend fun clear() {
+        }
+
+    }
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()
 
     val viewEvent: MutableLiveData<HomeViewEvent> = MutableLiveData()
