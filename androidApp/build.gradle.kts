@@ -18,6 +18,7 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
+
     implementation("com.airbnb.android:lottie:3.6.1")
     implementation("nl.dionsegijn:konfetti:1.2.6")
 
@@ -49,9 +50,9 @@ dependencies {
     testImplementation("junit:junit:4.12")
     // Optional -- Robolectric environment
     testImplementation("androidx.test:core:1.0.0")
-//    val coroutines = "1.4.3"
-//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines")
-//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines")
+    val coroutines = "1.4.3"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines")
 
     // testImplementation for pure JVM unit tests
 //    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines")

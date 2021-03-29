@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -25,6 +27,7 @@ import com.lindenlabs.scorebook.shared.common.engines.home.entities.HomeInteract
 import com.lindenlabs.scorebook.shared.common.engines.home.entities.HomeViewEvent
 import com.lindenlabs.scorebook.shared.common.engines.home.entities.HomeViewState
 import com.lindenlabs.scorebook.shared.common.raw.Game
+import kotlinx.coroutines.launch
 import nl.dionsegijn.konfetti.emitters.StreamEmitter
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
@@ -74,6 +77,8 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         }
 
     private fun showAddPlayersScreen(game: Game) {
+        val bundle = bundleOf("gameArg" to game.id)
+        findNavController().navigate(R.id.navigateToAddPlayersScreen, bundle)
 //        findNavController().navigate(HomeFragmentDirections.navigateToAddPlayersScreen(game.id))
     }
 
