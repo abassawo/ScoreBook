@@ -16,9 +16,7 @@ class EditGameViewModel : ViewModel() {
     val viewEvent: LiveData<EditGameViewEvent> =
        engine.viewEvent.asLiveData(viewModelScope.coroutineContext)
 
-    fun launch(gameId: String) {
-        engine.launch(gameId)
-    }
+    fun launch(gameId: String) = engine.launch(gameId)
 
     fun handleInteraction(interaction: EditGameInteraction) = engine.handleInteraction(interaction)
 }

@@ -20,7 +20,7 @@ class VictoryEngine(private val coroutineScope: CoroutineScope) {
 
     fun handleInteraction(interaction: VictoryInteraction) {
         when (interaction) {
-            VictoryInteraction.GoHome -> viewEvent.value = VictoryViewEvent.GoHome
+            is VictoryInteraction.GoHome -> Unit // viewEvent.value = VictoryViewEvent.GoHome
         }
     }
 }

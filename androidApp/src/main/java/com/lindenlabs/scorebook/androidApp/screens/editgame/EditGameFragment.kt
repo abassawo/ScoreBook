@@ -5,9 +5,12 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.fragment.findNavController
+import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseFragment
 import com.lindenlabs.scorebook.androidApp.databinding.EditGameFragmentBinding
+import com.lindenlabs.scorebook.androidApp.navigate
 import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameInteraction
 import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameViewEvent
 import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameViewState
@@ -34,13 +37,16 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
         when (viewState) {
             is EditGameViewState.Initial -> {
                 binding.editGameName.setText(viewState.game.name)
-//                binding.gameRuleSwitchView.isChecked = viewState.game.strategy == GameStrategy.LowestScoreWins
+                binding.gameRuleSwitchView.isChecked = viewState.game.strategy == GameStrategy.LowestScoreWins
             }
+            EditGameViewState.Loading -> Unit
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val gameId = requireArguments()["gameArg"] as String
+        viewModel.launch(gameId)
         viewModel.viewState.observe(this as LifecycleOwner, {
             handleViewState(it)
         })
@@ -76,8 +82,8 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
 
             }
             is EditGameViewEvent.ReturnToGameDetail ->{
-//                (requireActivity() as MainActivity).navigateFirstTabWithClearStack()
-//                findNavController().navigate(EditGameFragmentDirections.navigateBackToGame(viewEvent.game))
+                (requireActivity() as MainActivity).navigateFirstTabWithClearStack()
+                findNavController().navigate(R.id.navActiveGame, viewEvent.game.id)
             }
         }
     }

@@ -8,6 +8,7 @@ import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.FragmentVictoryBinding
 import com.lindenlabs.scorebook.shared.common.engines.victory.VictoryState
+import com.lindenlabs.scorebook.shared.common.engines.victory.VictoryViewEvent
 
 class VictoryFragment : Fragment(R.layout.fragment_victory) {
     private val binding: FragmentVictoryBinding by lazy { viewBinding() }
@@ -28,7 +29,14 @@ class VictoryFragment : Fragment(R.layout.fragment_victory) {
         val gameId = requireArguments()["gameArg"] as String
         viewModel.launch(gameId)
         viewModel.viewState.observe(viewLifecycleOwner, ::showVictory)
-        viewModel.viewEvent.observe(viewLifecycleOwner, { goHome() })
+        viewModel.viewEvent.observe(viewLifecycleOwner, ::handleViewEvent )
+    }
+
+    private fun handleViewEvent(viewEvent: VictoryViewEvent) {
+        when(viewEvent) {
+            VictoryViewEvent.None -> Unit
+            VictoryViewEvent.GoHome -> goHome()
+        }
     }
 
     private fun goHome(): Boolean {

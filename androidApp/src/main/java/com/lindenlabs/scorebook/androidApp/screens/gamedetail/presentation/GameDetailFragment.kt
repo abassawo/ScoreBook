@@ -111,7 +111,7 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
                 requireContext(), "${event.game.name} restarting", Toast.LENGTH_SHORT
             ).show()
             is PromptToRestartGame -> showRestartGamePrompt()
-            ConfirmEndGame -> ConfirmEndGameBottomView {
+            is ConfirmEndGame -> ConfirmEndGameBottomView {
                 viewModel.handleInteraction(GameDetailInteraction.EndGameConfirmed)
             }.show(requireFragmentManager(), GameDetailFragment::class.java.simpleName)
             is NavigateToEditHome -> launchEditGameScreen(event.game)

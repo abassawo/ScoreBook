@@ -128,7 +128,7 @@
 
         <action
             android:id="@+id/navigateToVictoryScreen"
-            app:destination="@+id/navVictoryFragment" />
+            app:destination="@id/navVictoryFragment" />
 
     </fragment>
 
