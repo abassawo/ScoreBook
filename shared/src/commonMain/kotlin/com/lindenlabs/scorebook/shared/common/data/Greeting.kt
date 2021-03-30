@@ -1,6 +1,5 @@
 package com.lindenlabs.scorebook.shared.common.data
 
-import com.lindenlabs.scorebook.shared.common.data.Platform
 import com.lindenlabs.scorebook.shared.common.raw.Game
 
 class Greeting {
@@ -9,6 +8,6 @@ class Greeting {
     }
 
     fun games(): List<Game> {
-        return listOf(Game(name = "Test game"))
+        return listOf(Game(name = "Test game", dateCreated = Date().getTime()))
     }
 }

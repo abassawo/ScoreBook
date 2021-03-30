@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -12,30 +14,22 @@ import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseFragment
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailFragmentBinding
-import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailInteraction
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailViewEvent
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailViewEvent.*
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailViewState
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.PlayerDataEntity
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showplayers.PlayerAdapter
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragment
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.entities.GameDetailInteraction
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.entities.GameDetailViewEvent
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.entities.GameDetailViewEvent.*
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.entities.GameDetailViewState
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.entities.PlayerDataEntity
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
 
 class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
     private val binding: GameDetailFragmentBinding by lazy { viewBinding() }
-    private val viewModel: GameViewModel by lazy {
-        viewModelFactory.makeViewModel(this, GameViewModel::class.java)
-    }
-//    private val args: GameDetailFragmentArgs by navArgs()
+    private val viewModel: GameViewModel by viewModels()
     private val adapter: PlayerAdapter = PlayerAdapter()
     private val navController: NavController by lazy { findNavController() }
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
 
     private fun viewBinding(): GameDetailFragmentBinding {
         val rootView = requireView().findViewById<View>(R.id.game_detail_root)
@@ -61,7 +55,6 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
     }
 
 
-
     private fun addToolbarListener() = binding.toolbar.setOnMenuItemClickListener {
         when (it.itemId) {
             R.id.endGameMenuItem -> {
@@ -85,6 +78,7 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.run {
+            launch(arguments?.get("gameArg") as Long)
             viewState.observe(viewLifecycleOwner, ::showGameState)
             viewEvent.observe(viewLifecycleOwner, ::processViewEvent)
         }
@@ -118,6 +112,7 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
                 viewModel.handleInteraction(GameDetailInteraction.EndGameConfirmed)
             }.show(requireFragmentManager(), GameDetailFragment::class.java.simpleName)
             is NavigateToEditHome -> Unit // launchEditGameScreen(event.game)
+            Nil -> {}
         }
 
 //    private fun launchEditGameScreen(game: Game) =
@@ -147,8 +142,11 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
         updatePointsDialog.show(requireFragmentManager(), GameDetailFragment::class.java.name)
     }
 
-    private fun navigateToAddPlayers(game: Game) = Unit
-//        navController.navigate(navigateToAddPlayersScreen(game))
+    private fun navigateToAddPlayers(game: Game) {
+        val bundle = bundleOf("gameArg" to game.id)
+        navController.navigate(R.id.navAddPlayers, bundle)
+    }
+
 
     private fun showGameState(state: GameDetailViewState) {
         binding.toolbar.title = state.game.name
@@ -173,9 +171,14 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.launch(arguments?.get("gameArg") as Long)
+    }
+
     private fun endGame(game: Game) {
-//        val directions = GameDetailFragmentDirections.navigateToVictoryScreen(game)
-//        findNavController().navigate(directions)
+        val bundle = bundleOf("gameArg" to game.id)
+        findNavController().navigate(R.id.navVictoryFragment, bundle)
     }
 
     private fun GameDetailFragmentBinding.showEmptyState() =

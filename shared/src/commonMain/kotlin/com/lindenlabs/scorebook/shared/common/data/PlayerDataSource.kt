@@ -13,15 +13,19 @@ class PlayerDataSource : DataSource<Player> {
     }
 
     override suspend fun store(t: Player) {
-
+        this.players += t
     }
 
     override suspend fun update(t: Player) {
+        val found = players.find { it.id == t.id }
+        players.set(index = players.indexOf(found), t)
     }
 
     override suspend fun delete(t: Player) {
+        players.remove(t)
     }
 
     override suspend fun clear() {
+        players.clear()
     }
 }

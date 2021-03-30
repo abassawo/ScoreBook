@@ -10,7 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -27,7 +27,6 @@ import com.lindenlabs.scorebook.shared.common.engines.home.entities.HomeInteract
 import com.lindenlabs.scorebook.shared.common.engines.home.entities.HomeViewEvent
 import com.lindenlabs.scorebook.shared.common.engines.home.entities.HomeViewState
 import com.lindenlabs.scorebook.shared.common.raw.Game
-import kotlinx.coroutines.launch
 import nl.dionsegijn.konfetti.emitters.StreamEmitter
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
@@ -68,7 +67,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             is HomeViewEvent.AlertNoTextEntered -> showError(event)
             is HomeViewEvent.ShowAddPlayersScreen -> showAddPlayersScreen(event.game)
                 .also { hideKeyboard() }
-            is HomeViewEvent.ShowGameDetail -> Unit // findNavController().showActiveGame(event.game)
+            is HomeViewEvent.ShowGameDetail -> findNavController().showActiveGame(event.game)
                 .also { hideKeyboard() }
             is HomeViewEvent.ShowUndoDeletePrompt -> showUndoPrompt(event)
             HomeViewEvent.ShowWelcomeScreen -> showWelcomeConfetti()
@@ -77,9 +76,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         }
 
     private fun showAddPlayersScreen(game: Game) {
-        val bundle = bundleOf("gameArg" to game.id)
-        findNavController().navigate(R.id.navigateToAddPlayersScreen, bundle)
-//        findNavController().navigate(HomeFragmentDirections.navigateToAddPlayersScreen(game.id))
+        findNavController().navigate(HomeFragmentDirections.navigateToAddPlayersScreen(game.id))
     }
 
     private fun showUndoPrompt(event: HomeViewEvent.ShowUndoDeletePrompt) =
@@ -103,11 +100,11 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 
-//    private fun NavController.showAddPlayersScreen(game: Game) = Unit
-//        navigate(HomeFragmentDirections.navigateToAddPlayersScreen(game))
+    private fun NavController.showAddPlayersScreen(game: Game) =
+        navigate(HomeFragmentDirections.navigateToAddPlayersScreen(game.id))
 
-//    private fun NavController.showActiveGame(game: Game) = Unit
-//         navigate(HomeFragmentDirections.navigateToScoreGameScreen(game))
+    private fun NavController.showActiveGame(game: Game) =
+         navigate(HomeFragmentDirections.navigateToScoreGameScreen(game.id))
 
 
     private fun showError(event: HomeViewEvent.AlertNoTextEntered) {

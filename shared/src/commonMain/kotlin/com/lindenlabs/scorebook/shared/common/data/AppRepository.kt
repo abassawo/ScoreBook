@@ -25,9 +25,9 @@ class AppRepository(
     suspend fun storeGame(game: Game) =
         withContext(dispatcher) {
             gameDataSource.store(game)
-//            game.players.forEach { player ->
-//                addPlayer(player)
-//            }
+            game.players.forEach { player ->
+                addPlayer(player)
+            }
         }
 
     suspend fun updateGame(game: Game) = withContext(dispatcher) {
@@ -49,5 +49,9 @@ class AppRepository(
         if (playersInDB.find { it.name == player.name } == null) {
             playersDataSource.store(player)
         }
+    }
+
+    suspend fun getGame(gameId: Long): Game {
+        return gameDataSource.get(gameId)
     }
 }

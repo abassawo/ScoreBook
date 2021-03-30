@@ -1,7 +1,6 @@
 package com.lindenlabs.scorebook.shared.common.data
 
 import com.lindenlabs.scorebook.shared.common.raw.Game
-import com.lindenlabs.scorebook.shared.common.raw.Player
 
 class GameDataSource : DataSource<Game> {
     val games: MutableList<Game> = mutableListOf()
@@ -15,14 +14,19 @@ class GameDataSource : DataSource<Game> {
     }
 
     override suspend fun store(t: Game) {
+        games.add(t)
     }
 
     override suspend fun update(t: Game) {
+        val foundGame = games.find { it.id == t.id }
+        games.set(index = games.indexOf(foundGame), t)
     }
 
     override suspend fun delete(t: Game) {
+        games.remove(t)
     }
 
     override suspend fun clear() {
+        games.clear()
     }
 }

@@ -1,5 +1,6 @@
 package com.lindenlabs.scorebook.shared.common.raw
 
+import com.lindenlabs.scorebook.shared.common.data.Date
 import kotlin.collections.List
 
 typealias StalematePair = Pair<Player, Player>
@@ -7,7 +8,7 @@ typealias StalematePair = Pair<Player, Player>
 data class Game(
     val id: Long = 0,
     var name: String,
-    val dateCreated: Long = 0,
+    val dateCreated: Long = Date().getTime(),
     var isClosed: Boolean = false,
     var strategy: GameStrategy = GameStrategy.HighestScoreWins,
     var players: List<Player> = mutableListOf()

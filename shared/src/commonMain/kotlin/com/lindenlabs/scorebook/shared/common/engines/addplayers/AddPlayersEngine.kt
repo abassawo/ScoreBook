@@ -13,13 +13,21 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AddPlayersEngine(private val coroutineScope: CoroutineScope, private val currentGame: Game) {
+class AddPlayersEngine(private val coroutineScope: CoroutineScope) {
+    private lateinit var currentGame: Game
     private val appRepository = Environment.appRepository
     val viewState: MutableStateFlow<AddPlayersViewState> = MutableStateFlow(UpdateCurrentPlayersText(""))
     val viewEvent: MutableStateFlow<AddPlayersViewEvent> = MutableStateFlow(AddPlayersViewEvent.None)
 
     init {
         populateAutocompleteAdapter()
+    }
+
+    fun launch(gameId: Long) {
+        coroutineScope.launch {
+            currentGame = appRepository.getGame(gameId)
+            showPlayers(currentGame.players)
+        }
     }
 
     private fun populateAutocompleteAdapter() {
