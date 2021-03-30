@@ -13,7 +13,7 @@ class UpdatePointsEngine(private val coroutineScope: CoroutineScope) {
     private lateinit var game: Game
     private lateinit var player: Player
     val viewState: MutableStateFlow<UpdatePointsViewState> = MutableStateFlow(UpdatePointsViewState.Loading)
-    val viewEvent: MutableStateFlow<UpdatePointsViewEvent> = MutableStateFlow(UpdatePointsViewEvent.Nil)
+    val viewEvent: MutableStateFlow<UpdatePointsViewEvent> = MutableStateFlow(UpdatePointsViewEvent.Loading)
 
     fun launch(gameId: String, playerId: String) {
         coroutineScope.launch {

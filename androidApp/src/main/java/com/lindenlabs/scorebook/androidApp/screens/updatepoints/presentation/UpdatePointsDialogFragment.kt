@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
@@ -84,7 +83,7 @@ class UpdatePointsDialogFragment(val refreshAction: () -> Unit) : BaseDialogFrag
             when (this) {
                 is UpdatePointsViewEvent.ScoreUpdated -> dismiss()
                 is UpdatePointsViewEvent.AlertNoTextEntered -> binding.playerName.setError("Must add point")
-                UpdatePointsViewEvent.Nil -> Unit
+                UpdatePointsViewEvent.Loading -> Unit
             }
         }
     }

@@ -3,13 +3,14 @@ package com.lindenlabs.scorebook.shared.common.engines.home
 import com.lindenlabs.scorebook.shared.common.Environment
 import com.lindenlabs.scorebook.shared.common.domain.GamesMapper
 import com.lindenlabs.scorebook.shared.common.domain.GamesWrapper
+import com.lindenlabs.scorebook.shared.common.domain.UserSettings
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.GameStrategy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class HomeEngine(private val coroutineScope: CoroutineScope) {
+class HomeEngine(private val coroutineScope: CoroutineScope, userSettings: UserSettings)  {
     val viewState: MutableStateFlow<HomeViewState> = MutableStateFlow(HomeViewState(emptyList()))
     val viewEvent: MutableStateFlow<HomeViewEvent> = MutableStateFlow(HomeViewEvent.None)
     private val gamesMapper: GamesMapper = GamesMapper()
@@ -18,11 +19,11 @@ class HomeEngine(private val coroutineScope: CoroutineScope) {
     private val appRepository = Environment.appRepository
 
     init {
-        if (appRepository.isFirstRun())
+        if (userSettings.isFirstRun())
             showWelcomeScreen()
 
         loadGames()
-        appRepository.clearFirstRun()
+        userSettings.clearFirstRun()
     }
 
     private fun showWelcomeScreen() {

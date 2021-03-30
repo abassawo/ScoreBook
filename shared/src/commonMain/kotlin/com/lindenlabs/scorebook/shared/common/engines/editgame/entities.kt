@@ -9,7 +9,7 @@ sealed class EditGameViewState {
 }
 
 sealed class EditGameViewEvent  {
-    object Nil : EditGameViewEvent()
+    object None : EditGameViewEvent()
     object ShowTextEntryError : EditGameViewEvent()
     data class ReturnToGameDetail(val game: Game) : EditGameViewEvent()
 }

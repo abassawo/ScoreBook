@@ -14,7 +14,7 @@ class GameViewEntityMapper {
 
 sealed class GameDetailViewState {
 
-    object Nil : GameDetailViewState()
+    object Loading : GameDetailViewState()
 
     sealed class WithGameData(open val game: Game) : GameDetailViewState() {
 
@@ -33,7 +33,7 @@ sealed class GameDetailViewState {
 
 sealed class GameDetailViewEvent {
 
-    object Nil : GameDetailViewEvent()
+    object None : GameDetailViewEvent()
 
     data class AddPlayersClicked(val game: Game) : GameDetailViewEvent()
 
@@ -53,6 +53,8 @@ sealed class GameDetailViewEvent {
 }
 
 sealed class GameDetailInteraction {
+    object AddPlayerClicked : GameDetailInteraction()
+    object RefreshScores : GameDetailInteraction()
     data class PlayerClicked(val player : Player) : GameDetailInteraction()
     object GoBack : GameDetailInteraction()
     object EndGameClicked : GameDetailInteraction()

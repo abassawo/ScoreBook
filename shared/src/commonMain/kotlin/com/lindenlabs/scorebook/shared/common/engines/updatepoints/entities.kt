@@ -14,7 +14,7 @@ sealed class UpdatePointsViewState {
 }
 
 sealed class UpdatePointsViewEvent {
-    object Nil : UpdatePointsViewEvent()
+    object Loading : UpdatePointsViewEvent()
 
     data class AlertNoTextEntered(val errorText: String = "Enter a score") : UpdatePointsViewEvent()
 

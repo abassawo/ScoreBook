@@ -5,5 +5,5 @@ import com.lindenlabs.scorebook.shared.common.data.GameDataSource
 import com.lindenlabs.scorebook.shared.common.data.PlayerDataSource
 
 object Environment {
-    val appRepository = AppRepository(GameDataSource(), PlayerDataSource())
+    val appRepository = AppRepository(GameDataSource(), PlayerDataSource(), )
 }

@@ -116,7 +116,7 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
                 viewModel.handleInteraction(GameDetailInteraction.EndGameConfirmed)
             }.show(requireFragmentManager(), GameDetailFragment::class.java.simpleName)
             is NavigateToEditHome -> launchEditGameScreen(event.game)
-            Nil -> {}
+            is None -> {}
         }
 
     private fun launchEditGameScreen(game: Game) =

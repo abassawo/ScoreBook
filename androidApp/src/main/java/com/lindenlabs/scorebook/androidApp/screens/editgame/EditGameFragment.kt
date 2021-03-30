@@ -3,7 +3,6 @@ package com.lindenlabs.scorebook.androidApp.screens.editgame
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import com.lindenlabs.scorebook.androidApp.MainActivity
@@ -98,7 +97,7 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
                 (requireActivity() as MainActivity).navigateFirstTabWithClearStack()
                 findNavController().navigate(R.id.navActiveGame, viewEvent.game.id)
             }
-            EditGameViewEvent.Nil -> Unit
+            EditGameViewEvent.None -> Unit
         }
     }
 }

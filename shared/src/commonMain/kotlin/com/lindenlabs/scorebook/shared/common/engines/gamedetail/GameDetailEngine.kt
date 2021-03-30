@@ -10,20 +10,24 @@ import kotlinx.coroutines.launch
 
 class GameDetailEngine(private val coroutineScope: CoroutineScope) {
     private lateinit var game: Game
-    val viewState: MutableStateFlow<GameDetailViewState> = MutableStateFlow(Nil)
-    val viewEvent: MutableStateFlow<GameDetailViewEvent> = MutableStateFlow(GameDetailViewEvent.Nil)
+    val viewState: MutableStateFlow<GameDetailViewState> = MutableStateFlow(Loading)
+    val viewEvent: MutableStateFlow<GameDetailViewEvent> = MutableStateFlow(GameDetailViewEvent.None)
     private val mapper: GameViewEntityMapper = GameViewEntityMapper()
 
     private var isFirstRun: Boolean = true
 
 
-    fun launch(game: Game) {
+    fun launch(gameId: String) =
+        coroutineScope.launch {
+            launchGame(appRepository.getGame(gameId))
+        }
+
+    fun launchGame(game: Game) {
         this.game = game
         when {
             isFirstRun && game.players.isNullOrEmpty() -> {
                 isFirstRun = false
-                viewEvent.value =
-                    GameDetailViewEvent.AddPlayersClicked(game) // Bypass home screen, just add
+                viewEvent.value = GameDetailViewEvent.AddPlayersClicked(game) // Bypass home screen, just add
             }
             game.players.isNullOrEmpty() -> viewState.value = NotStarted(game)
             game.players.isNotEmpty() -> refreshScore()
@@ -68,7 +72,7 @@ class GameDetailEngine(private val coroutineScope: CoroutineScope) {
                 coroutineScope.launch {
                     appRepository.updateGame(game)
                 }
-                launch(game)
+                launchGame(game)
                 viewEvent.postValue(GameDetailViewEvent.ShowRestartingGameMessage(game))
             }
             GameDetailInteraction.EndGameConfirmed -> endGame(game)
@@ -77,6 +81,8 @@ class GameDetailEngine(private val coroutineScope: CoroutineScope) {
                     game
                 )
             )
+            GameDetailInteraction.RefreshScores -> refreshScore()
+            GameDetailInteraction.AddPlayerClicked -> navigateToAddPlayerPage()
         }
     }
 
@@ -84,6 +90,5 @@ class GameDetailEngine(private val coroutineScope: CoroutineScope) {
 
     private fun endGame(game: Game) = viewEvent.postValue(GameDetailViewEvent.EndGame(game))
 
-    fun navigateToAddPlayerPage() =
-        viewEvent.postValue(GameDetailViewEvent.AddPlayersClicked(game))
+    fun navigateToAddPlayerPage() = viewEvent.postValue(GameDetailViewEvent.AddPlayersClicked(game))
 }
