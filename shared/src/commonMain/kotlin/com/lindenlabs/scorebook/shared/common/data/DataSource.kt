@@ -6,7 +6,7 @@ interface DataSource<T> {
 
     suspend fun load(): List<T>
 
-    suspend fun get(id: Long) : T
+    suspend fun get(id: String) : T
 
     suspend fun store(t: T)
 

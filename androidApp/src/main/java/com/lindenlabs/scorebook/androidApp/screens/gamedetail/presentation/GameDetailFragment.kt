@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -14,13 +13,17 @@ import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseFragment
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailFragmentBinding
+import com.lindenlabs.scorebook.androidApp.navigate
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showplayers.PlayerAdapter
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragment
-import com.lindenlabs.scorebook.shared.common.engines.gamedetail.entities.GameDetailInteraction
-import com.lindenlabs.scorebook.shared.common.engines.gamedetail.entities.GameDetailViewEvent
-import com.lindenlabs.scorebook.shared.common.engines.gamedetail.entities.GameDetailViewEvent.*
-import com.lindenlabs.scorebook.shared.common.engines.gamedetail.entities.GameDetailViewState
-import com.lindenlabs.scorebook.shared.common.engines.gamedetail.entities.PlayerDataEntity
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailInteraction
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewEvent
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewEvent.*
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewEvent.Nil
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewState
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewState.*
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewState.WithGameData.*
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.PlayerDataEntity
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import java.text.SimpleDateFormat
 import java.util.*
@@ -78,7 +81,7 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.run {
-            launch(arguments?.get("gameArg") as Long)
+            launch(arguments?.get("gameArg") as String)
             viewState.observe(viewLifecycleOwner, ::showGameState)
             viewEvent.observe(viewLifecycleOwner, ::processViewEvent)
         }
@@ -111,12 +114,12 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
             ConfirmEndGame -> ConfirmEndGameBottomView {
                 viewModel.handleInteraction(GameDetailInteraction.EndGameConfirmed)
             }.show(requireFragmentManager(), GameDetailFragment::class.java.simpleName)
-            is NavigateToEditHome -> Unit // launchEditGameScreen(event.game)
+            is NavigateToEditHome -> launchEditGameScreen(event.game)
             Nil -> {}
         }
 
-//    private fun launchEditGameScreen(game: Game) =
-//        navController.navigate(GameDetailFragmentDirections.navigateToEditGameScreen(game))
+    private fun launchEditGameScreen(game: Game) =
+        navController.navigate(R.id.navEditGame, game.id)
 
     private fun showRestartGamePrompt() {
         MaterialAlertDialogBuilder(requireContext())
@@ -142,44 +145,44 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
         updatePointsDialog.show(requireFragmentManager(), GameDetailFragment::class.java.name)
     }
 
-    private fun navigateToAddPlayers(game: Game) {
-        val bundle = bundleOf("gameArg" to game.id)
-        navController.navigate(R.id.navAddPlayers, bundle)
-    }
+    private fun navigateToAddPlayers(game: Game) =
+        navController.navigate(R.id.navAddPlayers, game.id)
 
 
     private fun showGameState(state: GameDetailViewState) {
-        binding.toolbar.title = state.game.name
-        binding.toolbar.subtitle = SimpleDateFormat("MMM dd, yyyy", Locale.US)
-            .format(Date(state.game.dateCreated))
 
-        when (state) {
-            is GameDetailViewState.NotStarted -> {
-                binding.showEmptyState()
-            }
-            is GameDetailViewState.StartedWithPlayers -> {
-                requireActivity().invalidateOptionsMenu()
-                binding.toolbar.menu.clear()
-                binding.toolbar.inflateMenu(R.menu.active_game_menu)
-                binding.showScoreBoard(state.playerDataEntities)
-            }
-            is GameDetailViewState.ClosedGame -> {
-                binding.toolbar.menu.clear()
-                binding.toolbar.inflateMenu(R.menu.closed_game_menu)
-                binding.showScoreBoard(state.playerDataEntities)
+        fun showState(state: WithGameData) {
+            binding.toolbar.title = state.game.name
+            binding.toolbar.subtitle = SimpleDateFormat("MMM dd, yyyy", Locale.US)
+                .format(Date(state.game.dateCreated))
+
+            when (state) {
+                is NotStarted -> {
+                    binding.showEmptyState()
+                }
+                is StartedWithPlayers -> {
+                    requireActivity().invalidateOptionsMenu()
+                    binding.toolbar.menu.clear()
+                    binding.toolbar.inflateMenu(R.menu.active_game_menu)
+                    binding.showScoreBoard(state.playerDataEntities)
+                }
+                is ClosedGame -> {
+                    binding.toolbar.menu.clear()
+                    binding.toolbar.inflateMenu(R.menu.closed_game_menu)
+                    binding.showScoreBoard(state.playerDataEntities)
+                }
             }
         }
+        (state as? WithGameData)?.let { showState(it) }
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.launch(arguments?.get("gameArg") as Long)
+        viewModel.launch(arguments?.get("gameArg") as String)
     }
 
-    private fun endGame(game: Game) {
-        val bundle = bundleOf("gameArg" to game.id)
-        findNavController().navigate(R.id.navVictoryFragment, bundle)
-    }
+    private fun endGame(game: Game) =
+        findNavController().navigate(R.id.navVictoryFragment, game.id)
 
     private fun GameDetailFragmentBinding.showEmptyState() =
         emptyStateTextView.run { this.visibility = View.VISIBLE }

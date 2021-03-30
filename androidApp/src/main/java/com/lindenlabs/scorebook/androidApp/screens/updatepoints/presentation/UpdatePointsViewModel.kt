@@ -1,71 +1,25 @@
 package com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation
 
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewEvent
-import com.lindenlabs.scorebook.androidApp.screens.updatepoints.entities.UpdatePointsViewState
-import com.lindenlabs.scorebook.shared.common.raw.Game
-import com.lindenlabs.scorebook.shared.common.raw.Player
-import kotlinx.coroutines.launch
+import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsEngine
+import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsInteraction
+import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsViewEvent
+import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsViewState
 
-class UpdatePointsViewModel() :
-    ViewModel() {
-//    private var game: Game
-//    private var player: Player
-    val viewState: MutableLiveData<UpdatePointsViewState> = MutableLiveData()
-    val viewEvent: MutableLiveData<UpdatePointsViewEvent> = MutableLiveData()
+class UpdatePointsViewModel : ViewModel() {
+    private val engine: UpdatePointsEngine = UpdatePointsEngine(viewModelScope)
 
-    fun handleInteraction(interaction: UpdatePointsInteraction) {
-        when (interaction) {
-            is UpdatePointsInteraction.ScoreIncreaseBy -> processAddToScoreAction(interaction)
-            is UpdatePointsInteraction.ScoreLoweredBy -> processSubtractFromScoreAction(interaction)
-        }
-    }
+    val viewState: LiveData<UpdatePointsViewState> =
+        engine.viewState.asLiveData(viewModelScope.coroutineContext)
+    val viewEvent: LiveData<UpdatePointsViewEvent> =
+        engine.viewEvent.asLiveData(viewModelScope.coroutineContext)
 
-    private fun processAddToScoreAction(interaction: UpdatePointsInteraction.ScoreIncreaseBy) {
-        if(interaction.point.isNullOrEmpty()) {
-            viewEvent.postValue(UpdatePointsViewEvent.AlertNoTextEntered())
-        } else {
-            try {
-//                player.addToScore(Integer.parseInt(interaction.point))
-            } catch (e: Exception) {
+    fun launch(gameId: String, playerId: String) =
+        engine.launch(gameId, playerId)
 
-            }
-
-            viewModelScope.launch {
-//                withContext(appRepository.dispatcher) {
-//                    runCatching { appRepository.updateGame(game) }
-//                        .onSuccess { onScoreUpdated(player, game) }
-//                }
-            }
-        }
-    }
-
-    private fun processSubtractFromScoreAction(interaction: UpdatePointsInteraction.ScoreLoweredBy) {
-        if(interaction.point.isNullOrEmpty()) {
-            viewEvent.postValue(UpdatePointsViewEvent.AlertNoTextEntered())
-        } else {
-            try {
-//                player.deductFromScore(Integer.parseInt(interaction.point))
-            } catch (e: Exception) {
-
-            }
-
-            viewModelScope.launch {
-//                withContext(appRepository.dispatcher) {
-//                    runCatching { appRepository.updateGame(game) }
-//                        .onSuccess { onScoreUpdated(player, game) }
-//                }
-            }
-        }
-    }
-
-    private fun onScoreUpdated(player: Player, game: Game) =
-        viewEvent.postValue(UpdatePointsViewEvent.ScoreUpdated(player, game))
-
-    sealed class UpdatePointsInteraction {
-        data class ScoreIncreaseBy(val point: String) : UpdatePointsInteraction()
-        data class ScoreLoweredBy(val point: String) : UpdatePointsInteraction()
-    }
+    fun handleInteraction(interaction: UpdatePointsInteraction) =
+        engine.handleInteraction(interaction)
 }

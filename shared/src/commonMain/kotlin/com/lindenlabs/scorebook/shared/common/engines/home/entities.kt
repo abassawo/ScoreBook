@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.shared.common.engines.home.entities
+package com.lindenlabs.scorebook.shared.common.engines.home
 
 import com.lindenlabs.scorebook.shared.common.raw.Game
 

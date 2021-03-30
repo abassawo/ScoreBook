@@ -1,34 +1,31 @@
 package com.lindenlabs.scorebook.shared.common.engines.gamedetail
 
 import com.lindenlabs.scorebook.shared.common.Environment.appRepository
-import com.lindenlabs.scorebook.shared.common.engines.gamedetail.entities.GameDetailInteraction
-import com.lindenlabs.scorebook.shared.common.engines.gamedetail.entities.GameDetailViewEvent
-import com.lindenlabs.scorebook.shared.common.engines.gamedetail.entities.GameDetailViewState
-import com.lindenlabs.scorebook.shared.common.engines.gamedetail.entities.GameViewEntityMapper
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewState.*
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewState.WithGameData.*
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class GameDetailEngine(private val coroutineScope: CoroutineScope, val game: Game) {
-    val viewState: MutableStateFlow<GameDetailViewState> = MutableStateFlow(GameDetailViewState.NotStarted(game))
+class GameDetailEngine(private val coroutineScope: CoroutineScope) {
+    private lateinit var game: Game
+    val viewState: MutableStateFlow<GameDetailViewState> = MutableStateFlow(Nil)
     val viewEvent: MutableStateFlow<GameDetailViewEvent> = MutableStateFlow(GameDetailViewEvent.Nil)
     private val mapper: GameViewEntityMapper = GameViewEntityMapper()
 
     private var isFirstRun: Boolean = true
 
-    init {
-        launch(game)
-    }
 
-   private fun launch(game: Game) {
+    fun launch(game: Game) {
+        this.game = game
         when {
             isFirstRun && game.players.isNullOrEmpty() -> {
                 isFirstRun = false
                 viewEvent.value =
                     GameDetailViewEvent.AddPlayersClicked(game) // Bypass home screen, just add
             }
-            game.players.isNullOrEmpty() -> viewState.value = GameDetailViewState.NotStarted(game)
+            game.players.isNullOrEmpty() -> viewState.value = NotStarted(game)
             game.players.isNotEmpty() -> refreshScore()
         }
     }
@@ -38,12 +35,12 @@ class GameDetailEngine(private val coroutineScope: CoroutineScope, val game: Gam
             handleInteraction(interaction)
         }
         if (game.isClosed)
-            viewState.value = GameDetailViewState.ClosedGame(playerEntities, game)
+            viewState.value = ClosedGame(playerEntities, game)
         else
-            viewState.value = GameDetailViewState.StartedWithPlayers(
-                    playerEntities,
-                    game
-                )
+            viewState.value = StartedWithPlayers(
+                playerEntities,
+                game
+            )
 
     }
 
@@ -85,9 +82,8 @@ class GameDetailEngine(private val coroutineScope: CoroutineScope, val game: Gam
 
     private fun confirmEndGame() = viewEvent.postValue(GameDetailViewEvent.ConfirmEndGame)
 
-    private fun endGame(game: Game) =  viewEvent.postValue(GameDetailViewEvent.EndGame(game))
+    private fun endGame(game: Game) = viewEvent.postValue(GameDetailViewEvent.EndGame(game))
 
     fun navigateToAddPlayerPage() =
         viewEvent.postValue(GameDetailViewEvent.AddPlayersClicked(game))
-
 }

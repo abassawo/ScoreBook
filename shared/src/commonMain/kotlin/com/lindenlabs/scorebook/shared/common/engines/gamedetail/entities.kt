@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.shared.common.engines.gamedetail.entities
+package com.lindenlabs.scorebook.shared.common.engines.gamedetail
 
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.Player
@@ -12,17 +12,23 @@ class GameViewEntityMapper {
     }
 }
 
-sealed class GameDetailViewState(open val game: Game) {
+sealed class GameDetailViewState {
 
-    data class NotStarted(override val game: Game) : GameDetailViewState(game)
+    object Nil : GameDetailViewState()
+
+    sealed class WithGameData(open val game: Game) : GameDetailViewState() {
+
+        data class NotStarted(override val game: Game) : WithGameData(game)
 
 
-    data class StartedWithPlayers(val playerDataEntities: List<PlayerDataEntity>, override val game: Game) :
-        GameDetailViewState(game)
+        data class StartedWithPlayers(
+            val playerDataEntities: List<PlayerDataEntity>,
+            override val game: Game
+        ) : WithGameData(game)
 
 
-    data class ClosedGame(val playerDataEntities: List<PlayerDataEntity>, override val game: Game) :
-        GameDetailViewState(game)
+        data class ClosedGame(val playerDataEntities: List<PlayerDataEntity>, override val game: Game) : WithGameData(game)
+    }
 }
 
 sealed class GameDetailViewEvent {

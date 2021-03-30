@@ -8,7 +8,7 @@ class PlayerDataSource : DataSource<Player> {
 
     override suspend fun load(): List<Player> = items
 
-    override suspend fun get(id: Long): Player {
+    override suspend fun get(id: String): Player {
         return items.find { it.id == id } ?: throw IllegalStateException()
     }
 

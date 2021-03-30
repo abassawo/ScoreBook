@@ -1,26 +1,23 @@
 package com.lindenlabs.scorebook.androidApp.screens.gamedetail
 
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.BaseViewModelTest
+import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameViewModel
 import com.lindenlabs.scorebook.androidApp.utils.game
 import com.lindenlabs.scorebook.androidApp.utils.gameWithPlayers
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailInteraction
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailViewEvent
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameDetailFragmentArgs
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameViewModel
-import com.nhaarman.mockitokotlin2.whenever
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailInteraction
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewEvent
+import com.lindenlabs.scorebook.shared.common.raw.Game
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import org.amshove.kluent.mock
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class GameViewModelTest : BaseViewModelTest() {
-    private val argsMock: GameDetailFragmentArgs = mock()
+//    private val argsMock: GameDetailFragmentArgs = mock()
     private val arrangeBuilder: GameViewModelTest.ArrangeBuilder = ArrangeBuilder()
-    private var underTest: GameViewModel = GameViewModel(argsMock)
+    private var underTest: GameViewModel = GameViewModel()
 
     @Test
     fun `test game just created as noted by empty players list`() = runBlockingTest {
@@ -34,7 +31,7 @@ class GameViewModelTest : BaseViewModelTest() {
     fun `test user click action on a player`() = runBlockingTest {
         MainScope().launch {
             arrangeBuilder.withGame(gameWithPlayers())
-            underTest = GameViewModel(GameDetailFragmentArgs(gameWithPlayers()))
+//            underTest = GameViewModel(GameDetailFragmentArgs(gameWithPlayers()))
             underTest.handleInteraction(GameDetailInteraction.PlayerClicked(gameWithPlayers().players.first()))
 
         }
@@ -65,7 +62,7 @@ class GameViewModelTest : BaseViewModelTest() {
         }
 
         fun withGame(game: Game) = also {
-            whenever(argsMock.gameArg).thenReturn(game)
+//            whenever(argsMock.gameArg).thenReturn(game)
         }
     }
 }

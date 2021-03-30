@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
@@ -20,12 +19,13 @@ import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.HomeFragmentBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
+import com.lindenlabs.scorebook.androidApp.navigate
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv.GameAdapter
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.welcome.WelcomeDialogFragment
 import com.lindenlabs.scorebook.androidApp.views.rv.SwipeToDismissCallback
-import com.lindenlabs.scorebook.shared.common.engines.home.entities.HomeInteraction
-import com.lindenlabs.scorebook.shared.common.engines.home.entities.HomeViewEvent
-import com.lindenlabs.scorebook.shared.common.engines.home.entities.HomeViewState
+import com.lindenlabs.scorebook.shared.common.engines.home.HomeInteraction
+import com.lindenlabs.scorebook.shared.common.engines.home.HomeViewEvent
+import com.lindenlabs.scorebook.shared.common.engines.home.HomeViewState
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import nl.dionsegijn.konfetti.emitters.StreamEmitter
 import nl.dionsegijn.konfetti.models.Shape
@@ -36,7 +36,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     private lateinit var binding: HomeFragmentBinding
     private lateinit var gameBinding: IncludeHomeScreenBinding
     private val gameAdapter = GameAdapter()
-
 
     override fun onResume() {
         super.onResume()
@@ -75,9 +74,8 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             HomeViewEvent.None -> Unit
         }
 
-    private fun showAddPlayersScreen(game: Game) {
-        findNavController().navigate(HomeFragmentDirections.navigateToAddPlayersScreen(game.id))
-    }
+    private fun showAddPlayersScreen(game: Game) =
+        findNavController().navigate(R.id.navAddPlayers, game.id)
 
     private fun showUndoPrompt(event: HomeViewEvent.ShowUndoDeletePrompt) =
         Snackbar.make(
@@ -101,10 +99,10 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     }
 
     private fun NavController.showAddPlayersScreen(game: Game) =
-        navigate(HomeFragmentDirections.navigateToAddPlayersScreen(game.id))
+        navigate(R.id.navAddPlayers, game.id)
 
     private fun NavController.showActiveGame(game: Game) =
-         navigate(HomeFragmentDirections.navigateToScoreGameScreen(game.id))
+        navigate(R.id.navActiveGame, game.id)
 
 
     private fun showError(event: HomeViewEvent.AlertNoTextEntered) {

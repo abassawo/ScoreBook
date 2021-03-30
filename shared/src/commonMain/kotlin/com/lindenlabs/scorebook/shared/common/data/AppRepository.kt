@@ -51,7 +51,9 @@ class AppRepository(
         }
     }
 
-    suspend fun getGame(gameId: Long): Game {
+    suspend fun getGame(gameId: String): Game {
         return gameDataSource.get(gameId)
     }
+
+    suspend fun getPlayer(playerId: String): Player = playersDataSource.get(playerId)
 }

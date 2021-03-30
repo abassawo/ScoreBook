@@ -2,9 +2,9 @@ package com.lindenlabs.scorebook.androidApp.screens.playerentry
 
 import com.lindenlabs.scorebook.androidApp.base.BaseViewModelTest
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.shared.common.engines.addplayers.entities.AddPlayersViewState.*
-import com.lindenlabs.scorebook.shared.common.engines.addplayers.entities.AddPlayerInteraction.*
-import com.lindenlabs.scorebook.shared.common.engines.addplayers.entities.AddPlayersViewEvent
+import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewState.*
+import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayerInteraction.*
+import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewEvent
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersViewModel
 import com.lindenlabs.scorebook.androidApp.utils.gameWithPlayers

@@ -1,8 +1,6 @@
 package com.lindenlabs.scorebook.androidApp.screens.victory
 
-import com.lindenlabs.scorebook.androidApp.utils.gameWithPlayers
 import com.lindenlabs.scorebook.androidApp.base.BaseViewModelTest
-import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryViewModel
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -12,14 +10,14 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 
 class VictoryViewModelTest : BaseViewModelTest() {
-    private val underTest = VictoryViewModel(appRepository, initArgs())
+    private val underTest = VictoryViewModel()
 
-    private fun initArgs(): VictoryFragmentArgs {
-        val game = gameWithPlayers()
-        game.players.first().scoreTotal = 100
-        game.players.last().scoreTotal = 20
-        return VictoryFragmentArgs((game))
-    }
+//    private fun initArgs(): VictoryFragmentArgs {
+//        val game = gameWithPlayers()
+//        game.players.first().scoreTotal = 100
+//        game.players.last().scoreTotal = 20
+//        return VictoryFragmentArgs((game))
+//    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test

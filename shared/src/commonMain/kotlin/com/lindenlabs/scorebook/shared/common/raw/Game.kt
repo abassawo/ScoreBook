@@ -1,12 +1,13 @@
 package com.lindenlabs.scorebook.shared.common.raw
 
 import com.lindenlabs.scorebook.shared.common.data.Date
+import com.lindenlabs.scorebook.shared.common.data.Id
 import kotlin.collections.List
 
 typealias StalematePair = Pair<Player, Player>
 
 data class Game(
-    val id: Long = 0,
+    val id: String = Id().id,
     var name: String,
     val dateCreated: Long = Date().getTime(),
     var isClosed: Boolean = false,

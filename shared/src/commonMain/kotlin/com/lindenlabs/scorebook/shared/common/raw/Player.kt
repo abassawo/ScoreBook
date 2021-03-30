@@ -1,5 +1,7 @@
 package com.lindenlabs.scorebook.shared.common.raw
 
+import com.lindenlabs.scorebook.shared.common.data.Date
+import com.lindenlabs.scorebook.shared.common.data.Id
 import kotlin.collections.List
 
 data class Player(
@@ -7,8 +9,8 @@ data class Player(
     var scoreTotal: Int = 0,
     var rounds: List<Round> = mutableListOf(),
     var isPlayerTurn: Boolean = false,
-    val id: Long = 0,
-    val dateCreated: Long = 0
+    val id: String = Id().id,
+    val dateCreated: Long = Date().getTime(),
 ) {
     fun addToScore(score: Int) {
         this.rounds += Round(score = score)

@@ -6,25 +6,24 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.lindenlabs.scorebook.shared.common.Environment
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailEngine
-import com.lindenlabs.scorebook.shared.common.engines.gamedetail.entities.GameDetailInteraction
-import com.lindenlabs.scorebook.shared.common.engines.gamedetail.entities.GameDetailViewEvent
-import com.lindenlabs.scorebook.shared.common.engines.gamedetail.entities.GameDetailViewState
-import com.lindenlabs.scorebook.shared.common.raw.Game
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailInteraction
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewEvent
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewState
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class GameViewModel @Inject constructor() : ViewModel() {
-    private lateinit var engine: GameDetailEngine
+    private val engine: GameDetailEngine = GameDetailEngine(viewModelScope)
 
-    val viewState: LiveData<GameDetailViewState> by lazy {
-        engine.viewState.asLiveData(viewModelScope.coroutineContext) }
-    val viewEvent: LiveData<GameDetailViewEvent> by lazy {
-        engine.viewEvent.asLiveData(viewModelScope.coroutineContext) }
+    val viewState: LiveData <GameDetailViewState> =
+        engine.viewState.asLiveData(viewModelScope.coroutineContext)
+    val viewEvent: LiveData<GameDetailViewEvent> =
+        engine.viewEvent.asLiveData(viewModelScope.coroutineContext)
 
-    fun launch(gameId: Long) {
+    fun launch(gameId: String) {
         viewModelScope.launch {
             val game = Environment.appRepository.getGame(gameId)
-            engine = GameDetailEngine(viewModelScope, game)
+            engine.launch(game)
         }
     }
 

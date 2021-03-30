@@ -1,7 +1,6 @@
 package com.lindenlabs.scorebook.shared.common.data
 
 import platform.Foundation.*
-import kotlin.math.absoluteValue
 import kotlin.time.ExperimentalTime
 import kotlin.time.milliseconds
 import kotlin.time.seconds
@@ -16,7 +15,7 @@ actual class Date {
 
     @OptIn(ExperimentalTime::class)
     actual constructor(time: Long) {
-        date = NSDate.dateWithTimeIntervalSince1970(time.milliseconds.inSeconds.absoluteValue)
+        date = NSDate.dateWithTimeIntervalSince1970(time.milliseconds.inSeconds)
     }
 
     constructor(platformDate: NSDate) {
@@ -34,6 +33,6 @@ actual class Date {
     @OptIn(ExperimentalTime::class)
     actual fun getTime(): Long = date.timeIntervalSince1970.seconds.inMilliseconds.toLong()
 
-    fun toPlatformDate() = date
 
+    fun toPlatformDate() = date
 }

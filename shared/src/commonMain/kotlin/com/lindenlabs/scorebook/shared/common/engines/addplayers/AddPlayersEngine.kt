@@ -1,10 +1,7 @@
 package com.lindenlabs.scorebook.shared.common.engines.addplayers
 
 import com.lindenlabs.scorebook.shared.common.Environment
-import com.lindenlabs.scorebook.shared.common.engines.addplayers.entities.AddPlayerInteraction
-import com.lindenlabs.scorebook.shared.common.engines.addplayers.entities.AddPlayersViewEvent
-import com.lindenlabs.scorebook.shared.common.engines.addplayers.entities.AddPlayersViewState
-import com.lindenlabs.scorebook.shared.common.engines.addplayers.entities.AddPlayersViewState.*
+import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewState.*
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.Player
 import com.lindenlabs.scorebook.shared.common.raw.toText
@@ -23,7 +20,7 @@ class AddPlayersEngine(private val coroutineScope: CoroutineScope) {
         populateAutocompleteAdapter()
     }
 
-    fun launch(gameId: Long) {
+    fun launch(gameId: String) {
         coroutineScope.launch {
             currentGame = appRepository.getGame(gameId)
             showPlayers(currentGame.players)
@@ -33,7 +30,7 @@ class AddPlayersEngine(private val coroutineScope: CoroutineScope) {
     private fun populateAutocompleteAdapter() {
         coroutineScope.launch {
             runCatching { appRepository.load() }
-                .onSuccess { games ->
+                .onSuccess {
                     val players = appRepository.getPlayers()
                     viewState.value = LoadAutocompleteAdapter(players.map { it.name })
                 }
