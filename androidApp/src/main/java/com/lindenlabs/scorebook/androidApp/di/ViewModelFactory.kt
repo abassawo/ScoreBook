@@ -16,7 +16,6 @@ class ViewModelFactory @Inject constructor(private val gameId: String, private v
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
         when (modelClass) {
-            HomeViewModel::class.java -> HomeViewModel() as T
             GameViewModel::class.java -> GameViewModel(gameId) as T
             AddPlayersViewModel::class.java -> AddPlayersViewModel(gameId) as T
             UpdatePointsViewModel::class.java -> UpdatePointsViewModel(gameId, playerId!!) as T

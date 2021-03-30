@@ -39,7 +39,6 @@ class VictoryFragment : Fragment(R.layout.fragment_victory) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val gameId = requireArguments()["gameArg"] as String
-        viewModel.launch(gameId)
         viewModel.viewState.observe(viewLifecycleOwner, ::showVictory)
         viewModel.viewEvent.observe(viewLifecycleOwner, ::handleViewEvent )
     }

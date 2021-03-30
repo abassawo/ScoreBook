@@ -13,7 +13,6 @@ class HomeModule {
         ViewModelFactory(gameId)
 }
 
-
 @Module
 class AddPlayersArgsModule(private val gameId: String) {
 

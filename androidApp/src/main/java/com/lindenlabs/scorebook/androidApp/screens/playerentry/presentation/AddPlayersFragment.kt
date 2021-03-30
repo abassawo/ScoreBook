@@ -56,9 +56,6 @@ class AddPlayersFragment : DialogFragment() {
         viewModel.run {
             viewState.observe(viewLifecycleOwner, ::processViewState)
             viewEvent.observe(viewLifecycleOwner, ::processViewEvent)
-
-            val gameId = requireArguments()["gameArg"] as String
-            launch(gameId)
         }
         binding.updateUI()
     }

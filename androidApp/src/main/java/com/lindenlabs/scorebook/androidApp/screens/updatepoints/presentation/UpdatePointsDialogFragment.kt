@@ -61,10 +61,6 @@ class UpdatePointsDialogFragment(val refreshAction: () -> Unit) : BaseDialogFrag
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val args = requireArguments()
-        viewModel.launch(
-            gameId = args["gameArg"] as String,
-            playerId = args["playerArg"] as String
-        )
         viewModel.viewState.observe(this as LifecycleOwner, ::processState)
         viewModel.viewEvent.observe(this as LifecycleOwner, ::processEvent)
 

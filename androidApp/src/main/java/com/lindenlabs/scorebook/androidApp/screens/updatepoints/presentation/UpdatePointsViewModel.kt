@@ -9,16 +9,16 @@ import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsI
 import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsViewEvent
 import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsViewState
 
-class UpdatePointsViewModel(val gameId: String, val playerId: String) : ViewModel() {
+class UpdatePointsViewModel(private val gameId: String, private val playerId: String) : ViewModel() {
     private val engine: UpdatePointsEngine = UpdatePointsEngine(viewModelScope)
-
     val viewState: LiveData<UpdatePointsViewState> =
         engine.viewState.asLiveData(viewModelScope.coroutineContext)
     val viewEvent: LiveData<UpdatePointsViewEvent> =
         engine.viewEvent.asLiveData(viewModelScope.coroutineContext)
 
-    fun launch(gameId: String, playerId: String) =
+    init {
         engine.launch(gameId, playerId)
+    }
 
     fun handleInteraction(interaction: UpdatePointsInteraction) =
         engine.handleInteraction(interaction)

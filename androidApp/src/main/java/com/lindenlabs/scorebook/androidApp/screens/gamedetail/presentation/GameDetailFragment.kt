@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -22,9 +21,8 @@ import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.Upd
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailInteraction
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewEvent
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewEvent.*
-import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewEvent.Nil
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewState
-import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewState.*
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewState.WithGameData
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewState.WithGameData.*
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.PlayerDataEntity
 import com.lindenlabs.scorebook.shared.common.raw.Game
@@ -90,7 +88,6 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.run {
-            launch(arguments?.get("gameArg") as String)
             viewState.observe(viewLifecycleOwner, ::showGameState)
             viewEvent.observe(viewLifecycleOwner, ::processViewEvent)
         }
@@ -98,16 +95,11 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
         addToolbarListener()
     }
 
-//    override fun handleBackPress() {
-//        findNavController().navigate(GameDetailFragmentDirections.navigateHome())
-//    }
-
     private fun GameDetailFragmentBinding.updateUi() {
-        this.addNewPlayerButton.setOnClickListener { viewModel.navigateToAddPlayerPage() }
+        this.addNewPlayerButton.setOnClickListener { viewModel.handleInteraction(GameDetailInteraction.AddPlayerClicked)}
         this.gameParticipantsRv.adapter = adapter
         this.gameParticipantsRv.addItemDecoration(DividerItemDecoration(requireContext(), 1))
         this.toolbar.title = "Games"
-
     }
 
     private fun processViewEvent(event: GameDetailViewEvent) =
@@ -147,7 +139,7 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
     private fun navigateHome() = (activity as MainActivity).navigateFirstTabWithClearStack()
 
     private fun navigateToUpdatePlayerScore(event: EditScoreForPlayer) {
-        val refreshAction = { viewModel.refreshScore() }
+        val refreshAction = { viewModel.handleInteraction(GameDetailInteraction.RefreshScores)}
         val updatePointsDialog = with(event) {
             UpdatePointsDialogFragment.newInstance(game, player, refreshAction)
         }
@@ -183,11 +175,6 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
             }
         }
         (state as? WithGameData)?.let { showState(it) }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.launch(arguments?.get("gameArg") as String)
     }
 
     private fun endGame(game: Game) =
