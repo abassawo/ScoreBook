@@ -9,7 +9,10 @@ import androidx.navigation.fragment.findNavController
 import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseFragment
+import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.databinding.EditGameFragmentBinding
+import com.lindenlabs.scorebook.androidApp.di.EditGameModule
+import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.navigate
 import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameInteraction
 import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameViewEvent
@@ -18,12 +21,22 @@ import com.lindenlabs.scorebook.shared.common.raw.GameStrategy
 import javax.inject.Inject
 
 class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
-    private val viewModel: EditGameViewModel by viewModels()
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel: EditGameViewModel by lazy {
+        viewModelFactory.makeViewModel(this, EditGameViewModel::class.java)
+    }
     private val binding: EditGameFragmentBinding by lazy { viewBinding() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        appComponent().value
+            .editGameComponentBuilder()
+            .plus(EditGameModule(requireArguments()["gameArg"] as String))
+            .build()
+            .inject(this)
     }
 
     override fun handleBackPress() = viewModel.handleInteraction(EditGameInteraction.Cancel)

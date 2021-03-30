@@ -12,7 +12,7 @@ import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewS
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class GameViewModel @Inject constructor() : ViewModel() {
+class GameViewModel @Inject constructor(gameId: String) : ViewModel() {
     private val engine: GameDetailEngine = GameDetailEngine(viewModelScope)
 
     val viewState: LiveData <GameDetailViewState> =

@@ -11,25 +11,38 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.lindenlabs.scorebook.androidApp.R
+import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
+import com.lindenlabs.scorebook.androidApp.di.AddPlayersArgsModule
+import com.lindenlabs.scorebook.androidApp.di.AppModule
+import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.navigate
-import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayerInteraction
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayerInteraction.*
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewEvent
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewState
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewState.*
+import javax.inject.Inject
 
 class AddPlayersFragment : DialogFragment() {
     private val binding: AddPlayersFragmentBinding by lazy { viewBinding() }
-    private val viewModel: AddPlayersViewModel by viewModels()
+    private val viewModel: AddPlayersViewModel by lazy { viewModelFactory.makeViewModel(this, AddPlayersViewModel::class.java) }
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     private fun viewBinding(): AddPlayersFragmentBinding {
         val rootView = requireView().findViewById<View>(R.id.addPlayersRoot)
         return AddPlayersFragmentBinding.bind(rootView)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        appComponent().value.addPlayersComponentBuilder()
+            .plus(AddPlayersArgsModule(requireArguments()["gameArg"] as String))
+            .build()
+            .inject(this)
     }
 
     override fun onCreateView(

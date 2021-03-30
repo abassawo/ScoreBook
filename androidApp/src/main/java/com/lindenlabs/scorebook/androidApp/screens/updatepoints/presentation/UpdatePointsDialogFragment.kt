@@ -8,17 +8,29 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import com.lindenlabs.scorebook.androidApp.R
+import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.databinding.UpdatePointsFragmentBinding
+import com.lindenlabs.scorebook.androidApp.di.UpdatePointsModule
+import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.views.BaseDialogFragment
 import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsInteraction
 import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsViewEvent
 import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsViewState
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.Player
+import javax.inject.Inject
 
 class UpdatePointsDialogFragment(val refreshAction: () -> Unit) : BaseDialogFragment() {
     private val binding: UpdatePointsFragmentBinding by lazy { viewBinding() }
-    private val viewModel: UpdatePointsViewModel by viewModels()
+    private val viewModel: UpdatePointsViewModel by lazy {
+        viewModelFactory.makeViewModel(
+            this,
+            UpdatePointsViewModel::class.java
+        )
+    }
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,6 +41,21 @@ class UpdatePointsDialogFragment(val refreshAction: () -> Unit) : BaseDialogFrag
     private fun viewBinding(): UpdatePointsFragmentBinding {
         val rootView = requireView().findViewById<View>(R.id.addPointsRoot)
         return UpdatePointsFragmentBinding.bind(rootView)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val args = requireArguments()
+        appComponent().value
+            .updatePointsComponentBuilder()
+            .plus(
+                UpdatePointsModule(
+                    gameId = args["gameArg"] as String,
+                    playerId = args["playerArg"] as String
+                )
+            )
+            .build()
+            .inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

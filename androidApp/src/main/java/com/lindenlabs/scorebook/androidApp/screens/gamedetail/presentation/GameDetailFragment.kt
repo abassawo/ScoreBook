@@ -12,7 +12,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseFragment
+import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailFragmentBinding
+import com.lindenlabs.scorebook.androidApp.di.GameScoreModule
+import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.navigate
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showplayers.PlayerAdapter
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragment
@@ -27,12 +30,18 @@ import com.lindenlabs.scorebook.shared.common.engines.gamedetail.PlayerDataEntit
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
     private val binding: GameDetailFragmentBinding by lazy { viewBinding() }
-    private val viewModel: GameViewModel by viewModels()
+    private val viewModel: GameViewModel by lazy {
+        viewModelFactory.makeViewModel(this, GameViewModel::class.java)
+    }
     private val adapter: PlayerAdapter = PlayerAdapter()
     private val navController: NavController by lazy { findNavController() }
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     private fun viewBinding(): GameDetailFragmentBinding {
         val rootView = requireView().findViewById<View>(R.id.game_detail_root)
@@ -43,11 +52,11 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-//        appComponent().value
-//            .gameScoreComponentBuilder()
-//            .plus(GameScoreModule())
-//            .build()
-//            .inject(this)
+        appComponent().value
+            .gameScoreComponentBuilder()
+            .plus(GameScoreModule(arguments?.get("gameArg") as String))
+            .build()
+            .inject(this)
     }
 
     override fun onAttach(context: Context) {

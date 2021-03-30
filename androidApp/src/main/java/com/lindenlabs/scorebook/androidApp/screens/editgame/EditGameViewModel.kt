@@ -9,7 +9,7 @@ import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameInteracti
 import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameViewEvent
 import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameViewState
 
-class EditGameViewModel : ViewModel() {
+class EditGameViewModel(val gameId: String) : ViewModel() {
     private val engine = EditGameEngine(viewModelScope)
     val viewState: LiveData<EditGameViewState> =
         engine.viewState.asLiveData(viewModelScope.coroutineContext)

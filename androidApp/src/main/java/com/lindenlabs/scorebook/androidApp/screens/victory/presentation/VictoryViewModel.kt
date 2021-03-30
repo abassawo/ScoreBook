@@ -6,7 +6,7 @@ import com.lindenlabs.scorebook.shared.common.engines.victory.VictoryInteraction
 import com.lindenlabs.scorebook.shared.common.engines.victory.VictoryState
 import com.lindenlabs.scorebook.shared.common.engines.victory.VictoryViewEvent
 
-class VictoryViewModel : ViewModel() {
+class VictoryViewModel(val gameId: String) : ViewModel() {
     private val victoryEngine: VictoryEngine = VictoryEngine(viewModelScope)
 
     val viewState: LiveData<VictoryState> =
