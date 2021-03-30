@@ -32,6 +32,10 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
+        setNavigationIcon(R.drawable.ic_menu) {
+            onBackPressed()
+        }
+
         binding.toolbar.title = "Score Book"
         setSupportActionBar(binding.toolbar)
         setupActionBarWithNavController(navController)
