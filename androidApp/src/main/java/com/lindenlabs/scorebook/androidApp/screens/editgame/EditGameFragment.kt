@@ -85,6 +85,7 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
                 (requireActivity() as MainActivity).navigateFirstTabWithClearStack()
                 findNavController().navigate(R.id.navActiveGame, viewEvent.game.id)
             }
+            EditGameViewEvent.Nil -> Unit
         }
     }
 }

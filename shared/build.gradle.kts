@@ -19,17 +19,7 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
                 implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
-//                implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3-native-mt"){
-//                    version {
-//                        strictly("1.4.2-native-mt")
-//                    }
-//                }
-                // KTOR
                 api("org.jetbrains.kotlin:kotlin-stdlib-common")
-                // MOKO - MVVM
-//                implementation("dev.icerock.moko:mvvm:1.4.21")
-                // COROUTINES
-//                implementation("io.ktor:ktor-client-core:1.5.3")
             }
         }
         val commonTest by getting {
@@ -41,9 +31,6 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation("com.google.android.material:material:1.2.1")
-//                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
-//                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines")
-//                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines")
             }
         }
         val androidTest by getting {
@@ -52,20 +39,7 @@ kotlin {
                 implementation("junit:junit:4.13")
             }
         }
-        val iosMain by getting {
-            dependencies {
-//                implementation("org.jetbrains.kotlin:kotlin-stdlib-common:1.4.0")
-
-                // COROUTINE
-//                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-native:1.4.30")
-
-                // SERIALIZATION
-//                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:1.4.30")
-
-                // KTOR
-//                implementation("io.ktor:ktor-client-ios:1.5.3")
-            }
-        }
+        val iosMain by getting
         val iosTest by getting
     }
 }
