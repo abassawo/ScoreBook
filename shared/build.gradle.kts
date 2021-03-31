@@ -6,12 +6,6 @@ plugins {
     id("com.squareup.sqldelight")
 }
 
-//sqldelight {
-//    com.squareup.sqlite.migrations.Database { // This will be the name of the generated database class.
-////        packageName = "com.example"
-//    }
-//}
-
 kotlin {
     android()
     ios {
@@ -80,3 +74,10 @@ val packForXcode by tasks.creating(Sync::class) {
 }
 
 tasks.getByName("build").dependsOn(packForXcode)
+
+sqldelight {
+    database(name = "AppDatabase") {
+        packageName = "com.lindenlabs.scorebook.shared.common.data"
+        sourceFolders = listOf("sqldelight")
+    }
+}
