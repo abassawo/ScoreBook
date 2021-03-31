@@ -1,1 +1,8 @@
-
+CREATE TABLE `players` (
+    `name` TEXT NOT NULL,
+    `scoreTotal` INTEGER NOT NULL,
+    `rounds` TEXT NOT NULL,
+    `isPlayerTurn` INTEGER NOT NULL,
+    `id` TEXT NOT NULL,
+    `dateCreated` INTEGER NOT NULL, PRIMARY KEY(`id`)
+ );

@@ -1,8 +1,9 @@
-PRAGMA foreign_keys=OFF;
-BEGIN TRANSACTION;
-CREATE TABLE `games` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `dateCreated` INTEGER NOT NULL, `isClosed` INTEGER NOT NULL, `strategy` TEXT NOT NULL, `players` TEXT NOT NULL, PRIMARY KEY(`id`));
--- INSERT INTO games VALUES('be952fa7-bd89-4b39-82cb-b68178af1863','Scrabble',1617169795734,0,'HighestScoreWins','[{"dateCreated":1617169798238,"id":"075e5a78-8603-4d7a-a6e7-38b81f712177","isPlayerTurn":false,"name":"Abass","rounds":[],"scoreTotal":0},{"dateCreated":1617169799440,"id":"80db21d4-f023-48a5-9c8e-b4e0a63456c0","isPlayerTurn":false,"name":"Emi","rounds":[],"scoreTotal":0}]');
--- INSERT INTO games VALUES('f4c43ead-3715-4048-a920-c2877d415ea6','Test',1617169907768,0,'HighestScoreWins','[]');
--- CREATE TABLE room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT);
--- INSERT INTO room_master_table VALUES(42,'ccd4dccc7586595ca0f32f53ba1f2eb0');
--- COMMIT;
+
+CREATE TABLE `games` (
+    `id` TEXT NOT NULL,
+    `name` TEXT NOT NULL,
+    `dateCreated` INTEGER NOT NULL,
+    `isClosed` INTEGER NOT NULL,
+    `strategy` TEXT NOT NULL,
+    `players` TEXT NOT NULL, PRIMARY KEY(`id`)
+ );
