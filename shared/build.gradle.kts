@@ -6,6 +6,12 @@ plugins {
     id("com.squareup.sqldelight")
 }
 
+//sqldelight {
+//    com.squareup.sqlite.migrations.Database { // This will be the name of the generated database class.
+////        packageName = "com.example"
+//    }
+//}
+
 kotlin {
     android()
     ios {
