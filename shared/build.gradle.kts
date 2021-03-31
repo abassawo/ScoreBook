@@ -18,6 +18,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation("com.squareup.sqldelight:sqlite-driver:1.4.4")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
                 implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
                 api("org.jetbrains.kotlin:kotlin-stdlib-common")
@@ -31,6 +32,7 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
+                implementation("com.squareup.sqldelight:android-driver:1.4.4")
                 implementation("com.google.android.material:material:1.2.1")
             }
         }
@@ -40,7 +42,11 @@ kotlin {
                 implementation("junit:junit:4.13")
             }
         }
-        val iosMain by getting
+        val iosMain by getting {
+            dependencies {
+                implementation("com.squareup.sqldelight:native-driver:1.4.4")
+            }
+        }
         val iosTest by getting
     }
 }
