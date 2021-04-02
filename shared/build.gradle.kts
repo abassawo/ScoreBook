@@ -18,7 +18,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("com.squareup.sqldelight:sqlite-driver:1.4.4")
+//                implementation("com.squareup.sqldelight:sqlite-driver:1.4.4")
+                implementation("com.squareup.sqldelight:native-driver:1.4.4")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
                 implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
                 api("org.jetbrains.kotlin:kotlin-stdlib-common")
@@ -75,9 +76,9 @@ val packForXcode by tasks.creating(Sync::class) {
 
 tasks.getByName("build").dependsOn(packForXcode)
 
-sqldelight {
-    database(name = "AppDatabase") {
-        packageName = "com.lindenlabs.scorebook.shared.common.data"
-        sourceFolders = listOf("sqldelight")
-    }
-}
+//sqldelight {
+//    database(name = "AppDatabase") {
+//        packageName = "com.lindenlabs.scorebook.shared.common.data"
+//        sourceFolders = listOf("sqldelight")
+//    }
+//}
