@@ -1,7 +1,12 @@
 package com.lindenlabs.scorebook.shared.common.data
 
-actual class DriverFactory(val context: android.content.Context)  {
-    actual fun createDriver() {
-        AppDatabase
+import android.content.Context
+import com.squareup.sqldelight.android.AndroidSqliteDriver
+import com.squareup.sqldelight.db.SqlDriver
+
+actual class DriverFactory(private val context: Context) {
+
+    actual fun createDriver(): SqlDriver {
+        return AndroidSqliteDriver(AppDatabase.Schema, context, "app.db")
     }
 }
