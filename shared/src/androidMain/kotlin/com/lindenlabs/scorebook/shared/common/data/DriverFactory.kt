@@ -1,5 +1,7 @@
-//package com.lindenlabs.scorebook.shared.common.data
-//
-//class DriverFactory(val context: android.content.Context)  {
-//
-//}
+package com.lindenlabs.scorebook.shared.common.data
+
+actual class DriverFactory(val context: android.content.Context)  {
+    actual fun createDriver() {
+
+    }
+}

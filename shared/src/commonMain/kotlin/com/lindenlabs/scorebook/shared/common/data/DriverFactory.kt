@@ -1,5 +1,5 @@
-package com.lindenlabs.scorebook.shared.common
+package com.lindenlabs.scorebook.shared.common.data
 
-//expect class DriverFactory {
-//    expect fun createDriver(): SqlDriver
-//}
+expect class DriverFactory {
+    fun createDriver()
+}
