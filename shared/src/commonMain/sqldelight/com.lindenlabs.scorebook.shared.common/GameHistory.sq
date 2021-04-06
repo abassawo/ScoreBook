@@ -5,7 +5,7 @@ CREATE TABLE games (
     dateCreated INTEGER NOT NULL,
     isClosed INTEGER AS Boolean DEFAULT 0,
     strategy TEXT NOT NULL,
-    players TEXT NOT NULL, PRIMARY KEY(id)
+    playerIds TEXT NOT NULL
  );
 
  selectAll:
@@ -20,7 +20,7 @@ CREATE TABLE games (
    dateCreated,
    isClosed,
    strategy,
-   players
+   playerIds
  )
  VALUES (?, ?, ?, ?, ?, ?);
 

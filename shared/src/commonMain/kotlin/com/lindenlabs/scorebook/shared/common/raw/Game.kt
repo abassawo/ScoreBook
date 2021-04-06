@@ -12,8 +12,9 @@ data class Game(
     val dateCreated: Long = Date().getTime(),
     var isClosed: Boolean = false,
     var strategy: GameStrategy = GameStrategy.HighestScoreWins,
-    var players: List<Player> = mutableListOf()
+    var playerIds: List<String> = mutableListOf()
 ) {
+    val players: MutableList<Player> = mutableListOf()
 
     fun start() {
         isClosed = false

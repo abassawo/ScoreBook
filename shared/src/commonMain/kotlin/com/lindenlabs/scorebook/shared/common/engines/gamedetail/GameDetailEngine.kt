@@ -25,12 +25,12 @@ class GameDetailEngine(private val coroutineScope: CoroutineScope, val appReposi
     fun launchGame(game: Game) {
         this.game = game
         when {
-            isFirstRun && game.players.isNullOrEmpty() -> {
+            isFirstRun && game.playerIds.isNullOrEmpty() -> {
                 isFirstRun = false
 //                viewEvent.value = GameDetailViewEvent.AddPlayersClicked(game) // Bypass home screen, just add
             }
-            game.players.isNullOrEmpty() -> viewState.value = NotStarted(game)
-            game.players.isNotEmpty() -> refreshScore()
+            game.playerIds.isNullOrEmpty() -> viewState.value = NotStarted(game)
+            game.playerIds.isNotEmpty() -> refreshScore()
         }
     }
 

@@ -29,10 +29,9 @@ class AddPlayersEngine(private val coroutineScope: CoroutineScope, private val a
 
     private fun populateAutocompleteAdapter() {
         coroutineScope.launch {
-            runCatching { appRepository.load() }
-                .onSuccess {
-                    val players = appRepository.getPlayers()
-                    viewState.value = LoadAutocompleteAdapter(players.map { it.name })
+            runCatching { appRepository.getPlayers() - currentGame.players}
+                .onSuccess { players ->
+                    viewState.value = LoadAutocompleteAdapter(players.map {  it.name })
                 }
                 .onFailure { }
         }
@@ -78,7 +77,7 @@ class AddPlayersEngine(private val coroutineScope: CoroutineScope, private val a
     }
 
     private fun savePlayerDataAndExit() {
-        if (currentGame.players.isEmpty()) {
+        if (currentGame.playerIds.isEmpty()) {
             viewState.value = TextEntryError
         } else {
             // navigate to Game Detail screen

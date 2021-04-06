@@ -43,7 +43,7 @@ class HomeEngine(
     private fun loadGames() {
         coroutineScope.launch {
             runCatching {
-                appRepository.load()
+                appRepository.loadGames()
             }
                 .onSuccess(::showGames)
                 .onFailure { }
