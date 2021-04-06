@@ -12,6 +12,7 @@ import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseFragment
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
+import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.GameScoreModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
@@ -52,7 +53,7 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
 
         appComponent().value
             .gameScoreComponentBuilder()
-            .plus(GameScoreModule(arguments?.get("gameArg") as String))
+            .plus(GameScoreModule(arguments?.get("gameArg") as String, appRepository()))
             .build()
             .inject(this)
     }

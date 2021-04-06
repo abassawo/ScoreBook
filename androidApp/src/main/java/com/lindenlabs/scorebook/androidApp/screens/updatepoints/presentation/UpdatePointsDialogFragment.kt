@@ -8,6 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.LifecycleOwner
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
+import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
 import com.lindenlabs.scorebook.androidApp.databinding.UpdatePointsFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.UpdatePointsModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
@@ -50,7 +51,8 @@ class UpdatePointsDialogFragment(val refreshAction: () -> Unit) : BaseDialogFrag
             .plus(
                 UpdatePointsModule(
                     gameId = args["gameArg"] as String,
-                    playerId = args["playerArg"] as String
+                    playerId = args["playerArg"] as String,
+                    appRepository = appRepository()
                 )
             )
             .build()
@@ -62,7 +64,6 @@ class UpdatePointsDialogFragment(val refreshAction: () -> Unit) : BaseDialogFrag
         val args = requireArguments()
         viewModel.viewState.observe(this as LifecycleOwner, ::processState)
         viewModel.viewEvent.observe(this as LifecycleOwner, ::processEvent)
-
         binding.pointsEditText.requestFocus()
 
         binding.addPointsButton.setOnClickListener {

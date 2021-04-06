@@ -10,13 +10,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class HomeEngine(private val coroutineScope: CoroutineScope, userSettings: UserSettings)  {
+class HomeEngine(private val coroutineScope: CoroutineScope, private val environment: Environment, userSettings: UserSettings) {
     val viewState: MutableStateFlow<HomeViewState> = MutableStateFlow(HomeViewState(emptyList()))
     val viewEvent: MutableStateFlow<HomeViewEvent> = MutableStateFlow(HomeViewEvent.None)
     private val gamesMapper: GamesMapper = GamesMapper()
     private val games: MutableList<Game> = mutableListOf()
 
-    private val appRepository = Environment.appRepository
+    private val appRepository = environment.appRepository
 
     init {
         if (userSettings.isFirstRun())

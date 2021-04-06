@@ -14,9 +14,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
+import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.AddPlayersArgsModule
-import com.lindenlabs.scorebook.androidApp.di.AppModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.navigate
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayerInteraction.*
@@ -40,7 +40,7 @@ class AddPlayersFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appComponent().value.addPlayersComponentBuilder()
-            .plus(AddPlayersArgsModule(requireArguments()["gameArg"] as String))
+            .plus(AddPlayersArgsModule(requireArguments()["gameArg"] as String, appRepository()))
             .build()
             .inject(this)
     }

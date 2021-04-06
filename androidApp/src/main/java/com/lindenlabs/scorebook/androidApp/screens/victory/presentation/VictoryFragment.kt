@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
+import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
 import com.lindenlabs.scorebook.androidApp.databinding.FragmentVictoryBinding
 import com.lindenlabs.scorebook.androidApp.di.VictoryModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
@@ -31,7 +32,7 @@ class VictoryFragment : Fragment(R.layout.fragment_victory) {
         setHasOptionsMenu(true)
         appComponent().value
             .victoryFragmentComponentBuilder()
-            .plus(VictoryModule(requireArguments()["gameArg"] as String))
+            .plus(VictoryModule(appRepository(), requireArguments()["gameArg"] as String))
             .build()
             .inject(this)
     }

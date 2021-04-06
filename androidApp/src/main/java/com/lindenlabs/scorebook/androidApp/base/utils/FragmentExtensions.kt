@@ -8,3 +8,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 fun Fragment.appComponent(): Lazy<AppComponent> = lazy {
     (requireActivity().application as ScoreBookApplication).appComponent
 }
+
+fun Fragment.appRepository() =
+    (requireActivity().application as ScoreBookApplication).environment.appRepository

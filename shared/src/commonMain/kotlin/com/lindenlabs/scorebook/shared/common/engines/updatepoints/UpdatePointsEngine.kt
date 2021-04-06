@@ -1,6 +1,6 @@
 package com.lindenlabs.scorebook.shared.common.engines.updatepoints
 
-import com.lindenlabs.scorebook.shared.common.Environment.appRepository
+import com.lindenlabs.scorebook.shared.common.data.AppRepository
 import com.lindenlabs.scorebook.shared.common.engines.postValue
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.Player
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class UpdatePointsEngine(private val coroutineScope: CoroutineScope) {
+class UpdatePointsEngine(private val coroutineScope: CoroutineScope , val appRepository: AppRepository) {
     private lateinit var game: Game
     private lateinit var player: Player
     val viewState: MutableStateFlow<UpdatePointsViewState> = MutableStateFlow(UpdatePointsViewState.Loading)

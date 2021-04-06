@@ -9,6 +9,7 @@ import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseFragment
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
+import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
 import com.lindenlabs.scorebook.androidApp.databinding.EditGameFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.EditGameModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
@@ -33,7 +34,7 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
         setHasOptionsMenu(true)
         appComponent().value
             .editGameComponentBuilder()
-            .plus(EditGameModule(requireArguments()["gameArg"] as String))
+            .plus(EditGameModule(appRepository(), requireArguments()["gameArg"] as String))
             .build()
             .inject(this)
     }

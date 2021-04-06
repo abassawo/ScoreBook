@@ -1,8 +1,9 @@
 package com.lindenlabs.scorebook.shared.common.data
 
 import com.lindenlabs.scorebook.shared.common.raw.Player
+import comlindenlabsscorebooksharedcommon.PlayerHistoryQueries
 
-class PlayerDataSource : DataSource<Player> {
+class PlayerDataSource(playerHistoryQueries: PlayerHistoryQueries) : DataSource<Player> {
     val players: MutableList<Player> = mutableListOf()
     override var items: MutableList<Player> = players
 

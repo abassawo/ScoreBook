@@ -1,6 +1,6 @@
 package com.lindenlabs.scorebook.shared.common.engines.gamedetail
 
-import com.lindenlabs.scorebook.shared.common.Environment.appRepository
+import com.lindenlabs.scorebook.shared.common.data.AppRepository
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewState.*
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewState.WithGameData.*
 import com.lindenlabs.scorebook.shared.common.raw.Game
@@ -8,7 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class GameDetailEngine(private val coroutineScope: CoroutineScope) {
+class GameDetailEngine(private val coroutineScope: CoroutineScope, val appRepository: AppRepository) {
     private lateinit var game: Game
     val viewState: MutableStateFlow<GameDetailViewState> = MutableStateFlow(Loading)
     val viewEvent: MutableStateFlow<GameDetailViewEvent> = MutableStateFlow(GameDetailViewEvent.None)
