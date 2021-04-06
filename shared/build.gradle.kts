@@ -73,7 +73,7 @@ kotlin {
 //        implementation("io.ktor:ktor-client-andro id:1.2.6")
 //        implementation("io.ktor:ktor-client-json-jvm:1.2.6")
 //        implementation("io.ktor:ktor-client-serialization-vm:1.2.6")
-        implementation("io.ktor:ktor-gson:1.2.6")
+//        implementation("io.ktor:ktor-gson:1.2.6")
     }
 }
 
