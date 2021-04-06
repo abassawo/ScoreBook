@@ -13,10 +13,11 @@ import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseFragment
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
+import com.lindenlabs.scorebook.androidApp.base.utils.navigate
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.GameScoreModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.navigate
+import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showplayers.PlayerAdapter
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragment
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailInteraction
@@ -121,7 +122,7 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
         }
 
     private fun launchEditGameScreen(game: Game) =
-        navController.navigate(R.id.navEditGame, game.id)
+        navigate(Destination.EditGame(game))
 
     private fun showRestartGamePrompt() {
         MaterialAlertDialogBuilder(requireContext())
@@ -148,7 +149,7 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
     }
 
     private fun navigateToAddPlayers(game: Game) =
-        navController.navigate(R.id.navAddPlayers, game.id)
+        navigate(Destination.AddPlayers(game))
 
 
     private fun showGameState(state: GameDetailViewState) {
@@ -179,7 +180,7 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
     }
 
     private fun endGame(game: Game) =
-        findNavController().navigate(R.id.navVictoryFragment, game.id)
+        navigate(Destination.VictoryScreen(game))
 
     private fun GameDetailFragmentBinding.showEmptyState() =
         emptyStateTextView.run { this.visibility = View.VISIBLE }

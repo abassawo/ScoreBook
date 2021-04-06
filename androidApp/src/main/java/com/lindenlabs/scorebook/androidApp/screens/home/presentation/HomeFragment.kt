@@ -9,16 +9,15 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearSnapHelper
 import com.google.android.material.snackbar.Snackbar
 import com.lindenlabs.scorebook.androidApp.R
+import com.lindenlabs.scorebook.androidApp.base.utils.navigate
 import com.lindenlabs.scorebook.androidApp.databinding.HomeFragmentBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
-import com.lindenlabs.scorebook.androidApp.navigate
+import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv.GameAdapter
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.welcome.WelcomeDialogFragment
 import com.lindenlabs.scorebook.androidApp.views.rv.SwipeToDismissCallback
@@ -58,7 +57,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             is HomeViewEvent.AlertNoTextEntered -> showError(event)
             is HomeViewEvent.ShowAddPlayersScreen -> showAddPlayersScreen(event.game)
                 .also { hideKeyboard() }
-            is HomeViewEvent.ShowGameDetail -> findNavController().showActiveGame(event.game)
+            is HomeViewEvent.ShowGameDetail -> navigate(Destination.GameDetail(event.game))
                 .also { hideKeyboard() }
             is HomeViewEvent.ShowUndoDeletePrompt -> showUndoPrompt(event)
             HomeViewEvent.ShowWelcomeScreen -> showWelcomeConfetti()
@@ -67,7 +66,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         }
 
     private fun showAddPlayersScreen(game: Game) =
-        findNavController().navigate(R.id.navAddPlayers, game.id)
+        navigate(Destination.AddPlayers(game))
 
     private fun showUndoPrompt(event: HomeViewEvent.ShowUndoDeletePrompt) =
         Snackbar.make(
@@ -89,13 +88,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
-
-    private fun NavController.showAddPlayersScreen(game: Game) =
-        navigate(R.id.navAddPlayers, game.id)
-
-    private fun NavController.showActiveGame(game: Game) =
-        navigate(R.id.navActiveGame, game.id)
-
 
     private fun showError(event: HomeViewEvent.AlertNoTextEntered) {
         val errorPair = event.errorText to ContextCompat.getDrawable(

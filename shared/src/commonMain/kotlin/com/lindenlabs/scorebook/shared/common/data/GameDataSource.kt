@@ -9,7 +9,7 @@ import comlindenlabsscorebooksharedcommon.Games
 
 class GameDataSource(private val gameHistoryQueries: GameHistoryQueries) : DataSource<Game> {
 
-    override var items: MutableList<Game> = mutableListOf<Game>().also { games ->
+    override suspend fun load(): List<Game> = mutableListOf<Game>().also { games ->
         games.addAll(gameHistoryQueries.selectAll().executeAsList().map { game ->
             Game(
                 id = game.id,
@@ -21,8 +21,6 @@ class GameDataSource(private val gameHistoryQueries: GameHistoryQueries) : DataS
             )
         })
     }
-
-    override suspend fun load(): List<Game> = items
 
     override suspend fun get(id: String): Game {
         val query = gameHistoryQueries.selectById(id).executeAsOneOrNull()

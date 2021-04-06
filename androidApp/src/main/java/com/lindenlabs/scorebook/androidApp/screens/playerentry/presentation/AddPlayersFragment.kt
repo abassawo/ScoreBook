@@ -10,25 +10,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.findNavController
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
+import com.lindenlabs.scorebook.androidApp.base.utils.navigate
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.AddPlayersArgsModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.navigate
+import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayerInteraction.*
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewEvent
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewState
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewState.*
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AddPlayersFragment : Fragment() {
@@ -101,13 +96,14 @@ class AddPlayersFragment : Fragment() {
         Log.d("APA", "Viewevent processed")
         when (viewEvent) {
             is AddPlayersViewEvent.NavigateToGameDetail -> {
-                val gameId = viewEvent.game.id
-                findNavController().navigate(R.id.navActiveGame, gameId)
-//                    .also { hideKeyboard() }
+                navigate(Destination.GameDetail(viewEvent.game))
+                    .also { hideKeyboard() }
             }
             is AddPlayersViewEvent.NavigateHome -> {
-//                findNavController().navigate(AddPlayersFragmentDirections.navigateBackHome())
-//                    .also { hideKeyboard()
+                navigate(Destination.Home)
+                    .also {
+                        hideKeyboard()
+                    }
             }
             AddPlayersViewEvent.None -> Unit
         }
@@ -130,7 +126,12 @@ class AddPlayersFragment : Fragment() {
         }
 
         this.enterNewPlayerEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) =
                 Unit
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {

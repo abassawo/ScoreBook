@@ -4,13 +4,18 @@ import com.lindenlabs.scorebook.shared.common.Environment
 import com.lindenlabs.scorebook.shared.common.domain.GamesMapper
 import com.lindenlabs.scorebook.shared.common.domain.GamesWrapper
 import com.lindenlabs.scorebook.shared.common.domain.UserSettings
+import com.lindenlabs.scorebook.shared.common.engines.AbstractEngine
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.GameStrategy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class HomeEngine(private val coroutineScope: CoroutineScope, private val environment: Environment, userSettings: UserSettings) {
+class HomeEngine(
+    private val coroutineScope: CoroutineScope,
+    environment: Environment,
+    userSettings: UserSettings
+) : AbstractEngine<HomeInteraction>() {
     val viewState: MutableStateFlow<HomeViewState> = MutableStateFlow(HomeViewState(emptyList()))
     val viewEvent: MutableStateFlow<HomeViewEvent> = MutableStateFlow(HomeViewEvent.None)
     private val gamesMapper: GamesMapper = GamesMapper()
@@ -21,10 +26,14 @@ class HomeEngine(private val coroutineScope: CoroutineScope, private val environ
     init {
         if (userSettings.isFirstRun())
             showWelcomeScreen()
-
-        loadGames()
         userSettings.clearFirstRun()
+        refresh()
     }
+
+    fun refresh() {
+        loadGames()
+    }
+
 
     private fun showWelcomeScreen() {
         viewEvent.value = HomeViewEvent.ShowWelcomeScreen
@@ -49,29 +58,32 @@ class HomeEngine(private val coroutineScope: CoroutineScope, private val environ
         viewState.value = wrapper.toViewState()
     }
 
-    fun handleInteraction(interaction: HomeInteraction) = when (interaction) {
-        is HomeInteraction.GameDetailsEntered -> {
-            if (interaction.name.isNullOrEmpty())
-                showError()
-            else {
-                val strategy =
-                    if (interaction.lowestScoreWins) GameStrategy.LowestScoreWins else GameStrategy.HighestScoreWins
-                onNewGameCreated(interaction.name, strategy)
+    override fun handleInteraction(interaction: HomeInteraction) {
+        when (interaction) {
+            is HomeInteraction.GameDetailsEntered -> {
+                if (interaction.name.isNullOrEmpty())
+                    showError()
+                else {
+                    val strategy =
+                        if (interaction.lowestScoreWins) GameStrategy.LowestScoreWins else GameStrategy.HighestScoreWins
+                    onNewGameCreated(interaction.name, strategy)
+                }
             }
-        }
-        is HomeInteraction.GameClicked -> onGameClicked(interaction.game)
-        is HomeInteraction.SwipeToDelete -> {
-            runCatching { deleteGame(interaction.game) }
-                .onSuccess {
-                    loadGames()
-                    viewEvent.value = HomeViewEvent.ShowUndoDeletePrompt(interaction.game, it)
-                }
-                .onFailure {
+            is HomeInteraction.GameClicked -> onGameClicked(interaction.game)
+            is HomeInteraction.SwipeToDelete -> {
+                runCatching { deleteGame(interaction.game) }
+                    .onSuccess {
+                        loadGames()
+                        viewEvent.value = HomeViewEvent.ShowUndoDeletePrompt(interaction.game, it)
+                    }
+                    .onFailure {
 //                    Timber.e(it)
-                }
+                    }
+            }
+            is HomeInteraction.UndoDelete -> restoreDeletedGame(interaction)
+            HomeInteraction.DismissWelcome -> viewEvent.value = HomeViewEvent.DismissWelcomeMessage
+            HomeInteraction.Refresh -> refresh()
         }
-        is HomeInteraction.UndoDelete -> restoreDeletedGame(interaction)
-        HomeInteraction.DismissWelcome -> viewEvent.value = HomeViewEvent.DismissWelcomeMessage
     }
 
     private fun onGameClicked(game: Game) {

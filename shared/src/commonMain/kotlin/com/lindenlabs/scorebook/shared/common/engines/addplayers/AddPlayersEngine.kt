@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 
 class AddPlayersEngine(private val coroutineScope: CoroutineScope, private val appRepository: AppRepository) {
     private lateinit var currentGame: Game
-    val viewState: MutableStateFlow<AddPlayersViewState> = MutableStateFlow(AddPlayersViewState.None)
+    val viewState: MutableStateFlow<AddPlayersViewState> = MutableStateFlow(None)
     val viewEvent: MutableStateFlow<AddPlayersViewEvent> = MutableStateFlow(AddPlayersViewEvent.None)
 
     init {

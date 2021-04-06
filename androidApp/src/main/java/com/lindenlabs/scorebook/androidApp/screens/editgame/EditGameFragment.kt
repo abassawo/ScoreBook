@@ -10,10 +10,11 @@ import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseFragment
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
+import com.lindenlabs.scorebook.androidApp.base.utils.navigate
 import com.lindenlabs.scorebook.androidApp.databinding.EditGameFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.EditGameModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.navigate
+import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameInteraction
 import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameViewEvent
 import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameViewState
@@ -95,8 +96,8 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
 
             }
             is EditGameViewEvent.ReturnToGameDetail ->{
-                (requireActivity() as MainActivity).navigateFirstTabWithClearStack()
-                findNavController().navigate(R.id.navActiveGame, viewEvent.game.id)
+//                (requireActivity() as MainActivity).navigateFirstTabWithClearStack()
+                navigate(Destination.GameDetail(viewEvent.game))
             }
             EditGameViewEvent.None -> Unit
         }

@@ -8,8 +8,7 @@ class PlayerDataSource(private val playerHistoryQueries: PlayerHistoryQueries) :
     DataSource<Player> {
     val players: MutableList<Player> = mutableListOf()
 
-
-    override var items: MutableList<Player> = mutableListOf<Player>().also { players ->
+    override suspend fun load(): List<Player> = mutableListOf<Player>().also { players ->
         players.addAll(playerHistoryQueries.selectAll().executeAsList().map { player ->
             Player(
                 name = player.name,
@@ -18,8 +17,6 @@ class PlayerDataSource(private val playerHistoryQueries: PlayerHistoryQueries) :
             )
         })
     }
-
-    override suspend fun load(): List<Player> = items
 
     override suspend fun get(id: String): Player {
         val query = playerHistoryQueries.selectById(id).executeAsOneOrNull()
