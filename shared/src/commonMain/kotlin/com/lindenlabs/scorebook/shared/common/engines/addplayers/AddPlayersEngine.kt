@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
 
 class AddPlayersEngine(private val coroutineScope: CoroutineScope, private val appRepository: AppRepository) {
     private lateinit var currentGame: Game
-    val viewState: MutableStateFlow<AddPlayersViewState> = MutableStateFlow(UpdateCurrentPlayersText(""))
+    val viewState: MutableStateFlow<AddPlayersViewState> = MutableStateFlow(TypingState)
     val viewEvent: MutableStateFlow<AddPlayersViewEvent> = MutableStateFlow(AddPlayersViewEvent.None)
 
     init {
@@ -81,12 +81,13 @@ class AddPlayersEngine(private val coroutineScope: CoroutineScope, private val a
             viewState.value = TextEntryError
         } else {
             // navigate to Game Detail screen
-            viewEvent.value = AddPlayersViewEvent.NavigateToGameDetail(currentGame)
             coroutineScope.launch {
                 withContext(appRepository.dispatcher) {
                     appRepository.updateGame(currentGame)
                 }
             }
+
+            viewEvent.value = AddPlayersViewEvent.NavigateToGameDetail(currentGame)
         }
     }
 }

@@ -2,7 +2,7 @@ CREATE TABLE `players` (
     `name` TEXT NOT NULL,
     `scoreTotal` INTEGER NOT NULL,
     `rounds` TEXT NOT NULL,
-    `isPlayerTurn` INTEGER NOT NULL,
+    `isPlayerTurn` INTEGER AS Boolean DEFAULT 0,
     `id` TEXT NOT NULL,
     `dateCreated` INTEGER NOT NULL, PRIMARY KEY(`id`)
  );

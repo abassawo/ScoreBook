@@ -6,5 +6,8 @@ import kotlinx.coroutines.CoroutineScope
 
 class Environment(database: ScoreBookDatabase) {
     val appRepository =
-        AppRepository(GameDataSource(database.gameHistoryQueries), PlayerDataSource(database.playerHistoryQueries), )
+        AppRepository(
+            gameDataSource = GameDataSource(database.gameHistoryQueries),
+            playersDataSource = PlayerDataSource(database.playerHistoryQueries),
+        )
 }

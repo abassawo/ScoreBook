@@ -2,31 +2,49 @@ package com.lindenlabs.scorebook.shared.common.data
 
 import com.lindenlabs.scorebook.shared.common.raw.Player
 import comlindenlabsscorebooksharedcommon.PlayerHistoryQueries
+import comlindenlabsscorebooksharedcommon.Players
 
-class PlayerDataSource(playerHistoryQueries: PlayerHistoryQueries) : DataSource<Player> {
+class PlayerDataSource(private val playerHistoryQueries: PlayerHistoryQueries) :
+    DataSource<Player> {
     val players: MutableList<Player> = mutableListOf()
-    override var items: MutableList<Player> = players
+
+
+    override var items: MutableList<Player> = mutableListOf<Player>().also { players ->
+        players.addAll(playerHistoryQueries.selectAll().executeAsList().map { player ->
+            Player(
+                name = player.name,
+                scoreTotal = player.scoreTotal.toInt(),
+                isPlayerTurn = player.isPlayerTurn ?: false
+            )
+        })
+    }
 
     override suspend fun load(): List<Player> = items
 
     override suspend fun get(id: String): Player {
-        return items.find { it.id == id } ?: throw IllegalStateException()
+        val query = playerHistoryQueries.selectById(id).executeAsOneOrNull()
+        val player: Players = requireNotNull(query)
+        return Player(
+            id = player.id,
+            name = player.name,
+            dateCreated = player.dateCreated
+        )
     }
 
-    override suspend fun store(t: Player) {
-        this.players += t
+    override suspend fun store(player: Player) = with(player) {
+        playerHistoryQueries.insertOrReplace(
+            name = name,
+            id = id,
+            dateCreated = dateCreated,
+            isPlayerTurn = isPlayerTurn,
+            scoreTotal = scoreTotal.toLong(),
+            rounds = ""
+        )
     }
 
-    override suspend fun update(t: Player) {
-        val found = players.find { it.id == t.id }
-        players.set(index = players.indexOf(found), t)
-    }
+    override suspend fun update(player: Player) = store(player)
 
-    override suspend fun delete(t: Player) {
-        players.remove(t)
-    }
+    override suspend fun delete(player: Player) = playerHistoryQueries.deleteByLabel(player.id)
 
-    override suspend fun clear() {
-        players.clear()
-    }
+    override suspend fun clear() = playerHistoryQueries.empty()
 }

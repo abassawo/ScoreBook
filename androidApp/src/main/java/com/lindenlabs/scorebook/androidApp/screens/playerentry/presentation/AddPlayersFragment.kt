@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
@@ -23,6 +24,9 @@ import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayerIntera
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewEvent
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewState
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewState.*
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AddPlayersFragment : DialogFragment() {
@@ -51,11 +55,16 @@ class AddPlayersFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.add_players_fragment, container ,false)
 
+    @OptIn(InternalCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.run {
             viewState.observe(viewLifecycleOwner, ::processViewState)
-            viewEvent.observe(viewLifecycleOwner, ::processViewEvent)
+            viewModelScope.launch {
+                viewEvent.collect {
+                    processViewEvent(it)
+                }
+            }
         }
         binding.updateUI()
     }

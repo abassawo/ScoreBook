@@ -9,11 +9,13 @@ import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersEngin
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayerInteraction
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewEvent
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class AddPlayersViewModel(val gameId: String, val appRepository: AppRepository) : ViewModel() {
     private val engine: AddPlayersEngine = AddPlayersEngine(viewModelScope, appRepository)
     val viewState: LiveData<AddPlayersViewState> = engine.viewState.asLiveData(viewModelScope.coroutineContext)
-    val viewEvent: LiveData<AddPlayersViewEvent> = engine.viewEvent.asLiveData(viewModelScope.coroutineContext)
+    val viewEvent: StateFlow<AddPlayersViewEvent> = engine.viewEvent
 
     init {
         engine.launch(gameId)

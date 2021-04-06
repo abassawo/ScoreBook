@@ -12,8 +12,8 @@ import timber.log.Timber
 
 class ScoreBookApplication : Application() {
     val appComponent: AppComponent by lazy { initAppComponent() }
-    val scoreBookDatabase = DatabaseFactory(this).createDB()
-    val environment = Environment(scoreBookDatabase)
+    val scoreBookDatabase by lazy { DatabaseFactory(this).createDB() }
+    val environment by lazy { Environment(scoreBookDatabase) }
     private fun initSettings() = UserSettingsStore(this)
 
     override fun onCreate() {

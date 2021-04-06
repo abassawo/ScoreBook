@@ -1,33 +1,45 @@
 package com.lindenlabs.scorebook.shared.common.data
 
 import com.lindenlabs.scorebook.shared.common.raw.Game
+import com.lindenlabs.scorebook.shared.common.raw.GameStrategy
 import comlindenlabsscorebooksharedcommon.GameHistoryQueries
+import comlindenlabsscorebooksharedcommon.Games
 
-class GameDataSource(gameHistoryQueries: GameHistoryQueries) : DataSource<Game> {
-    val games: MutableList<Game> = mutableListOf()
+class GameDataSource(private val gameHistoryQueries: GameHistoryQueries) : DataSource<Game> {
 
-    override var items: MutableList<Game> = games
+    override var items: MutableList<Game> = mutableListOf<Game>().also { games ->
+        games.addAll(gameHistoryQueries.selectAll().executeAsList().map { game ->
+            Game(
+                id = game.id,
+                name = game.name,
+                dateCreated = game.dateCreated,
+                isClosed = game.isClosed ?: false,
+                strategy = GameStrategy.valueOf(game.strategy)
+            )
+        })
+    }
 
-    override suspend fun load(): List<Game> = games
+    override suspend fun load(): List<Game> = items
 
     override suspend fun get(id: String): Game {
-        return games.find { it.id == id } ?: throw IllegalStateException()
+        val query = gameHistoryQueries.selectById(id).executeAsOneOrNull()
+        val game: Games = requireNotNull(query)
+        return Game(
+            id = game.id,
+            name = game.name,
+            dateCreated = game.dateCreated,
+            isClosed = game.isClosed ?: false,
+            strategy = GameStrategy.valueOf(game.strategy)
+        )
     }
 
-    override suspend fun store(t: Game) {
-        games.add(t)
+    override suspend fun store(game: Game) = with(game) {
+        gameHistoryQueries.insertOrReplace(id, name, dateCreated, isClosed, strategy.name, "")
     }
 
-    override suspend fun update(t: Game) {
-        val foundGame = games.find { it.id == t.id }
-        games.set(index = games.indexOf(foundGame), t)
-    }
+    override suspend fun update(t: Game) = store(t)
 
-    override suspend fun delete(t: Game) {
-        games.remove(t)
-    }
+    override suspend fun delete(t: Game) = gameHistoryQueries.deleteByLabel(t.id)
 
-    override suspend fun clear() {
-        games.clear()
-    }
+    override suspend fun clear() = gameHistoryQueries.empty()
 }
