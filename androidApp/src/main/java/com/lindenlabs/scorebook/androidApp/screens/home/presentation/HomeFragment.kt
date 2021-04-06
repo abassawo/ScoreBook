@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import com.google.android.material.snackbar.Snackbar
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.utils.navigate
+import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.androidApp.databinding.HomeFragmentBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
 import com.lindenlabs.scorebook.androidApp.navigation.Destination
@@ -40,6 +41,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         binding = view.viewBinding()
         gameBinding = view.homeScreenBinding()
         binding.updateUi()
+        viewModel.viewEvent.removeObservers(this)
         viewModel.viewState.observe(this as LifecycleOwner, this::showGames)
         viewModel.viewEvent.observe(this as LifecycleOwner, this::processViewEvent)
     }
@@ -52,18 +54,19 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         return HomeFragmentBinding.bind(rootView)
     }
 
-    private fun processViewEvent(event: HomeViewEvent) =
-        when (event) {
-            is HomeViewEvent.AlertNoTextEntered -> showError(event)
-            is HomeViewEvent.ShowAddPlayersScreen -> showAddPlayersScreen(event.game)
+    private fun processViewEvent(event: Event<HomeViewEvent>) {
+        when (val action = event.getContentIfNotHandled()) {
+            is HomeViewEvent.AlertNoTextEntered -> showError(action)
+            is HomeViewEvent.ShowAddPlayersScreen -> showAddPlayersScreen(action.game)
                 .also { hideKeyboard() }
-            is HomeViewEvent.ShowGameDetail -> navigate(Destination.GameDetail(event.game))
+            is HomeViewEvent.ShowGameDetail -> navigate(Destination.GameDetail(action.game))
                 .also { hideKeyboard() }
-            is HomeViewEvent.ShowUndoDeletePrompt -> showUndoPrompt(event)
+            is HomeViewEvent.ShowUndoDeletePrompt -> showUndoPrompt(action)
             HomeViewEvent.ShowWelcomeScreen -> showWelcomeConfetti()
             HomeViewEvent.DismissWelcomeMessage -> binding.viewKonfetti.stopGracefully()
             HomeViewEvent.None -> Unit
         }
+    }
 
     private fun showAddPlayersScreen(game: Game) =
         navigate(Destination.AddPlayers(game))

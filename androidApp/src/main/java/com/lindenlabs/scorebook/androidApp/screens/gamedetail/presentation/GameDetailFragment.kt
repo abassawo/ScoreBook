@@ -38,7 +38,6 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
         viewModelFactory.makeViewModel(this, GameViewModel::class.java)
     }
     private val adapter: PlayerAdapter = PlayerAdapter()
-    private val navController: NavController by lazy { findNavController() }
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory

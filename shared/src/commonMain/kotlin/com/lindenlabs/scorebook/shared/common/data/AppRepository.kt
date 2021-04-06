@@ -34,7 +34,6 @@ class AppRepository(
         playersDataSource.load()
     }
 
-
     suspend fun addPlayer(player: Player) = withContext(dispatcher) {
         val playersInDB = getPlayers()
 

@@ -1,6 +1,5 @@
 package com.lindenlabs.scorebook.shared.common.data
 
-import com.lindenlabs.scorebook.shared.common.ObjectConverter
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.GameStrategy
 import com.lindenlabs.scorebook.shared.common.raw.Player
@@ -34,7 +33,7 @@ class GameDataSource(private val gameHistoryQueries: GameHistoryQueries) : DataS
             dateCreated = game.dateCreated,
             isClosed = game.isClosed ?: false,
             strategy = GameStrategy.valueOf(game.strategy),
-            players = emptyList()
+            players = emptyList() // todo
         )
     }
 

@@ -4,7 +4,7 @@ import com.lindenlabs.scorebook.shared.common.raw.Game
 
 sealed class AddPlayerInteraction {
 
-    data class SavePlayerDataAndExit(val playerName: String) : AddPlayerInteraction()
+    object SavePlayerDataAndExit : AddPlayerInteraction()
 
     data class AddAnotherPlayer(val playerName: String) : AddPlayerInteraction()
 

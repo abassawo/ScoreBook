@@ -4,7 +4,6 @@ import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +14,7 @@ import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
 import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
 import com.lindenlabs.scorebook.androidApp.base.utils.navigate
+import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.AddPlayersArgsModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
@@ -63,6 +63,9 @@ class AddPlayersFragment : Fragment() {
         viewModel.run {
             viewState.observe(viewLifecycleOwner, ::processViewState)
             viewEvent.observe(viewLifecycleOwner, ::processViewEvent)
+            if(savedInstanceState == null) {
+                launch()
+            }
         }
         binding.updateUI()
     }
@@ -92,11 +95,10 @@ class AddPlayersFragment : Fragment() {
         None -> Unit
     }
 
-    private fun processViewEvent(viewEvent: AddPlayersViewEvent) {
-        Log.d("APA", "Viewevent processed")
-        when (viewEvent) {
+    private fun processViewEvent(viewEvent: Event<AddPlayersViewEvent>) {
+        when (val action = viewEvent.getContentIfNotHandled()) {
             is AddPlayersViewEvent.NavigateToGameDetail -> {
-                navigate(Destination.GameDetail(viewEvent.game))
+                navigate(Destination.GameDetail(action.game))
                     .also { hideKeyboard() }
             }
             is AddPlayersViewEvent.NavigateHome -> {
@@ -117,8 +119,8 @@ class AddPlayersFragment : Fragment() {
 
     private fun AddPlayersFragmentBinding.updateUI() {
         this.addPlayersButton.setOnClickListener {
-            val name = binding.enterNewPlayerEditText.text.toString()
-            viewModel.handleInteraction(SavePlayerDataAndExit(name)) // new player routes back to Game Detail Screen
+//            val name = binding.enterNewPlayerEditText.text.toString()
+            viewModel.handleInteraction(SavePlayerDataAndExit) // new player routes back to Game Detail Screen
         }
         this.addAnotherPlayer.setOnClickListener { // keeps screen on same screen
             val name = binding.enterNewPlayerEditText.text.toString()

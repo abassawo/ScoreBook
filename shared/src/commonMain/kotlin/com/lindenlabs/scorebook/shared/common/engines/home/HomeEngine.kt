@@ -1,5 +1,6 @@
 package com.lindenlabs.scorebook.shared.common.engines.home
 
+import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.Environment
 import com.lindenlabs.scorebook.shared.common.domain.GamesMapper
 import com.lindenlabs.scorebook.shared.common.domain.GamesWrapper
@@ -17,7 +18,7 @@ class HomeEngine(
     userSettings: UserSettings
 ) : AbstractEngine<HomeInteraction>() {
     val viewState: MutableStateFlow<HomeViewState> = MutableStateFlow(HomeViewState(emptyList()))
-    val viewEvent: MutableStateFlow<HomeViewEvent> = MutableStateFlow(HomeViewEvent.None)
+    val viewEvent: MutableStateFlow<Event<HomeViewEvent>> = MutableStateFlow(Event(HomeViewEvent.None))
     private val gamesMapper: GamesMapper = GamesMapper()
     private val games: MutableList<Game> = mutableListOf()
 
@@ -36,7 +37,7 @@ class HomeEngine(
 
 
     private fun showWelcomeScreen() {
-        viewEvent.value = HomeViewEvent.ShowWelcomeScreen
+        viewEvent.value = Event(HomeViewEvent.ShowWelcomeScreen)
     }
 
     private fun loadGames() {
@@ -74,20 +75,20 @@ class HomeEngine(
                 runCatching { deleteGame(interaction.game) }
                     .onSuccess {
                         loadGames()
-                        viewEvent.value = HomeViewEvent.ShowUndoDeletePrompt(interaction.game, it)
+                        viewEvent.value = Event(HomeViewEvent.ShowUndoDeletePrompt(interaction.game, it))
                     }
                     .onFailure {
 //                    Timber.e(it)
                     }
             }
             is HomeInteraction.UndoDelete -> restoreDeletedGame(interaction)
-            HomeInteraction.DismissWelcome -> viewEvent.value = HomeViewEvent.DismissWelcomeMessage
+            HomeInteraction.DismissWelcome -> viewEvent.value = Event(HomeViewEvent.DismissWelcomeMessage)
             HomeInteraction.Refresh -> refresh()
         }
     }
 
     private fun onGameClicked(game: Game) {
-        viewEvent.value = HomeViewEvent.ShowGameDetail(game)
+        viewEvent.value = Event(HomeViewEvent.ShowGameDetail(game))
     }
 
     private fun restoreDeletedGame(interaction: HomeInteraction.UndoDelete) {
@@ -113,7 +114,7 @@ class HomeEngine(
     }
 
     private fun showError() {
-        viewEvent.value = HomeViewEvent.AlertNoTextEntered()
+        viewEvent.value = Event(HomeViewEvent.AlertNoTextEntered())
     }
 
     private fun onNewGameCreated(
@@ -135,7 +136,7 @@ class HomeEngine(
             }
                 .onSuccess {
                     if (autoStart) {
-                        viewEvent.value = HomeViewEvent.ShowAddPlayersScreen(game)
+                        viewEvent.value = Event(HomeViewEvent.ShowAddPlayersScreen(game))
                     } else {
                         loadGames()
                     }

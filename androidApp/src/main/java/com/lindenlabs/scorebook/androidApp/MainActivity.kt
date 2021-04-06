@@ -18,6 +18,7 @@ import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameD
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeFragment
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersFragment
 import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryFragment
+import com.lindenlabs.scorebook.shared.common.Event
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
@@ -47,8 +48,8 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController)
     }
 
-    private fun navigate(destination: Destination) {
-        when (destination) {
+    private fun navigate(event: Event<Destination>) {
+        when (val destination = event.getContentIfNotHandled()) {
             Destination.Home -> navController.navigate(R.id.navHomeFragment)
             is Destination.AddPlayers -> navController.navigate(
                 R.id.navAddPlayers,

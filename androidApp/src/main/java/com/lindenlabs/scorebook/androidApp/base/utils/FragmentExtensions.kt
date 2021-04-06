@@ -20,11 +20,3 @@ fun Fragment.navigate(destination: Destination) {
     val sharedViewModel by activityViewModels<SharedNavigationViewModel>()
     sharedViewModel.navigateTo(destination)
 }
-
-//fun <T> LiveData<T>.toSingleEvent(): LiveData<T> {
-//    val result = LiveEvent<T>()
-//    result.addSource(this) {
-//        result.value = it
-//    }
-//    return result
-//}
