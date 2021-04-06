@@ -2,6 +2,7 @@ package com.lindenlabs.scorebook.shared.common.raw
 
 import com.lindenlabs.scorebook.shared.common.data.Date
 import com.lindenlabs.scorebook.shared.common.data.Id
+import comlindenlabsscorebooksharedcommon.Games
 import kotlin.collections.List
 
 typealias StalematePair = Pair<Player, Player>
@@ -36,7 +37,11 @@ data class Game(
         val winners = players.getWinners(strategy)
         return when (winners.size) {
             1 -> GameOutcome.WinnerAnnounced(winners.first())
-            else -> GameOutcome.DrawAnnounced(StalematePair(winners.first(), winners.last()))
+            else -> if(winners.size > 1) {
+                GameOutcome.DrawAnnounced(StalematePair(winners.first(), winners.last()))
+            } else {
+                GameOutcome.DrawAnnounced(StalematePair(Player(name = ""), Player(name=""))) //todo - not valid state
+            }
         }
     }
 
@@ -57,6 +62,15 @@ data class Game(
             }
         }
     }
+
+    fun toDao(): Games = Games(
+        id = this.id,
+        name = this.name,
+        dateCreated = this.dateCreated,
+        strategy = this.strategy.name,
+        playerIds = (this.players.map { it.id }).toSpaceSeparatedText(),
+        isClosed = this.isClosed
+    )
 }
 
 sealed class GameOutcome {

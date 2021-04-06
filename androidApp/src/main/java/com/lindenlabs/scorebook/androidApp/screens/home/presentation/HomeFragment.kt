@@ -46,6 +46,11 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         viewModel.viewEvent.observe(this as LifecycleOwner, this::processViewEvent)
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.handleInteraction(HomeInteraction.Refresh)
+    }
+
     private fun View.homeScreenBinding() =
         IncludeHomeScreenBinding.bind(findViewById(R.id.homeScrenRoot))
 

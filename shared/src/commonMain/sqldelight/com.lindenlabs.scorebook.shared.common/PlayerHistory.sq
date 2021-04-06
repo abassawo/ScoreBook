@@ -3,7 +3,7 @@ CREATE TABLE `players` (
     `scoreTotal` INTEGER NOT NULL,
     `rounds` TEXT NOT NULL,
     `isPlayerTurn` INTEGER AS Boolean DEFAULT 0,
-    `id` TEXT NOT NULL,
+    `id` TEXT UNIQUE NOT NULL,
     `dateCreated` INTEGER NOT NULL, PRIMARY KEY(`id`)
  );
 

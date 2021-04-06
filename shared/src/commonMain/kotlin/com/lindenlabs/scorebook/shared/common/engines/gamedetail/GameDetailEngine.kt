@@ -19,7 +19,8 @@ class GameDetailEngine(private val coroutineScope: CoroutineScope, val appReposi
 
     fun launch(gameId: String) =
         coroutineScope.launch {
-            launchGame(appRepository.getGame(gameId))
+            val game = requireNotNull(appRepository.getGame(gameId))
+            launchGame(game)
         }
 
     fun launchGame(game: Game) {
@@ -27,7 +28,7 @@ class GameDetailEngine(private val coroutineScope: CoroutineScope, val appReposi
         when {
             isFirstRun && game.playerIds.isNullOrEmpty() -> {
                 isFirstRun = false
-//                viewEvent.value = GameDetailViewEvent.AddPlayersClicked(game) // Bypass home screen, just add
+                viewEvent.value = GameDetailViewEvent.AddPlayersClicked(game) // Bypass home screen, just add
             }
             game.playerIds.isNullOrEmpty() -> viewState.value = NotStarted(game)
             game.playerIds.isNotEmpty() -> refreshScore()
@@ -35,6 +36,10 @@ class GameDetailEngine(private val coroutineScope: CoroutineScope, val appReposi
     }
 
     fun refreshScore() {
+        coroutineScope.launch {
+            appRepository.syncGameWithPlayers(game, game.playerIds)
+        }
+
         val playerEntities = mapper.map(game.players) { interaction ->
             handleInteraction(interaction)
         }

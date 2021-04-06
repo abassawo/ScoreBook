@@ -35,7 +35,7 @@ kotlin {
                 implementation("dev.icerock.moko:parcelize:0.6.1")
                 implementation("com.squareup.sqldelight:runtime:1.4.4")
 //                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
-//                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.14.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.14.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
                 api("org.jetbrains.kotlin:kotlin-stdlib-common")
             }

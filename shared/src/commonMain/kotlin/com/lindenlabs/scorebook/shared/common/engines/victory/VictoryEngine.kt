@@ -12,7 +12,7 @@ class VictoryEngine(private val coroutineScope: CoroutineScope, val appRepositor
 
     fun launch(gameId: String) {
         coroutineScope.launch {
-            val game = appRepository.getGame(gameId)
+            val game = requireNotNull(appRepository.getGame(gameId))
             viewState.value = VictoryState(victoryText = game.end())
             appRepository.updateGame(game)
         }

@@ -17,8 +17,8 @@ class UpdatePointsEngine(private val coroutineScope: CoroutineScope , val appRep
 
     fun launch(gameId: String, playerId: String) {
         coroutineScope.launch {
-            game = appRepository.getGame(gameId)
-            player = appRepository.getPlayer(playerId)
+            game = requireNotNull(appRepository.getGame(gameId))
+            player = appRepository.getPlayer(playerId)!!
         }
     }
 

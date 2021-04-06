@@ -16,7 +16,7 @@ abstract class BaseFragment(layoutId: Int) : Fragment(layoutId), BackPressHandle
     }
 
     override fun handleBackPress() {
-        requireActivity().onBackPressed()
+        activity?.onBackPressed()
     }
 }
 

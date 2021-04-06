@@ -68,6 +68,7 @@ class AddPlayersEngine(private val coroutineScope: CoroutineScope, private val a
         else {
             val player = Player(playerName)
             currentGame.players += player
+            currentGame.playerIds += player.id
             coroutineScope.launch {
                 appRepository.addPlayer(player)
             }
@@ -77,7 +78,7 @@ class AddPlayersEngine(private val coroutineScope: CoroutineScope, private val a
     }
 
     private fun savePlayerDataAndExit() {
-        if (currentGame.playerIds.isEmpty()) {
+        if (currentGame.players.isEmpty()) {
             viewState.value = TextEntryError
         } else {
             // navigate to Game Detail screen

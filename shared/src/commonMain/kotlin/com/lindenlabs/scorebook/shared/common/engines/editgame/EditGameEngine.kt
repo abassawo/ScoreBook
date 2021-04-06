@@ -15,7 +15,7 @@ class EditGameEngine(val coroutineScope: CoroutineScope, val appRepository: AppR
 
     fun launch(gameId: String) {
         coroutineScope.launch {
-            game = appRepository.getGame(gameId)
+            game = requireNotNull(appRepository.getGame(gameId))
             viewState.value = EditGameViewState.Initial(game)
         }
     }
