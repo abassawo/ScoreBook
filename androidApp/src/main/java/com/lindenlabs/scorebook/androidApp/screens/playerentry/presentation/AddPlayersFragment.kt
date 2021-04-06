@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.lindenlabs.scorebook.androidApp.R
@@ -29,9 +31,14 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class AddPlayersFragment : DialogFragment() {
+class AddPlayersFragment : Fragment() {
     private val binding: AddPlayersFragmentBinding by lazy { viewBinding() }
-    private val viewModel: AddPlayersViewModel by lazy { viewModelFactory.makeViewModel(this, AddPlayersViewModel::class.java) }
+    private val viewModel: AddPlayersViewModel by lazy {
+        viewModelFactory.makeViewModel(
+            this,
+            AddPlayersViewModel::class.java
+        )
+    }
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -53,18 +60,14 @@ class AddPlayersFragment : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.add_players_fragment, container ,false)
+    ): View = inflater.inflate(R.layout.add_players_fragment, container, false)
 
     @OptIn(InternalCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.run {
             viewState.observe(viewLifecycleOwner, ::processViewState)
-            viewModelScope.launch {
-                viewEvent.collect {
-                    processViewEvent(it)
-                }
-            }
+            viewEvent.observe(viewLifecycleOwner, ::processViewEvent)
         }
         binding.updateUI()
     }
@@ -91,6 +94,7 @@ class AddPlayersFragment : DialogFragment() {
             );
             binding.enterNewPlayerEditText.setAdapter(adapter)
         }
+        None -> Unit
     }
 
     private fun processViewEvent(viewEvent: AddPlayersViewEvent) {
@@ -98,12 +102,13 @@ class AddPlayersFragment : DialogFragment() {
         when (viewEvent) {
             is AddPlayersViewEvent.NavigateToGameDetail -> {
                 val gameId = viewEvent.game.id
-                findNavController().navigate(R.id.navActiveGame, gameId).also { hideKeyboard() }
+                findNavController().navigate(R.id.navActiveGame, gameId)
+//                    .also { hideKeyboard() }
             }
             is AddPlayersViewEvent.NavigateHome -> {
 //                findNavController().navigate(AddPlayersFragmentDirections.navigateBackHome())
 //                    .also { hideKeyboard()
-                    }
+            }
             AddPlayersViewEvent.None -> Unit
         }
     }

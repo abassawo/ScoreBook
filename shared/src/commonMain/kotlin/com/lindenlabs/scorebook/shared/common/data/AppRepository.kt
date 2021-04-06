@@ -24,9 +24,7 @@ class AppRepository(
             }
         }
 
-    suspend fun updateGame(game: Game) = withContext(dispatcher) {
-        gameDataSource.update(game)
-    }
+    suspend fun updateGame(game: Game) = storeGame(game)
 
     suspend fun deleteGame(game: Game) = withContext(dispatcher) {
         gameDataSource.delete(game)

@@ -4,6 +4,7 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("com.squareup.sqldelight")
+    kotlin("plugin.serialization") version "1.4.30"
 }
 
 kotlin {
@@ -33,7 +34,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation("com.squareup.sqldelight:runtime:1.4.4")
-//                implementation("com.squareup.sqldelight/:native-driver:1.4.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
                 api("org.jetbrains.kotlin:kotlin-stdlib-common")
             }
@@ -46,6 +47,7 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
+                implementation("com.google.code.gson:gson:2.8.6")
                 implementation("com.squareup.sqldelight:android-driver:1.4.4")
                 implementation("com.google.android.material:material:1.2.1")
             }
@@ -58,6 +60,7 @@ kotlin {
         }
         val iosMain by getting {
             dependencies {
+                implementation("com.google.code.gson:gson:2.8.6")
                 implementation("com.squareup.sqldelight:native-driver:1.4.4")
             }
         }
@@ -79,7 +82,8 @@ val packForXcode by tasks.creating(Sync::class) {
     val mode = System.getenv("CONFIGURATION") ?: "DEBUG"
     val sdkName = System.getenv("SDK_NAME") ?: "iphonesimulator"
     val targetName = "ios" + if (sdkName.startsWith("iphoneos")) "Arm64" else "X64"
-    val framework = kotlin.targets.getByName<KotlinNativeTarget>(targetName).binaries.getFramework(mode)
+    val framework =
+        kotlin.targets.getByName<KotlinNativeTarget>(targetName).binaries.getFramework(mode)
     inputs.property("mode", mode)
     dependsOn(framework.linkTask)
     val targetDir = File(buildDir, "xcode-frameworks")

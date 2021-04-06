@@ -2,6 +2,7 @@ package com.lindenlabs.scorebook.shared.common.engines.addplayers
 
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewState.*
+import com.lindenlabs.scorebook.shared.common.engines.postValue
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.Player
 import com.lindenlabs.scorebook.shared.common.raw.toText
@@ -12,7 +13,7 @@ import kotlinx.coroutines.withContext
 
 class AddPlayersEngine(private val coroutineScope: CoroutineScope, private val appRepository: AppRepository) {
     private lateinit var currentGame: Game
-    val viewState: MutableStateFlow<AddPlayersViewState> = MutableStateFlow(TypingState)
+    val viewState: MutableStateFlow<AddPlayersViewState> = MutableStateFlow(AddPlayersViewState.None)
     val viewEvent: MutableStateFlow<AddPlayersViewEvent> = MutableStateFlow(AddPlayersViewEvent.None)
 
     init {
@@ -81,13 +82,15 @@ class AddPlayersEngine(private val coroutineScope: CoroutineScope, private val a
             viewState.value = TextEntryError
         } else {
             // navigate to Game Detail screen
+
             coroutineScope.launch {
                 withContext(appRepository.dispatcher) {
                     appRepository.updateGame(currentGame)
+                    viewEvent.value = AddPlayersViewEvent.NavigateToGameDetail(currentGame)
                 }
             }
 
-            viewEvent.value = AddPlayersViewEvent.NavigateToGameDetail(currentGame)
+
         }
     }
 }
