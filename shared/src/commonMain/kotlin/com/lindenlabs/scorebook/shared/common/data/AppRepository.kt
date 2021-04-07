@@ -1,6 +1,7 @@
 package com.lindenlabs.scorebook.shared.common.data
 
 import com.lindenlabs.scorebook.shared.common.DefaultDispatcherProvider
+import com.lindenlabs.scorebook.shared.common.Json
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.GameStrategy
 import com.lindenlabs.scorebook.shared.common.raw.Player
@@ -52,11 +53,7 @@ class AppRepository(
     }
 
     suspend fun storeGame(game: Game) = withContext(dispatcher) {
-        val playerText = buildString {
-            game.players.forEach {
-                append(it.id + " ")
-            }
-        }
+        val playerText = PlayerListConverter.playerToString(game.players)
 
         gameHistoryQueries.insertOrReplace(
             game.id,

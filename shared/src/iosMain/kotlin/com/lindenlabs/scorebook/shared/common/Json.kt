@@ -2,7 +2,7 @@ package com.lindenlabs.scorebook.shared.common
 
 import com.lindenlabs.scorebook.shared.common.raw.Player
 
-actual class Json actual constructor(action: () -> Unit){
+actual class Json {
     actual fun playerToString(players: List<Player>): String {
         return ""
     }
