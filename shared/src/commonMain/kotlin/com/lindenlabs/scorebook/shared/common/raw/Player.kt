@@ -1,9 +1,11 @@
 package com.lindenlabs.scorebook.shared.common.raw
 
+import com.lindenlabs.scorebook.shared.common.Serializable
 import com.lindenlabs.scorebook.shared.common.data.Date
 import com.lindenlabs.scorebook.shared.common.data.Id
 import kotlin.collections.List
 
+@Serializable
 data class Player(
     val name: String,
     var scoreTotal: Int = 0,

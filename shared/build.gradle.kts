@@ -32,11 +32,10 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("dev.icerock.moko:parcelize:0.6.1")
-                implementation("com.squareup.sqldelight:runtime:1.4.4")
-//                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.14.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
+                implementation("dev.icerock.moko:parcelize:0.6.1")
+                implementation("com.squareup.sqldelight:runtime:1.4.4")
                 api("org.jetbrains.kotlin:kotlin-stdlib-common")
             }
         }
@@ -48,7 +47,7 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-//                implementation("com.google.code.gson:gson:2.8.6")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3")
                 implementation("com.squareup.sqldelight:android-driver:1.4.4")
                 implementation("com.google.android.material:material:1.2.1")
             }
@@ -61,15 +60,14 @@ kotlin {
         }
         val iosMain by getting {
             dependencies {
-//                implementation("com.google.code.gson:gson:2.8.6")
                 implementation("com.squareup.sqldelight:native-driver:1.4.4")
             }
         }
         val iosTest by getting
     }
     dependencies {
-//        commonMainApi("com.google.code.gson:gson:2.8.6")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3")
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.14.0")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
 //        implementation("io.ktor:ktor-client-andro id:1.2.6")
 //        implementation("io.ktor:ktor-client-json-jvm:1.2.6")
 //        implementation("io.ktor:ktor-client-serialization-vm:1.2.6")
