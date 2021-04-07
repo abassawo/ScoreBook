@@ -3,7 +3,7 @@ package com.lindenlabs.scorebook.shared.common
 import com.lindenlabs.scorebook.shared.common.raw.Player
 
 // Common Code
-@UseExperimental(ExperimentalMultiplatform::class)
+@OptIn(ExperimentalMultiplatform::class)
 @OptionalExpectation
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.BINARY)

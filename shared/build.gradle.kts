@@ -38,7 +38,7 @@ kotlin {
 //                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.14.0")
 //                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:0.14.0")
 //                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
 //                implementation("dev.icerock.moko:parcelize:0.6.1")
                 implementation("com.squareup.sqldelight:runtime:1.4.4")
 //                api("org.jetbrains.kotlin:kotlin-stdlib-common")
@@ -52,15 +52,15 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
                 implementation("com.squareup.sqldelight:android-driver:1.4.4")
-                implementation("com.google.android.material:material:1.2.1")
+                implementation("com.google.android.material:material:1.3.0")
             }
         }
         val androidTest by getting {
             dependencies {
                 implementation(kotlin("test-junit"))
-                implementation("junit:junit:4.13")
+                implementation("junit:junit:4.13.2")
             }
         }
         val iosMain by getting {
@@ -73,7 +73,7 @@ kotlin {
     dependencies {
 //        implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.14.0")
 //        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
-        implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0-1.4.0-rc-95")
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC")
         implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-common")
 //        implementation("io.ktor:ktor-client-andro id:1.2.6")

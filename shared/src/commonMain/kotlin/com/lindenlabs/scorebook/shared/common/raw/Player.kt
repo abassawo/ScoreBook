@@ -1,6 +1,5 @@
 package com.lindenlabs.scorebook.shared.common.raw
 
-import com.lindenlabs.scorebook.shared.common.Json
 import com.lindenlabs.scorebook.shared.common.Serializable
 import com.lindenlabs.scorebook.shared.common.data.Date
 import com.lindenlabs.scorebook.shared.common.data.Id
