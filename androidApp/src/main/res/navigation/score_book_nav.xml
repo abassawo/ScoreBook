@@ -17,9 +17,10 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+                app:argType="string" />
 
         </action>
+
         <action
             android:id="@+id/navigateToScoreGameScreen"
             app:destination="@id/navActiveGame"
@@ -27,7 +28,7 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+                app:argType="string" />
 
         </action>
 
@@ -40,7 +41,7 @@
 
         <argument
             android:name="gameArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+            app:argType="string" />
 
         <action
             android:id="@+id/navigateToScoreGameScreen"
@@ -48,7 +49,7 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+                app:argType="string" />
 
         </action>
 
@@ -64,7 +65,7 @@
 
         <argument
             android:name="gameArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+            app:argType="string" />
 
         <action
             android:id="@+id/navigateBackToGame"
@@ -72,7 +73,7 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+                app:argType="string" />
 
         </action>
 
@@ -87,7 +88,7 @@
 
         <argument
             android:name="gameArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+            app:argType="string" />
 
         <action
             android:id="@+id/navigateToAddPlayersScreen"
@@ -95,7 +96,7 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+                app:argType="string" />
 
         </action>
 
@@ -106,10 +107,9 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+                app:argType="string" />
 
         </action>
-
 
 
         <action
@@ -118,22 +118,22 @@
 
             <argument
                 android:name="gameArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+                app:argType="string" />
 
             <argument
                 android:name="playerArg"
-                app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Player" />
+                app:argType="string" />
 
         </action>
 
         <action
             android:id="@+id/navigateToVictoryScreen"
-            app:destination="@+id/navVictoryFragment" />
+            app:destination="@id/navVictoryFragment" />
 
     </fragment>
 
-<!--    Dialog is unreachable by graph due to listener argument, but is represented for
-        documentation of all possible destinations and for compile-safe args-->
+    <!--    Dialog is unreachable by graph due to listener argument, but is represented for
+            documentation of all possible destinations and for compile-safe args-->
 
     <dialog
         android:id="@+id/navUpdatePoints"
@@ -142,11 +142,11 @@
 
         <argument
             android:name="gameArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+            app:argType="string" />
 
         <argument
             android:name="playerArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Player" />
+            app:argType="string" />
 
     </dialog>
 
@@ -157,7 +157,7 @@
 
         <argument
             android:name="gameArg"
-            app:argType="com.lindenlabs.scorebook.androidApp.base.data.raw.Game" />
+            app:argType="string" />
 
     </fragment>
 

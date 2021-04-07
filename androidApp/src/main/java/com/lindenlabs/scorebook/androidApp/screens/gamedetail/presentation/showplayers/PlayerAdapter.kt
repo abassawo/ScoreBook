@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lindenlabs.scorebook.androidApp.databinding.PlayerRowItemBinding
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.PlayerDataEntity
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.entities.GameDetailInteraction
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailInteraction
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.PlayerDataEntity
 
 class PlayerAdapter : RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder>() {
     private val playerData: MutableList<PlayerDataEntity> = mutableListOf()

@@ -1,91 +1,93 @@
 package com.lindenlabs.scorebook.androidApp.di
 
-import androidx.navigation.NavArgs
-import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
 import com.lindenlabs.scorebook.androidApp.di.scope.FragmentScope
-import com.lindenlabs.scorebook.androidApp.screens.editgame.EditGameFragmentArgs
-import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameDetailFragmentArgs
-import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersFragmentArgs
-import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragmentArgs
-import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryFragmentArgs
+import com.lindenlabs.scorebook.shared.common.data.AppRepository
 import dagger.Module
 import dagger.Provides
+import javax.inject.Named
 
 @Module
 class HomeModule {
     @Provides
     @FragmentScope
-    fun provideViewModelFactory(appRepository: AppRepository): ViewModelFactory =
-        ViewModelFactory(appRepository, object : NavArgs {})
+    fun provideViewModelFactory(gameId: String, appRepository: AppRepository): ViewModelFactory =
+        ViewModelFactory(appRepository, gameId)
+}
+
+@Module
+class AddPlayersArgsModule(private val gameId: String, val appRepository: AppRepository) {
+
+    @Provides
+    fun provideArg(): String = gameId
+
+    @Provides
+    @FragmentScope
+    fun provideViewModelFactory(gameId: String): ViewModelFactory =
+        ViewModelFactory(appRepository, gameId)
 }
 
 
 @Module
-class AddPlayersArgsModule(private val addPlayerArgs: AddPlayersFragmentArgs) {
+class UpdatePointsModule(val appRepository: AppRepository, val gameId: String, val playerId: String) {
 
     @Provides
     @FragmentScope
-    fun provideArg(): NavArgs = addPlayerArgs
+    @Named("gameId")
+    fun provideGameId(): String = gameId
 
     @Provides
     @FragmentScope
-    fun provideViewModelFactory(appRepository: AppRepository): ViewModelFactory =
-        ViewModelFactory(appRepository, addPlayerArgs)
+    @Named("playerId")
+    fun providePlayerId(): String = playerId
+
+    @Provides
+    @FragmentScope
+    fun provideViewModelFactory(
+        @Named("gameId") gameId: String,
+        @Named("playerId") playerId: String
+    ): ViewModelFactory =
+        ViewModelFactory(appRepository = appRepository , gameId, playerId)
 }
 
 
 @Module
-class UpdatePointsModule(private val updatePointsArgs: UpdatePointsDialogFragmentArgs) {
+class GameScoreModule(val gameId: String, val appRepository: AppRepository) {
 
     @Provides
     @FragmentScope
-    fun provideArg(): NavArgs= updatePointsArgs
+    fun provideArg(): String = gameId
 
     @Provides
     @FragmentScope
-    fun provideViewModelFactory(appRepository: AppRepository): ViewModelFactory =
-        ViewModelFactory(appRepository, updatePointsArgs)
-}
-
-
-@Module
-class GameScoreModule(private val gameDetailFragmentArgs: GameDetailFragmentArgs) {
-
-    @Provides
-    @FragmentScope
-    fun provideArg(): NavArgs = gameDetailFragmentArgs
-
-    @Provides
-    @FragmentScope
-    fun provideViewModelFactory(appRepository: AppRepository): ViewModelFactory =
-        ViewModelFactory(appRepository, gameDetailFragmentArgs)
+    fun provideViewModelFactory(gameId: String): ViewModelFactory =
+        ViewModelFactory(appRepository, gameId)
 }
 
 @Module
-class EditGameModule(private val editGameFragmentArgs: EditGameFragmentArgs) {
+class EditGameModule( val appRepository: AppRepository, val gameId: String) {
 
     @Provides
     @FragmentScope
-    fun provideArg(): NavArgs = editGameFragmentArgs
+    fun provideArg(): String = gameId
 
     @Provides
     @FragmentScope
-    fun provideViewModelFactory(appRepository: AppRepository): ViewModelFactory =
-        ViewModelFactory(appRepository, editGameFragmentArgs)
+    fun provideViewModelFactory(gameId: String): ViewModelFactory =
+        ViewModelFactory(appRepository, gameId)
 
 }
 
 @Module
-class VictoryModule(private val victoryFragmentArgs: VictoryFragmentArgs) {
+class VictoryModule( val appRepository: AppRepository, private val gameId: String) {
 
     @Provides
     @FragmentScope
-    fun provideArg(): NavArgs = victoryFragmentArgs
+    fun provideArg(): String = gameId
 
     @Provides
     @FragmentScope
-    fun provideViewModelFactory(appRepository: AppRepository): ViewModelFactory =
-        ViewModelFactory(appRepository, victoryFragmentArgs)
+    fun provideViewModelFactory(gameId: String): ViewModelFactory =
+        ViewModelFactory(appRepository, gameId)
 }
 
 

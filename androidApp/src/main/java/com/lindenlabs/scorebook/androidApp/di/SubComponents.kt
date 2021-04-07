@@ -12,7 +12,7 @@ import dagger.Subcomponent
 interface SubComponents {
 
     @FragmentScope
-    @Subcomponent(modules=[HomeModule::class])
+    @Subcomponent
     interface HomeFragmentComponent {
         fun inject(fragment: HomeFragment)
     }

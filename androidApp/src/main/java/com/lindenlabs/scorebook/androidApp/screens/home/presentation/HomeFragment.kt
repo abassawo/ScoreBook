@@ -1,75 +1,54 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearSnapHelper
 import com.google.android.material.snackbar.Snackbar
-import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
-import com.lindenlabs.scorebook.androidApp.base.BaseFragment
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
+import com.lindenlabs.scorebook.androidApp.base.utils.navigate
+import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.androidApp.databinding.HomeFragmentBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
-import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeInteraction
-import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeInteraction.GameDetailsEntered
-import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeInteraction.UndoDelete
-import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent
-import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewState
+import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv.GameAdapter
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.welcome.WelcomeDialogFragment
 import com.lindenlabs.scorebook.androidApp.views.rv.SwipeToDismissCallback
+import com.lindenlabs.scorebook.shared.common.engines.home.HomeInteraction
+import com.lindenlabs.scorebook.shared.common.engines.home.HomeViewEvent
+import com.lindenlabs.scorebook.shared.common.engines.home.HomeViewState
+import com.lindenlabs.scorebook.shared.common.raw.Game
 import nl.dionsegijn.konfetti.emitters.StreamEmitter
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
-import javax.inject.Inject
 
 class HomeFragment : Fragment(R.layout.home_fragment) {
-    private val viewModel: HomeViewModel by lazy {
-        viewModelFactory.makeViewModel(
-            this,
-            HomeViewModel::class.java
-        )
-    }
+    private val viewModel: HomeViewModel by viewModels()
     private lateinit var binding: HomeFragmentBinding
     private lateinit var gameBinding: IncludeHomeScreenBinding
     private val gameAdapter = GameAdapter()
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        appComponent().value.homeFragmentComponent().inject(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
-//        (requireActivity() as MainActivity).setNavigationIcon(R.drawable.ic_menu) {
-//            requireActivity().onBackPressed()
-//        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = view.viewBinding()
         gameBinding = view.homeScreenBinding()
         binding.updateUi()
+        viewModel.viewEvent.removeObservers(this)
         viewModel.viewState.observe(this as LifecycleOwner, this::showGames)
         viewModel.viewEvent.observe(this as LifecycleOwner, this::processViewEvent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.handleInteraction(HomeInteraction.Refresh)
     }
 
     private fun View.homeScreenBinding() =
@@ -80,17 +59,22 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         return HomeFragmentBinding.bind(rootView)
     }
 
-    private fun processViewEvent(event: HomeViewEvent) =
-        when (event) {
-            is HomeViewEvent.AlertNoTextEntered -> showError(event)
-            is HomeViewEvent.ShowAddPlayersScreen -> findNavController().showAddPlayersScreen(event.game)
+    private fun processViewEvent(event: Event<HomeViewEvent>) {
+        when (val action = event.getContentIfNotHandled()) {
+            is HomeViewEvent.AlertNoTextEntered -> showError(action)
+            is HomeViewEvent.ShowAddPlayersScreen -> showAddPlayersScreen(action.game)
                 .also { hideKeyboard() }
-            is HomeViewEvent.ShowGameDetail -> findNavController().showActiveGame(event.game)
+            is HomeViewEvent.ShowGameDetail -> navigate(Destination.GameDetail(action.game))
                 .also { hideKeyboard() }
-            is HomeViewEvent.ShowUndoDeletePrompt -> showUndoPrompt(event)
+            is HomeViewEvent.ShowUndoDeletePrompt -> showUndoPrompt(action)
             HomeViewEvent.ShowWelcomeScreen -> showWelcomeConfetti()
             HomeViewEvent.DismissWelcomeMessage -> binding.viewKonfetti.stopGracefully()
+            HomeViewEvent.None -> Unit
         }
+    }
+
+    private fun showAddPlayersScreen(game: Game) =
+        navigate(Destination.AddPlayers(game))
 
     private fun showUndoPrompt(event: HomeViewEvent.ShowUndoDeletePrompt) =
         Snackbar.make(
@@ -99,7 +83,12 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             Snackbar.LENGTH_SHORT
         )
             .setAction(R.string.undo) {
-                viewModel.handleInteraction(UndoDelete(event.game, event.restoreIndex))
+                viewModel.handleInteraction(
+                    HomeInteraction.UndoDelete(
+                        event.game,
+                        event.restoreIndex
+                    )
+                )
             }.show()
 
     private fun hideKeyboard() {
@@ -107,13 +96,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
-
-    private fun NavController.showAddPlayersScreen(game: Game) =
-        navigate(HomeFragmentDirections.navigateToAddPlayersScreen(game))
-
-    private fun NavController.showActiveGame(game: Game) =
-        navigate(HomeFragmentDirections.navigateToScoreGameScreen(game))
-
 
     private fun showError(event: HomeViewEvent.AlertNoTextEntered) {
         val errorPair = event.errorText to ContextCompat.getDrawable(
@@ -141,7 +123,9 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                 )
                 .streamFor(particlesPerSecond = 30, emittingTime = StreamEmitter.INDEFINITE)
         }
-        val dialog = WelcomeDialogFragment { viewModel.handleInteraction(HomeInteraction.DismissWelcome) }
+        val dialog = WelcomeDialogFragment {
+            viewModel.handleInteraction(HomeInteraction.DismissWelcome)
+        }
         dialog.show(requireFragmentManager(), HomeFragment::class.java.simpleName)
     }
 
@@ -166,7 +150,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         newGameButton.setOnClickListener {
             val enteredText = enterNewGameEditText.text.toString()
             viewModel.handleInteraction(
-                GameDetailsEntered(
+                HomeInteraction.GameDetailsEntered(
                     enteredText,
                     gameRuleSwitchView.isChecked
                 )

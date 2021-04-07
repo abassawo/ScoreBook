@@ -3,27 +3,28 @@ package com.lindenlabs.scorebook.androidApp.screens.editgame
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseFragment
-import com.lindenlabs.scorebook.androidApp.base.data.raw.GameStrategy
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
+import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
+import com.lindenlabs.scorebook.androidApp.base.utils.navigate
 import com.lindenlabs.scorebook.androidApp.databinding.EditGameFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.EditGameModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.screens.editgame.entities.EditGameInteraction
-import com.lindenlabs.scorebook.androidApp.screens.editgame.entities.EditGameViewEvent
-import com.lindenlabs.scorebook.androidApp.screens.editgame.entities.EditGameViewState
+import com.lindenlabs.scorebook.androidApp.navigation.Destination
+import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameInteraction
+import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameViewEvent
+import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameViewState
+import com.lindenlabs.scorebook.shared.common.raw.GameStrategy
 import javax.inject.Inject
 
 class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    private val args: EditGameFragmentArgs by navArgs()
+
     private val viewModel: EditGameViewModel by lazy {
         viewModelFactory.makeViewModel(this, EditGameViewModel::class.java)
     }
@@ -34,7 +35,7 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
         setHasOptionsMenu(true)
         appComponent().value
             .editGameComponentBuilder()
-            .plus(EditGameModule(args))
+            .plus(EditGameModule(appRepository(), requireArguments()["gameArg"] as String))
             .build()
             .inject(this)
     }
@@ -52,11 +53,14 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
                 binding.editGameName.setText(viewState.game.name)
                 binding.gameRuleSwitchView.isChecked = viewState.game.strategy == GameStrategy.LowestScoreWins
             }
+            EditGameViewState.Loading -> Unit
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val gameId = requireArguments()["gameArg"] as String
+        viewModel.launch(gameId)
         viewModel.viewState.observe(this as LifecycleOwner, {
             handleViewState(it)
         })
@@ -93,8 +97,9 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
             }
             is EditGameViewEvent.ReturnToGameDetail ->{
 //                (requireActivity() as MainActivity).navigateFirstTabWithClearStack()
-                findNavController().navigate(EditGameFragmentDirections.navigateBackToGame(viewEvent.game))
+                navigate(Destination.GameDetail(viewEvent.game))
             }
+            EditGameViewEvent.None -> Unit
         }
     }
 }

@@ -1,29 +1,24 @@
 package com.lindenlabs.scorebook.androidApp.screens.victory.presentation
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.lindenlabs.scorebook.androidApp.base.domain.AppRepository
-import com.lindenlabs.scorebook.androidApp.screens.victory.entities.VictoryInteraction
-import com.lindenlabs.scorebook.androidApp.screens.victory.entities.VictoryState
-import com.lindenlabs.scorebook.androidApp.screens.victory.entities.VictoryViewEvent
-import kotlinx.coroutines.launch
+import androidx.lifecycle.*
+import com.lindenlabs.scorebook.shared.common.data.AppRepository
+import com.lindenlabs.scorebook.shared.common.engines.victory.VictoryEngine
+import com.lindenlabs.scorebook.shared.common.engines.victory.VictoryInteraction
+import com.lindenlabs.scorebook.shared.common.engines.victory.VictoryState
+import com.lindenlabs.scorebook.shared.common.engines.victory.VictoryViewEvent
 
-class VictoryViewModel(val appRepository: AppRepository, args: VictoryFragmentArgs) : ViewModel() {
-    val viewState: MutableLiveData<VictoryState> = MutableLiveData()
-    val viewEvent: MutableLiveData<VictoryViewEvent> = MutableLiveData()
-
+class VictoryViewModel(val gameId: String, appRepository: AppRepository) : ViewModel() {
+    private val victoryEngine: VictoryEngine = VictoryEngine(viewModelScope, appRepository)
+    val viewState: LiveData<VictoryState> =
+        victoryEngine.viewState.asLiveData(viewModelScope.coroutineContext)
+    val viewEvent: LiveData<VictoryViewEvent> =
+        victoryEngine.viewEvent.asLiveData(viewModelScope.coroutineContext)
 
     init {
-        viewState.postValue(VictoryState(victoryText = args.gameArg.end()))
-        viewModelScope.launch {
-            appRepository.updateGame(args.gameArg)
-        }
+        victoryEngine.launch(gameId)
     }
 
-    fun handleInteraction(interaction: VictoryInteraction) {
-        when (interaction) {
-            VictoryInteraction.GoHome -> viewEvent.postValue(VictoryViewEvent.GoHome)
-        }
-    }
+    fun handleInteraction(interaction: VictoryInteraction) =
+        victoryEngine.handleInteraction(interaction)
+
 }
