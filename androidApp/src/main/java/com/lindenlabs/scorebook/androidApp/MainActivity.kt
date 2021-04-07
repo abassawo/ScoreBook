@@ -81,7 +81,6 @@ class MainActivity : AppCompatActivity() {
         navHost?.let { navFragment ->
             navFragment.childFragmentManager.primaryNavigationFragment?.let { fragment ->
                 when (fragment) {
-                    is AddPlayersFragment,
                     is GameDetailFragment,
                     is VictoryFragment -> findNavController(R.id.my_nav_host_fragment).navigate(R.id.navHomeFragment)
                     is HomeFragment -> super.onBackPressed()
