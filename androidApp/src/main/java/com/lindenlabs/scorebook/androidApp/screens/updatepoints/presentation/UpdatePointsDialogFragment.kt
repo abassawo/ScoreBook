@@ -13,6 +13,7 @@ import com.lindenlabs.scorebook.androidApp.databinding.UpdatePointsFragmentBindi
 import com.lindenlabs.scorebook.androidApp.di.UpdatePointsModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.views.BaseDialogFragment
+import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsInteraction
 import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsViewEvent
 import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsViewState
@@ -79,11 +80,11 @@ class UpdatePointsDialogFragment(val refreshAction: () -> Unit) : BaseDialogFrag
 
     }
 
-    private fun processEvent(viewEvent: UpdatePointsViewEvent) {
-        with(viewEvent) {
+    private fun processEvent(viewEvent: Event<UpdatePointsViewEvent>) {
+        with(viewEvent.getContentIfNotHandled()) {
             when (this) {
                 is UpdatePointsViewEvent.ScoreUpdated -> dismiss()
-                is UpdatePointsViewEvent.AlertNoTextEntered -> binding.playerName.setError("Must add point")
+                is UpdatePointsViewEvent.AlertNoTextEntered -> binding.playerName.error = "Must add point"
                 UpdatePointsViewEvent.Loading -> Unit
             }
         }
