@@ -68,7 +68,6 @@ class AddPlayersEngine(private val coroutineScope: CoroutineScope, private val a
         else {
             val player = Player(playerName)
             currentGame.players += player
-            currentGame.playerIds += player.id
             coroutineScope.launch {
                 appRepository.addPlayer(player)
             }

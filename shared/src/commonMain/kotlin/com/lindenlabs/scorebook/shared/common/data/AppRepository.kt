@@ -28,7 +28,7 @@ class AppRepository(
                     dateCreated = game.dateCreated,
                     isClosed = game.isClosed ?: false,
                     strategy = GameStrategy.valueOf(game.strategy),
-                    playerIds = game.playerIds.split(" ")
+                    players = PlayerListConverter.stringToPlayers(game.players).toMutableList()
                 )
             })
         }

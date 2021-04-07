@@ -1,7 +1,7 @@
 package com.lindenlabs.scorebook.shared.common.engines.gamedetail
 
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
-import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewState.*
+import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewState.Loading
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewState.WithGameData.*
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import kotlinx.coroutines.CoroutineScope
@@ -26,20 +26,16 @@ class GameDetailEngine(private val coroutineScope: CoroutineScope, val appReposi
     fun launchGame(game: Game) {
         this.game = game
         when {
-            isFirstRun && game.playerIds.isNullOrEmpty() -> {
+            isFirstRun && game.players.isNullOrEmpty() -> {
                 isFirstRun = false
                 viewEvent.value = GameDetailViewEvent.AddPlayersClicked(game) // Bypass home screen, just add
             }
-            game.playerIds.isNullOrEmpty() -> viewState.value = NotStarted(game)
-            game.playerIds.isNotEmpty() -> refreshScore()
+            game.players.isNullOrEmpty() -> viewState.value = NotStarted(game)
+            game.players.isNotEmpty() -> refreshScore()
         }
     }
 
     fun refreshScore() {
-        coroutineScope.launch {
-            appRepository.syncGameWithPlayers(game, game.playerIds)
-        }
-
         val playerEntities = mapper.map(game.players) { interaction ->
             handleInteraction(interaction)
         }

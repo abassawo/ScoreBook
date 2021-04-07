@@ -2,6 +2,7 @@ package com.lindenlabs.scorebook.shared.common.raw
 
 import com.lindenlabs.scorebook.shared.common.data.Date
 import com.lindenlabs.scorebook.shared.common.data.Id
+import com.lindenlabs.scorebook.shared.common.data.PlayerListConverter
 import comlindenlabsscorebooksharedcommon.Games
 import kotlin.collections.List
 
@@ -13,9 +14,9 @@ data class Game(
     val dateCreated: Long = Date().getTime(),
     var isClosed: Boolean = false,
     var strategy: GameStrategy = GameStrategy.HighestScoreWins,
-    var playerIds: List<String> = mutableListOf()
-) {
     val players: MutableList<Player> = mutableListOf()
+) {
+
 
     fun start() {
         isClosed = false
@@ -68,7 +69,7 @@ data class Game(
         name = this.name,
         dateCreated = this.dateCreated,
         strategy = this.strategy.name,
-        playerIds = (this.players.map { it.id }).toSpaceSeparatedText(),
+        players = PlayerListConverter.playerToString(this.players),
         isClosed = this.isClosed
     )
 }

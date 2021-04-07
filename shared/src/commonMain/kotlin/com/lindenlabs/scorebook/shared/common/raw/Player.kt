@@ -1,8 +1,8 @@
 package com.lindenlabs.scorebook.shared.common.raw
 
-import com.lindenlabs.scorebook.shared.common.Serializable
 import com.lindenlabs.scorebook.shared.common.data.Date
 import com.lindenlabs.scorebook.shared.common.data.Id
+import kotlinx.serialization.Serializable
 import kotlin.collections.List
 
 @Serializable

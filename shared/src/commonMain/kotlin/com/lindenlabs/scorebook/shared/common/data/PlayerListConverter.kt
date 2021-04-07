@@ -1,13 +1,19 @@
-package com.lindenlabs.scorebook.shared.common
+package com.lindenlabs.scorebook.shared.common.data
 
 import com.lindenlabs.scorebook.shared.common.raw.Player
 
 object PlayerListConverter {
-    fun playerToString(players: List<Player>): String = ""
+    fun playerToString(players: List<Player>): String {
+        Js
+//        val array = org.json.JSONArray()
+//        for(player in players){
+//            array[]
+//        }
+        return ""
+    }
 
     fun stringToPlayers(playerString: String): List<Player> {
-//        Timber.e("Player string $playerString")
-//        val playerListType: Type = object : TypeToken<ArrayList<Player?>?>() {}.type
         return emptyList()
     }
+//    = org.json.JSONObject.decodeFromString(playerString)
 }
