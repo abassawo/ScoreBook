@@ -20,6 +20,7 @@ import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showplayers.PlayerAdapter
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragment
+import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailInteraction
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewEvent
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewEvent.*
@@ -103,22 +104,23 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
         this.toolbar.title = "Games"
     }
 
-    private fun processViewEvent(event: GameDetailViewEvent) =
-        when (event) {
+    private fun processViewEvent(event: Event<GameDetailViewEvent>) {
+        when (val action = event.getContentIfNotHandled()) {
             is GoBackHome -> navigateHome()
-            is AddPlayersClicked -> navigateToAddPlayers(event.game)
-            is EditScoreForPlayer -> navigateToUpdatePlayerScore(event)
-            is EndGame -> endGame(event.game)
+            is AddPlayersClicked -> navigateToAddPlayers(action.game)
+            is EditScoreForPlayer -> navigateToUpdatePlayerScore(action)
+            is EndGame -> endGame(action.game)
             is ShowRestartingGameMessage -> Toast.makeText(
-                requireContext(), "${event.game.name} restarting", Toast.LENGTH_SHORT
+                requireContext(), "${action.game.name} restarting", Toast.LENGTH_SHORT
             ).show()
             is PromptToRestartGame -> showRestartGamePrompt()
             is ConfirmEndGame -> ConfirmEndGameBottomView {
                 viewModel.handleInteraction(GameDetailInteraction.EndGameConfirmed)
             }.show(requireFragmentManager(), GameDetailFragment::class.java.simpleName)
-            is NavigateToEditHome -> launchEditGameScreen(event.game)
-            is None -> {}
+            is NavigateToEditHome -> launchEditGameScreen(action.game)
+            is None -> Unit
         }
+    }
 
     private fun launchEditGameScreen(game: Game) =
         navigate(Destination.EditGame(game))
@@ -139,13 +141,9 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
 
     private fun navigateHome() = (activity as MainActivity).navigateFirstTabWithClearStack()
 
-    private fun navigateToUpdatePlayerScore(event: EditScoreForPlayer) {
-        val refreshAction = { viewModel.handleInteraction(GameDetailInteraction.RefreshScores)}
-        val updatePointsDialog = with(event) {
-            UpdatePointsDialogFragment.newInstance(game, player, refreshAction)
-        }
-        updatePointsDialog.show(requireFragmentManager(), GameDetailFragment::class.java.name)
-    }
+    private fun navigateToUpdatePlayerScore(event: EditScoreForPlayer) =
+        navigate(Destination.UpdatePoints(event.game, event.player))
+
 
     private fun navigateToAddPlayers(game: Game) =
         navigate(Destination.AddPlayers(game))

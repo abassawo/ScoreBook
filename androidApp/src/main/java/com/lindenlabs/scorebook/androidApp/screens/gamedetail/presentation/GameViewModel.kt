@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailEngine
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailInteraction
@@ -15,7 +16,7 @@ class GameViewModel @Inject constructor(val gameId: String, appRepository: AppRe
     private val engine: GameDetailEngine = GameDetailEngine(viewModelScope, appRepository)
     val viewState: LiveData <GameDetailViewState> =
         engine.viewState.asLiveData(viewModelScope.coroutineContext)
-    val viewEvent: LiveData<GameDetailViewEvent> =
+    val viewEvent: LiveData<Event<GameDetailViewEvent>> =
         engine.viewEvent.asLiveData(viewModelScope.coroutineContext)
 
     init {
