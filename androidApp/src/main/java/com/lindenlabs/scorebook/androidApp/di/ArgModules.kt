@@ -1,6 +1,7 @@
 package com.lindenlabs.scorebook.androidApp.di
 
 import com.lindenlabs.scorebook.androidApp.di.scope.FragmentScope
+import com.lindenlabs.scorebook.shared.common.data.AppRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named
@@ -9,12 +10,12 @@ import javax.inject.Named
 class HomeModule {
     @Provides
     @FragmentScope
-    fun provideViewModelFactory(gameId: String): ViewModelFactory =
-        ViewModelFactory(gameId)
+    fun provideViewModelFactory(gameId: String, appRepository: AppRepository): ViewModelFactory =
+        ViewModelFactory(appRepository, gameId)
 }
 
 @Module
-class AddPlayersArgsModule(private val gameId: String) {
+class AddPlayersArgsModule(private val gameId: String, val appRepository: AppRepository) {
 
     @Provides
     fun provideArg(): String = gameId
@@ -22,12 +23,12 @@ class AddPlayersArgsModule(private val gameId: String) {
     @Provides
     @FragmentScope
     fun provideViewModelFactory(gameId: String): ViewModelFactory =
-        ViewModelFactory(gameId)
+        ViewModelFactory(appRepository, gameId)
 }
 
 
 @Module
-class UpdatePointsModule(val gameId: String, val playerId: String) {
+class UpdatePointsModule(val appRepository: AppRepository, val gameId: String, val playerId: String) {
 
     @Provides
     @FragmentScope
@@ -41,13 +42,16 @@ class UpdatePointsModule(val gameId: String, val playerId: String) {
 
     @Provides
     @FragmentScope
-    fun provideViewModelFactory(@Named("gameId") gameId: String, @Named("playerId") playerId: String): ViewModelFactory =
-        ViewModelFactory(gameId, playerId)
+    fun provideViewModelFactory(
+        @Named("gameId") gameId: String,
+        @Named("playerId") playerId: String
+    ): ViewModelFactory =
+        ViewModelFactory(appRepository = appRepository , gameId, playerId)
 }
 
 
 @Module
-class GameScoreModule(val gameId: String) {
+class GameScoreModule(val gameId: String, val appRepository: AppRepository) {
 
     @Provides
     @FragmentScope
@@ -56,11 +60,11 @@ class GameScoreModule(val gameId: String) {
     @Provides
     @FragmentScope
     fun provideViewModelFactory(gameId: String): ViewModelFactory =
-        ViewModelFactory(gameId)
+        ViewModelFactory(appRepository, gameId)
 }
 
 @Module
-class EditGameModule(val gameId: String) {
+class EditGameModule( val appRepository: AppRepository, val gameId: String) {
 
     @Provides
     @FragmentScope
@@ -69,12 +73,12 @@ class EditGameModule(val gameId: String) {
     @Provides
     @FragmentScope
     fun provideViewModelFactory(gameId: String): ViewModelFactory =
-        ViewModelFactory(gameId)
+        ViewModelFactory(appRepository, gameId)
 
 }
 
 @Module
-class VictoryModule(private val gameId: String) {
+class VictoryModule( val appRepository: AppRepository, private val gameId: String) {
 
     @Provides
     @FragmentScope
@@ -83,7 +87,7 @@ class VictoryModule(private val gameId: String) {
     @Provides
     @FragmentScope
     fun provideViewModelFactory(gameId: String): ViewModelFactory =
-        ViewModelFactory(gameId)
+        ViewModelFactory(appRepository, gameId)
 }
 
 

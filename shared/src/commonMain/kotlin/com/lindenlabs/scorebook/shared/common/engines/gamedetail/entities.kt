@@ -1,5 +1,6 @@
 package com.lindenlabs.scorebook.shared.common.engines.gamedetail
 
+import com.lindenlabs.scorebook.shared.common.engines.BaseInteraction
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.Player
 
@@ -52,9 +53,9 @@ sealed class GameDetailViewEvent {
     data class NavigateToEditHome(val game: Game) : GameDetailViewEvent()
 }
 
-sealed class GameDetailInteraction {
+sealed class GameDetailInteraction : BaseInteraction {
     object AddPlayerClicked : GameDetailInteraction()
-    object RefreshScores : GameDetailInteraction()
+    data class RefreshScores(val game: Game) : GameDetailInteraction()
     data class PlayerClicked(val player : Player) : GameDetailInteraction()
     object GoBack : GameDetailInteraction()
     object EndGameClicked : GameDetailInteraction()

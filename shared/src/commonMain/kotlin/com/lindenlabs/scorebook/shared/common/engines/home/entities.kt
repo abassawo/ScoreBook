@@ -1,5 +1,6 @@
 package com.lindenlabs.scorebook.shared.common.engines.home
 
+import com.lindenlabs.scorebook.shared.common.engines.BaseInteraction
 import com.lindenlabs.scorebook.shared.common.raw.Game
 
 data class HomeViewState(val entities: List<GameRowEntity>)
@@ -30,7 +31,8 @@ sealed class HomeViewEvent {
     class ShowUndoDeletePrompt(val game: Game, val restoreIndex: Int) : HomeViewEvent()
 }
 
-sealed class HomeInteraction {
+sealed class HomeInteraction : BaseInteraction {
+    object Refresh : HomeInteraction()
     data class GameDetailsEntered(val name: String?, val lowestScoreWins: Boolean = false) : HomeInteraction()
     data class GameClicked(val game: Game) : HomeInteraction()
     data class SwipeToDelete(val game: Game) : HomeInteraction()

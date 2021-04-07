@@ -12,12 +12,14 @@ import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseFragment
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
+import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
+import com.lindenlabs.scorebook.androidApp.base.utils.navigate
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.GameScoreModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.navigate
+import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showplayers.PlayerAdapter
-import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragment
+import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailInteraction
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewEvent
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewEvent.*
@@ -36,7 +38,6 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
         viewModelFactory.makeViewModel(this, GameViewModel::class.java)
     }
     private val adapter: PlayerAdapter = PlayerAdapter()
-    private val navController: NavController by lazy { findNavController() }
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -52,7 +53,7 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
 
         appComponent().value
             .gameScoreComponentBuilder()
-            .plus(GameScoreModule(arguments?.get("gameArg") as String))
+            .plus(GameScoreModule(arguments?.get("gameArg") as String, appRepository()))
             .build()
             .inject(this)
     }
@@ -95,6 +96,11 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
         addToolbarListener()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.refresh()
+    }
+
     private fun GameDetailFragmentBinding.updateUi() {
         this.addNewPlayerButton.setOnClickListener { viewModel.handleInteraction(GameDetailInteraction.AddPlayerClicked)}
         this.gameParticipantsRv.adapter = adapter
@@ -102,25 +108,26 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
         this.toolbar.title = "Games"
     }
 
-    private fun processViewEvent(event: GameDetailViewEvent) =
-        when (event) {
+    private fun processViewEvent(event: Event<GameDetailViewEvent>) {
+        when (val action = event.getContentIfNotHandled()) {
             is GoBackHome -> navigateHome()
-            is AddPlayersClicked -> navigateToAddPlayers(event.game)
-            is EditScoreForPlayer -> navigateToUpdatePlayerScore(event)
-            is EndGame -> endGame(event.game)
+            is AddPlayersClicked -> navigateToAddPlayers(action.game)
+            is EditScoreForPlayer -> navigateToUpdatePlayerScore(action)
+            is EndGame -> endGame(action.game)
             is ShowRestartingGameMessage -> Toast.makeText(
-                requireContext(), "${event.game.name} restarting", Toast.LENGTH_SHORT
+                requireContext(), "${action.game.name} restarting", Toast.LENGTH_SHORT
             ).show()
             is PromptToRestartGame -> showRestartGamePrompt()
             is ConfirmEndGame -> ConfirmEndGameBottomView {
                 viewModel.handleInteraction(GameDetailInteraction.EndGameConfirmed)
             }.show(requireFragmentManager(), GameDetailFragment::class.java.simpleName)
-            is NavigateToEditHome -> launchEditGameScreen(event.game)
-            is None -> {}
+            is NavigateToEditHome -> launchEditGameScreen(action.game)
+            is None -> Unit
         }
+    }
 
     private fun launchEditGameScreen(game: Game) =
-        navController.navigate(R.id.navEditGame, game.id)
+        navigate(Destination.EditGame(game))
 
     private fun showRestartGamePrompt() {
         MaterialAlertDialogBuilder(requireContext())
@@ -138,16 +145,12 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
 
     private fun navigateHome() = (activity as MainActivity).navigateFirstTabWithClearStack()
 
-    private fun navigateToUpdatePlayerScore(event: EditScoreForPlayer) {
-        val refreshAction = { viewModel.handleInteraction(GameDetailInteraction.RefreshScores)}
-        val updatePointsDialog = with(event) {
-            UpdatePointsDialogFragment.newInstance(game, player, refreshAction)
-        }
-        updatePointsDialog.show(requireFragmentManager(), GameDetailFragment::class.java.name)
-    }
+    private fun navigateToUpdatePlayerScore(event: EditScoreForPlayer) =
+        navigate(Destination.UpdatePoints(event.game, event.player))
+
 
     private fun navigateToAddPlayers(game: Game) =
-        navController.navigate(R.id.navAddPlayers, game.id)
+        navigate(Destination.AddPlayers(game))
 
 
     private fun showGameState(state: GameDetailViewState) {
@@ -178,7 +181,7 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
     }
 
     private fun endGame(game: Game) =
-        findNavController().navigate(R.id.navVictoryFragment, game.id)
+        navigate(Destination.VictoryScreen(game))
 
     private fun GameDetailFragmentBinding.showEmptyState() =
         emptyStateTextView.run { this.visibility = View.VISIBLE }

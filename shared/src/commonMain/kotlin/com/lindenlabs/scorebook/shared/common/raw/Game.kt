@@ -2,9 +2,9 @@ package com.lindenlabs.scorebook.shared.common.raw
 
 import com.lindenlabs.scorebook.shared.common.data.Date
 import com.lindenlabs.scorebook.shared.common.data.Id
+import com.lindenlabs.scorebook.shared.common.data.PlayerListConverter
+import comlindenlabsscorebooksharedcommon.Games
 import kotlin.collections.List
-
-typealias StalematePair = Pair<Player, Player>
 
 data class Game(
     val id: String = Id().id,
@@ -12,8 +12,9 @@ data class Game(
     val dateCreated: Long = Date().getTime(),
     var isClosed: Boolean = false,
     var strategy: GameStrategy = GameStrategy.HighestScoreWins,
-    var players: List<Player> = mutableListOf()
+    val players: MutableList<Player> = mutableListOf()
 ) {
+
 
     fun start() {
         isClosed = false
@@ -35,7 +36,7 @@ data class Game(
         val winners = players.getWinners(strategy)
         return when (winners.size) {
             1 -> GameOutcome.WinnerAnnounced(winners.first())
-            else -> GameOutcome.DrawAnnounced(StalematePair(winners.first(), winners.last()))
+            else -> GameOutcome.DrawAnnounced
         }
     }
 
@@ -56,11 +57,25 @@ data class Game(
             }
         }
     }
+
+    fun toDao(): Games = Games(
+        id = this.id,
+        name = this.name,
+        dateCreated = this.dateCreated,
+        strategy = this.strategy.name,
+        players = PlayerListConverter.playerToString(this.players),
+        isClosed = this.isClosed
+    )
+
+    fun updateScore(player: Player, score: Int) {
+        player.addToScore(score)
+        this.players[players.indexOf(player)] = player
+    }
 }
 
 sealed class GameOutcome {
 
     data class WinnerAnnounced(val player: Player) : GameOutcome()
 
-    data class DrawAnnounced(val stalematePair: StalematePair) : GameOutcome()
+    object DrawAnnounced : GameOutcome()
 }

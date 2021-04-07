@@ -1,5 +1,6 @@
 package com.lindenlabs.scorebook.shared.common.engines.editgame
 
+import com.lindenlabs.scorebook.shared.common.engines.BaseInteraction
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.GameStrategy
 
@@ -14,7 +15,7 @@ sealed class EditGameViewEvent  {
     data class ReturnToGameDetail(val game: Game) : EditGameViewEvent()
 }
 
-sealed class EditGameInteraction {
+sealed class EditGameInteraction : BaseInteraction {
     object Cancel : EditGameInteraction()
 
     data class SaveChanges(

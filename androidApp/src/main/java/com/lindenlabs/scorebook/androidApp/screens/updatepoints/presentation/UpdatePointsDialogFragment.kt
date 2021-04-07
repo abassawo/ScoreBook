@@ -5,13 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LifecycleOwner
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
+import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
+import com.lindenlabs.scorebook.androidApp.base.utils.navigate
 import com.lindenlabs.scorebook.androidApp.databinding.UpdatePointsFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.UpdatePointsModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.views.BaseDialogFragment
+import com.lindenlabs.scorebook.androidApp.navigation.Destination
+import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsInteraction
 import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsViewEvent
 import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsViewState
@@ -19,7 +23,7 @@ import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.Player
 import javax.inject.Inject
 
-class UpdatePointsDialogFragment(val refreshAction: () -> Unit) : BaseDialogFragment() {
+class UpdatePointsDialogFragment : DialogFragment() {
     private val binding: UpdatePointsFragmentBinding by lazy { viewBinding() }
     private val viewModel: UpdatePointsViewModel by lazy {
         viewModelFactory.makeViewModel(
@@ -50,7 +54,8 @@ class UpdatePointsDialogFragment(val refreshAction: () -> Unit) : BaseDialogFrag
             .plus(
                 UpdatePointsModule(
                     gameId = args["gameArg"] as String,
-                    playerId = args["playerArg"] as String
+                    playerId = args["playerArg"] as String,
+                    appRepository = appRepository()
                 )
             )
             .build()
@@ -59,30 +64,26 @@ class UpdatePointsDialogFragment(val refreshAction: () -> Unit) : BaseDialogFrag
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val args = requireArguments()
         viewModel.viewState.observe(this as LifecycleOwner, ::processState)
         viewModel.viewEvent.observe(this as LifecycleOwner, ::processEvent)
-
         binding.pointsEditText.requestFocus()
 
         binding.addPointsButton.setOnClickListener {
             val text = binding.pointsEditText.text.toString()
             viewModel.handleInteraction(UpdatePointsInteraction.ScoreIncreaseBy(text))
-            refreshAction()
         }
         binding.deductPointsButton.setOnClickListener {
             val text = binding.pointsEditText.text.toString()
             viewModel.handleInteraction(UpdatePointsInteraction.ScoreLoweredBy(text))
-            refreshAction()
         }
 
     }
 
-    private fun processEvent(viewEvent: UpdatePointsViewEvent) {
-        with(viewEvent) {
+    private fun processEvent(viewEvent: Event<UpdatePointsViewEvent>) {
+        with(viewEvent.getContentIfNotHandled()) {
             when (this) {
-                is UpdatePointsViewEvent.ScoreUpdated -> dismiss()
-                is UpdatePointsViewEvent.AlertNoTextEntered -> binding.playerName.setError("Must add point")
+                is UpdatePointsViewEvent.ScoreUpdated -> dismiss().also{ navigate(Destination.GameDetail(this.game)) }
+                is UpdatePointsViewEvent.AlertNoTextEntered -> binding.playerName.error = "Must add point"
                 UpdatePointsViewEvent.Loading -> Unit
             }
         }
@@ -98,10 +99,9 @@ class UpdatePointsDialogFragment(val refreshAction: () -> Unit) : BaseDialogFrag
     companion object {
         fun newInstance(
             game: Game,
-            player: Player,
-            refreshAction: () -> Unit
+            player: Player
         ): UpdatePointsDialogFragment =
-            UpdatePointsDialogFragment(refreshAction)
+            UpdatePointsDialogFragment()
                 .apply {
                     arguments = bundleOf("gameArg" to game.id, "playerArg" to player.id)
                 }

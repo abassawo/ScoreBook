@@ -1,6 +1,7 @@
 package com.lindenlabs.scorebook.shared.common.engines.addplayers
 
-import com.lindenlabs.scorebook.shared.common.Environment
+import com.lindenlabs.scorebook.shared.common.Event
+import com.lindenlabs.scorebook.shared.common.data.AppRepository
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewState.*
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.Player
@@ -10,11 +11,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AddPlayersEngine(private val coroutineScope: CoroutineScope) {
+class AddPlayersEngine(private val coroutineScope: CoroutineScope, private val appRepository: AppRepository) {
     private lateinit var currentGame: Game
-    private val appRepository = Environment.appRepository
-    val viewState: MutableStateFlow<AddPlayersViewState> = MutableStateFlow(UpdateCurrentPlayersText(""))
-    val viewEvent: MutableStateFlow<AddPlayersViewEvent> = MutableStateFlow(AddPlayersViewEvent.None)
+    val viewState: MutableStateFlow<AddPlayersViewState> = MutableStateFlow(None)
+    val viewEvent: MutableStateFlow<Event<AddPlayersViewEvent>> = MutableStateFlow(Event(AddPlayersViewEvent.None))
 
     init {
         populateAutocompleteAdapter()
@@ -29,10 +29,9 @@ class AddPlayersEngine(private val coroutineScope: CoroutineScope) {
 
     private fun populateAutocompleteAdapter() {
         coroutineScope.launch {
-            runCatching { appRepository.load() }
-                .onSuccess {
-                    val players = appRepository.getPlayers()
-                    viewState.value = LoadAutocompleteAdapter(players.map { it.name })
+            runCatching { appRepository.getPlayers() - currentGame.players}
+                .onSuccess { players ->
+                    viewState.value = LoadAutocompleteAdapter(players.map {  it.name })
                 }
                 .onFailure { }
         }
@@ -60,14 +59,14 @@ class AddPlayersEngine(private val coroutineScope: CoroutineScope) {
         coroutineScope.launch {
             appRepository.updateGame(currentGame)
         }
-        viewEvent.value = AddPlayersViewEvent.NavigateHome
+        viewEvent.value = Event(AddPlayersViewEvent.NavigateHome)
     }
 
     private fun addAnotherPlayer(playerName: String) {
         if (playerName.isEmpty())
             viewState.value = TextEntryError
         else {
-            val player = Player(playerName)
+            val player = Player(playerName, scoreTotal = 0)
             currentGame.players += player
             coroutineScope.launch {
                 appRepository.addPlayer(player)
@@ -82,12 +81,14 @@ class AddPlayersEngine(private val coroutineScope: CoroutineScope) {
             viewState.value = TextEntryError
         } else {
             // navigate to Game Detail screen
-            viewEvent.value = AddPlayersViewEvent.NavigateToGameDetail(currentGame)
+
             coroutineScope.launch {
                 withContext(appRepository.dispatcher) {
                     appRepository.updateGame(currentGame)
                 }
             }
+
+            viewEvent.value = Event(AddPlayersViewEvent.NavigateToGameDetail(currentGame))
         }
     }
 }

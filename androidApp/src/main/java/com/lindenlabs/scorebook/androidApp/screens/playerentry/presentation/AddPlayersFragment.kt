@@ -4,30 +4,36 @@ import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
-import androidx.fragment.app.DialogFragment
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.Fragment
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
+import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
+import com.lindenlabs.scorebook.androidApp.base.utils.navigate
+import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.AddPlayersArgsModule
-import com.lindenlabs.scorebook.androidApp.di.AppModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
-import com.lindenlabs.scorebook.androidApp.navigate
+import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayerInteraction.*
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewEvent
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewState
 import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewState.*
+import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 
-class AddPlayersFragment : DialogFragment() {
+class AddPlayersFragment : Fragment() {
     private val binding: AddPlayersFragmentBinding by lazy { viewBinding() }
-    private val viewModel: AddPlayersViewModel by lazy { viewModelFactory.makeViewModel(this, AddPlayersViewModel::class.java) }
+    private val viewModel: AddPlayersViewModel by lazy {
+        viewModelFactory.makeViewModel(
+            this,
+            AddPlayersViewModel::class.java
+        )
+    }
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -40,7 +46,7 @@ class AddPlayersFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appComponent().value.addPlayersComponentBuilder()
-            .plus(AddPlayersArgsModule(requireArguments()["gameArg"] as String))
+            .plus(AddPlayersArgsModule(requireArguments()["gameArg"] as String, appRepository()))
             .build()
             .inject(this)
     }
@@ -49,13 +55,17 @@ class AddPlayersFragment : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.add_players_fragment, container ,false)
+    ): View = inflater.inflate(R.layout.add_players_fragment, container, false)
 
+    @OptIn(InternalCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.run {
             viewState.observe(viewLifecycleOwner, ::processViewState)
             viewEvent.observe(viewLifecycleOwner, ::processViewEvent)
+            if(savedInstanceState == null) {
+                launch()
+            }
         }
         binding.updateUI()
     }
@@ -82,19 +92,21 @@ class AddPlayersFragment : DialogFragment() {
             );
             binding.enterNewPlayerEditText.setAdapter(adapter)
         }
+        None -> Unit
     }
 
-    private fun processViewEvent(viewEvent: AddPlayersViewEvent) {
-        Log.d("APA", "Viewevent processed")
-        when (viewEvent) {
+    private fun processViewEvent(viewEvent: Event<AddPlayersViewEvent>) {
+        when (val action = viewEvent.getContentIfNotHandled()) {
             is AddPlayersViewEvent.NavigateToGameDetail -> {
-                val gameId = viewEvent.game.id
-                findNavController().navigate(R.id.navActiveGame, gameId).also { hideKeyboard() }
+                navigate(Destination.GameDetail(action.game))
+                    .also { hideKeyboard() }
             }
             is AddPlayersViewEvent.NavigateHome -> {
-//                findNavController().navigate(AddPlayersFragmentDirections.navigateBackHome())
-//                    .also { hideKeyboard()
+                navigate(Destination.Home)
+                    .also {
+                        hideKeyboard()
                     }
+            }
             AddPlayersViewEvent.None -> Unit
         }
     }
@@ -107,8 +119,8 @@ class AddPlayersFragment : DialogFragment() {
 
     private fun AddPlayersFragmentBinding.updateUI() {
         this.addPlayersButton.setOnClickListener {
-            val name = binding.enterNewPlayerEditText.text.toString()
-            viewModel.handleInteraction(SavePlayerDataAndExit(name)) // new player routes back to Game Detail Screen
+//            val name = binding.enterNewPlayerEditText.text.toString()
+            viewModel.handleInteraction(SavePlayerDataAndExit) // new player routes back to Game Detail Screen
         }
         this.addAnotherPlayer.setOnClickListener { // keeps screen on same screen
             val name = binding.enterNewPlayerEditText.text.toString()
@@ -116,7 +128,12 @@ class AddPlayersFragment : DialogFragment() {
         }
 
         this.enterNewPlayerEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) =
                 Unit
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
