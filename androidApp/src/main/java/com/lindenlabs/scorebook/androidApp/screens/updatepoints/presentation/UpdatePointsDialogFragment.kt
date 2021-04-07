@@ -23,7 +23,7 @@ import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.Player
 import javax.inject.Inject
 
-class UpdatePointsDialogFragment : DialogFragment() {
+class UpdatePointsDialogFragment(val refreshAction: () -> Unit)  : DialogFragment() {
     private val binding: UpdatePointsFragmentBinding by lazy { viewBinding() }
     private val viewModel: UpdatePointsViewModel by lazy {
         viewModelFactory.makeViewModel(
@@ -82,7 +82,7 @@ class UpdatePointsDialogFragment : DialogFragment() {
     private fun processEvent(viewEvent: Event<UpdatePointsViewEvent>) {
         with(viewEvent.getContentIfNotHandled()) {
             when (this) {
-                is UpdatePointsViewEvent.ScoreUpdated -> dismiss().also{ navigate(Destination.GameDetail(this.game)) }
+                is UpdatePointsViewEvent.ScoreUpdated -> dismiss().also{ refreshAction() }
                 is UpdatePointsViewEvent.AlertNoTextEntered -> binding.playerName.error = "Must add point"
                 UpdatePointsViewEvent.Loading -> Unit
             }
@@ -97,11 +97,8 @@ class UpdatePointsDialogFragment : DialogFragment() {
     }
 
     companion object {
-        fun newInstance(
-            game: Game,
-            player: Player
-        ): UpdatePointsDialogFragment =
-            UpdatePointsDialogFragment()
+        fun newInstance(game: Game, player: Player, refreshAction: () -> Unit): UpdatePointsDialogFragment =
+            UpdatePointsDialogFragment(refreshAction)
                 .apply {
                     arguments = bundleOf("gameArg" to game.id, "playerArg" to player.id)
                 }

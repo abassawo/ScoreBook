@@ -4,8 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lindenlabs.scorebook.androidApp.MainActivity
@@ -96,11 +94,6 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
         addToolbarListener()
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.refresh()
-    }
-
     private fun GameDetailFragmentBinding.updateUi() {
         this.addNewPlayerButton.setOnClickListener { viewModel.handleInteraction(GameDetailInteraction.AddPlayerClicked)}
         this.gameParticipantsRv.adapter = adapter
@@ -145,8 +138,10 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
 
     private fun navigateHome() = (activity as MainActivity).navigateFirstTabWithClearStack()
 
-    private fun navigateToUpdatePlayerScore(event: EditScoreForPlayer) =
-        navigate(Destination.UpdatePoints(event.game, event.player))
+    private fun navigateToUpdatePlayerScore(event: EditScoreForPlayer) {
+        val destination = Destination.UpdatePoints(event.game, event.player) { viewModel.refresh() }
+        navigate(destination)
+    }
 
 
     private fun navigateToAddPlayers(game: Game) =

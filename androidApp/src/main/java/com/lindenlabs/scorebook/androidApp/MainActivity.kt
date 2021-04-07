@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             )
             is Destination.UpdatePoints ->
                 with(destination) {
-                    UpdatePointsDialogFragment.newInstance(game, player)
+                    UpdatePointsDialogFragment.newInstance(game, player) { onDismissAction() }
                         .show(supportFragmentManager, "UpdatePoints")
                 }
             is Destination.VictoryScreen ->
