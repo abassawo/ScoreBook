@@ -16,13 +16,10 @@ class AddPlayersEngine(private val coroutineScope: CoroutineScope, private val a
     val viewState: MutableStateFlow<AddPlayersViewState> = MutableStateFlow(None)
     val viewEvent: MutableStateFlow<Event<AddPlayersViewEvent>> = MutableStateFlow(Event(AddPlayersViewEvent.None))
 
-    init {
-        populateAutocompleteAdapter()
-    }
-
     fun launch(gameId: String) {
         coroutineScope.launch {
             currentGame = appRepository.getGame(gameId)
+            populateAutocompleteAdapter()
             showPlayers(currentGame.players)
         }
     }
