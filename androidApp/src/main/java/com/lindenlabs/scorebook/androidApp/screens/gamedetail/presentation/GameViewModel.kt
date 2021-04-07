@@ -20,8 +20,10 @@ class GameViewModel @Inject constructor(val gameId: String, appRepository: AppRe
         engine.viewEvent.asLiveData(viewModelScope.coroutineContext)
 
     init {
-        engine.launch(gameId)
+        refresh()
     }
+
+    fun refresh() = engine.launch(gameId)
 
     fun handleInteraction(interaction: GameDetailInteraction) =
         engine.handleInteraction(interaction)

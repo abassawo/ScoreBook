@@ -17,6 +17,7 @@ import com.lindenlabs.scorebook.androidApp.screens.editgame.EditGameFragment
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameDetailFragment
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.HomeFragment
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersFragment
+import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragment
 import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryFragment
 import com.lindenlabs.scorebook.shared.common.Event
 
@@ -63,11 +64,14 @@ class MainActivity : AppCompatActivity() {
                 R.id.navActiveGame,
                 bundleOf("gameArg" to destination.game.id)
             )
-            is Destination.UpdatePoints -> navController.navigate(
-                R.id.navUpdatePoints,
-                bundleOf("gameArg" to destination.game.id, "playerArg" to destination.player.id)
+            is Destination.UpdatePoints ->
+                with(destination) {
+                    UpdatePointsDialogFragment.newInstance(game, player)
+                        .show(supportFragmentManager, "UpdatePoints")
+                }
+            is Destination.VictoryScreen ->
+                navController.navigate(R.id.navVictoryFragment, bundleOf("gameArg" to destination.game.id)
             )
-            is Destination.VictoryScreen -> navController.navigate(R.id.navVictoryFragment, bundleOf("gameArg" to destination.game.id))
         }
     }
 

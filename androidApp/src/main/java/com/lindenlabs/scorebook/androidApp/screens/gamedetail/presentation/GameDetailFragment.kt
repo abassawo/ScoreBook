@@ -19,7 +19,6 @@ import com.lindenlabs.scorebook.androidApp.di.GameScoreModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showplayers.PlayerAdapter
-import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragment
 import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailInteraction
 import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewEvent
@@ -95,6 +94,11 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
         }
         binding.updateUi()
         addToolbarListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refresh()
     }
 
     private fun GameDetailFragmentBinding.updateUi() {

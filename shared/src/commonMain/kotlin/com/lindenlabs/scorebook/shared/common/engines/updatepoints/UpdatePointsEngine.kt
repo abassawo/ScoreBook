@@ -1,5 +1,6 @@
 package com.lindenlabs.scorebook.shared.common.engines.updatepoints
 
+import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
 import com.lindenlabs.scorebook.shared.common.engines.postValue
 import com.lindenlabs.scorebook.shared.common.raw.Game
@@ -13,28 +14,28 @@ class UpdatePointsEngine(private val coroutineScope: CoroutineScope , val appRep
     private lateinit var game: Game
     private lateinit var player: Player
     val viewState: MutableStateFlow<UpdatePointsViewState> = MutableStateFlow(UpdatePointsViewState.Loading)
-    val viewEvent: MutableStateFlow<UpdatePointsViewEvent> = MutableStateFlow(UpdatePointsViewEvent.Loading)
+    val viewEvent: MutableStateFlow<Event<UpdatePointsViewEvent>> = MutableStateFlow(Event(UpdatePointsViewEvent.Loading))
 
     fun launch(gameId: String, playerId: String) {
         coroutineScope.launch {
             game = requireNotNull(appRepository.getGame(gameId))
-            player = appRepository.getPlayer(playerId)!!
+            player = game.players.find { it.id == playerId }!!
         }
     }
 
     fun handleInteraction(interaction: UpdatePointsInteraction) {
-        when (interaction) {
+     when (interaction) {
             is UpdatePointsInteraction.ScoreIncreaseBy -> processAddToScoreAction(interaction)
             is UpdatePointsInteraction.ScoreLoweredBy -> processSubtractFromScoreAction(interaction)
-        }
+     }
     }
 
     private fun processAddToScoreAction(interaction: UpdatePointsInteraction.ScoreIncreaseBy) {
         if(interaction.point.isNullOrEmpty()) {
-            viewEvent.postValue(UpdatePointsViewEvent.AlertNoTextEntered())
+            viewEvent.postValue(Event(UpdatePointsViewEvent.AlertNoTextEntered()))
         } else {
             try {
-                player.addToScore(interaction.point.toInt())
+                game.updateScore(player, interaction.point.toInt())
             } catch (e: Exception) {
 
             }
@@ -50,7 +51,7 @@ class UpdatePointsEngine(private val coroutineScope: CoroutineScope , val appRep
 
     private fun processSubtractFromScoreAction(interaction: UpdatePointsInteraction.ScoreLoweredBy) {
         if(interaction.point.isNullOrEmpty()) {
-            viewEvent.postValue(UpdatePointsViewEvent.AlertNoTextEntered())
+            viewEvent.postValue(Event(UpdatePointsViewEvent.AlertNoTextEntered()))
         } else {
             try {
                 player.deductFromScore(interaction.point.toInt())
@@ -68,5 +69,5 @@ class UpdatePointsEngine(private val coroutineScope: CoroutineScope , val appRep
     }
 
     private fun onScoreUpdated(player: Player, game: Game) =
-        viewEvent.postValue(UpdatePointsViewEvent.ScoreUpdated(player, game))
+        viewEvent.postValue(Event(UpdatePointsViewEvent.ScoreUpdated(player, game)))
 }

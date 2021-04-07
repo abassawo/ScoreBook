@@ -66,7 +66,7 @@ class AddPlayersEngine(private val coroutineScope: CoroutineScope, private val a
         if (playerName.isEmpty())
             viewState.value = TextEntryError
         else {
-            val player = Player(playerName)
+            val player = Player(playerName, scoreTotal = 0)
             currentGame.players += player
             coroutineScope.launch {
                 appRepository.addPlayer(player)

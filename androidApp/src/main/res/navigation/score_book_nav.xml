@@ -135,7 +135,7 @@
     <!--    Dialog is unreachable by graph due to listener argument, but is represented for
             documentation of all possible destinations and for compile-safe args-->
 
-    <fragment
+    <dialog
         android:id="@+id/navUpdatePoints"
         android:name="com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragment"
         tools:layout="@layout/update_points_fragment">
@@ -148,7 +148,7 @@
             android:name="playerArg"
             app:argType="string" />
 
-    </fragment>
+    </dialog>
 
     <fragment
         android:id="@+id/navVictoryFragment"

@@ -6,8 +6,6 @@ import com.lindenlabs.scorebook.shared.common.data.PlayerListConverter
 import comlindenlabsscorebooksharedcommon.Games
 import kotlin.collections.List
 
-typealias StalematePair = Pair<Player, Player>
-
 data class Game(
     val id: String = Id().id,
     var name: String,
@@ -38,11 +36,7 @@ data class Game(
         val winners = players.getWinners(strategy)
         return when (winners.size) {
             1 -> GameOutcome.WinnerAnnounced(winners.first())
-            else -> if(winners.size > 1) {
-                GameOutcome.DrawAnnounced(StalematePair(winners.first(), winners.last()))
-            } else {
-                GameOutcome.DrawAnnounced(StalematePair(Player(name = ""), Player(name=""))) //todo - not valid state
-            }
+            else -> GameOutcome.DrawAnnounced
         }
     }
 
@@ -72,11 +66,16 @@ data class Game(
         players = PlayerListConverter.playerToString(this.players),
         isClosed = this.isClosed
     )
+
+    fun updateScore(player: Player, score: Int) {
+        player.addToScore(score)
+        this.players[players.indexOf(player)] = player
+    }
 }
 
 sealed class GameOutcome {
 
     data class WinnerAnnounced(val player: Player) : GameOutcome()
 
-    data class DrawAnnounced(val stalematePair: StalematePair) : GameOutcome()
+    object DrawAnnounced : GameOutcome()
 }

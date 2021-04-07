@@ -8,8 +8,7 @@ import kotlin.collections.List
 @Serializable
 data class Player(
     val name: String,
-    var scoreTotal: Int = 0,
-//    var rounds: List<Round> = mutableListOf(),
+    var scoreTotal: Int,
     var isPlayerTurn: Boolean = false,
     val id: String = Id().id,
     val dateCreated: Long = Date().getTime(),

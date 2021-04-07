@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LifecycleOwner
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
@@ -23,7 +23,7 @@ import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.Player
 import javax.inject.Inject
 
-class UpdatePointsDialogFragment : Fragment() {
+class UpdatePointsDialogFragment : DialogFragment() {
     private val binding: UpdatePointsFragmentBinding by lazy { viewBinding() }
     private val viewModel: UpdatePointsViewModel by lazy {
         viewModelFactory.makeViewModel(
@@ -71,12 +71,10 @@ class UpdatePointsDialogFragment : Fragment() {
         binding.addPointsButton.setOnClickListener {
             val text = binding.pointsEditText.text.toString()
             viewModel.handleInteraction(UpdatePointsInteraction.ScoreIncreaseBy(text))
-//            refreshAction()
         }
         binding.deductPointsButton.setOnClickListener {
             val text = binding.pointsEditText.text.toString()
             viewModel.handleInteraction(UpdatePointsInteraction.ScoreLoweredBy(text))
-//            refreshAction()
         }
 
     }
@@ -84,7 +82,7 @@ class UpdatePointsDialogFragment : Fragment() {
     private fun processEvent(viewEvent: Event<UpdatePointsViewEvent>) {
         with(viewEvent.getContentIfNotHandled()) {
             when (this) {
-                is UpdatePointsViewEvent.ScoreUpdated -> requireActivity().onBackPressed()
+                is UpdatePointsViewEvent.ScoreUpdated -> dismiss().also{ navigate(Destination.GameDetail(this.game)) }
                 is UpdatePointsViewEvent.AlertNoTextEntered -> binding.playerName.error = "Must add point"
                 UpdatePointsViewEvent.Loading -> Unit
             }
@@ -101,8 +99,7 @@ class UpdatePointsDialogFragment : Fragment() {
     companion object {
         fun newInstance(
             game: Game,
-            player: Player,
-            refreshAction: () -> Unit
+            player: Player
         ): UpdatePointsDialogFragment =
             UpdatePointsDialogFragment()
                 .apply {

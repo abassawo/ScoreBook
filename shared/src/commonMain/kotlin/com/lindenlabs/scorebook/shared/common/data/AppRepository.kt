@@ -1,12 +1,10 @@
 package com.lindenlabs.scorebook.shared.common.data
 
 import com.lindenlabs.scorebook.shared.common.DefaultDispatcherProvider
-import com.lindenlabs.scorebook.shared.common.Json
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.GameStrategy
 import com.lindenlabs.scorebook.shared.common.raw.Player
 import comlindenlabsscorebooksharedcommon.GameHistoryQueries
-import comlindenlabsscorebooksharedcommon.Games
 import comlindenlabsscorebooksharedcommon.PlayerHistoryQueries
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -32,17 +30,6 @@ class AppRepository(
                     players = PlayerListConverter.stringToPlayers(game.players).toMutableList()
                 )
             })
-        }
-        games.forEach { game ->
-            game.players += playerHistoryQueries.selectById(game.id).executeAsList().map {
-                Player(
-                    name = it.name,
-                    scoreTotal = it.scoreTotal.toInt(),
-                    isPlayerTurn = it.isPlayerTurn ?: false,
-                    id = it.id,
-                    dateCreated = it.dateCreated
-                )
-            }
         }
         games
     }
@@ -108,12 +95,5 @@ class AppRepository(
     suspend fun getPlayer(playerId: String): Player? = withContext(dispatcher) {
         getPlayers()
         players.find { it.id == playerId }
-    }
-
-    suspend fun syncGameWithPlayers(game: Game, playerIds: List<String>) {
-        for (id in playerIds) {
-            val player = getPlayer(id)
-            player?.let { game.players += it }
-        }
     }
 }
