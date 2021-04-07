@@ -1,33 +1,34 @@
 package com.lindenlabs.scorebook.shared.common.raw
 
+import com.lindenlabs.scorebook.shared.common.Json
+import com.lindenlabs.scorebook.shared.common.Serializable
 import com.lindenlabs.scorebook.shared.common.data.Date
 import com.lindenlabs.scorebook.shared.common.data.Id
-import kotlinx.serialization.Serializable
 import kotlin.collections.List
 
 @Serializable
 data class Player(
     val name: String,
     var scoreTotal: Int = 0,
-    var rounds: List<Round> = mutableListOf(),
+//    var rounds: List<Round> = mutableListOf(),
     var isPlayerTurn: Boolean = false,
     val id: String = Id().id,
     val dateCreated: Long = Date().getTime(),
 ) {
 
     fun addToScore(score: Int) {
-        this.rounds += Round(score = score)
+//        this.rounds += Round(score = score)
         this.scoreTotal += score
     }
 
     fun deductFromScore(score: Int) {
         if (score < 0) throw IllegalStateException()
-        this.rounds += Round(score = -score)
+//        this.rounds += Round(score = -score)
         this.scoreTotal -= score
     }
 
     fun resetScore() {
-        this.rounds = mutableListOf()
+//        this.rounds = mutableListOf()
         this.scoreTotal = 0
     }
 }

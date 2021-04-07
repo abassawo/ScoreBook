@@ -4,6 +4,7 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("com.squareup.sqldelight")
+    id("kotlinx-serialization") version("1.4.10")
 }
 
 kotlin {
@@ -32,12 +33,13 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0")
+//                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0")
+//                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.14.0")
 //                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.14.0")
 //                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:0.14.0")
 //                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
-                implementation("dev.icerock.moko:parcelize:0.6.1")
+//                implementation("dev.icerock.moko:parcelize:0.6.1")
                 implementation("com.squareup.sqldelight:runtime:1.4.4")
 //                api("org.jetbrains.kotlin:kotlin-stdlib-common")
             }
@@ -71,8 +73,8 @@ kotlin {
     dependencies {
 //        implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.14.0")
 //        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
-        implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0")
-        implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0")
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0-1.4.0-rc-95")
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-common")
 //        implementation("io.ktor:ktor-client-andro id:1.2.6")
 //        implementation("io.ktor:ktor-client-serialization-vm:1.2.6")
