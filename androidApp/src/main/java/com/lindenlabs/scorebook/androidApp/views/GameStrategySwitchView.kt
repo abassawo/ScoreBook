@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.GameStrategySwitchBinding
 
 
