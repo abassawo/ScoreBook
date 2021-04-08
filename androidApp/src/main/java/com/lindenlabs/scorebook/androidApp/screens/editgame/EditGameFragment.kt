@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.fragment.findNavController
-import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseFragment
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
@@ -51,7 +49,7 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
         when (viewState) {
             is EditGameViewState.Initial -> {
                 binding.editGameName.setText(viewState.game.name)
-                binding.gameRuleSwitchView.isChecked = viewState.game.strategy == GameStrategy.LowestScoreWins
+                binding.gameRuleSwitchView.setLowestScoreStrategyGameEnabled((viewState.game.strategy == GameStrategy.LowestScoreWins))
             }
             EditGameViewState.Loading -> Unit
         }
@@ -70,7 +68,7 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
         with(binding) {
             saveGameButton.setOnClickListener {
                 val enteredText = editGameName.text.toString()
-                val isChecked = gameRuleSwitchView.isChecked
+                val isChecked = gameRuleSwitchView.isLowestScoreStrategyChecked()
                 val newGameStrategy =
                     if (isChecked) GameStrategy.LowestScoreWins else GameStrategy.HighestScoreWins
                 viewModel.handleInteraction(

@@ -41,16 +41,16 @@ data class Game(
     }
 
     private fun List<Player>.getWinners(strategy: GameStrategy): List<Player> {
-        var min = 0
-        var max = 0
         return when (strategy) {
             GameStrategy.HighestScoreWins -> {
+                var max = Int.MIN_VALUE
                 for (player in this)
                     if (player.scoreTotal > max) max = player.scoreTotal
                 this.filter { it.scoreTotal == max }
             }
 
             GameStrategy.LowestScoreWins -> {
+                var min = Int.MAX_VALUE
                 for (player in this)
                     if (player.scoreTotal < min) min = player.scoreTotal
                 this.filter { it.scoreTotal == min }
