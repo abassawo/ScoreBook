@@ -152,7 +152,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             viewModel.handleInteraction(
                 HomeInteraction.GameDetailsEntered(
                     enteredText,
-                    gameRuleSwitchView.isChecked
+                    gameRuleSwitchView.isLowestScoreStrategyChecked()
                 )
             )
             enterNewGameEditText.setText("")

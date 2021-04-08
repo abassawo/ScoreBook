@@ -65,8 +65,7 @@ class HomeEngine(
                 if (interaction.name.isNullOrEmpty())
                     showError()
                 else {
-                    val strategy =
-                        if (interaction.lowestScoreWins) GameStrategy.LowestScoreWins else GameStrategy.HighestScoreWins
+                    val strategy = if (interaction.lowestScoreWins) GameStrategy.LowestScoreWins else GameStrategy.HighestScoreWins
                     onNewGameCreated(interaction.name, strategy)
                 }
             }

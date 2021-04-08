@@ -3,37 +3,34 @@ package com.lindenlabs.scorebook.androidApp.views
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.Checkable
 import android.widget.FrameLayout
-import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.databinding.GameStrategySwitchBinding
+
 
 class GameStrategySwitchView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr), Checkable {
+) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private var binding: GameStrategySwitchBinding = GameStrategySwitchBinding.inflate(LayoutInflater.from(context))
-
+    private var binding: GameStrategySwitchBinding
 
     init {
-        val view = inflate(context, R.layout.game_strategy_switch, null)
-        this.addView(view)
+        with(GameStrategySwitchBinding.inflate(LayoutInflater.from(context))) {
+            binding = this
+            binding.setup()
+            addView(root)
+        }
 
     }
 
+    fun isLowestScoreStrategyChecked(): Boolean = binding.gameRuleSwitch.isChecked
 
-    fun GameStrategySwitchBinding.bind() =
+    fun setLowestScoreStrategyGameEnabled(enabled: Boolean) {
+        binding.gameRuleSwitch.isChecked = enabled
+    }
+
+    fun GameStrategySwitchBinding.setup() =
         with(gameRuleSwitch) {
             textOff = context.getString(R.string.high_score)
             textOn = context.getString(R.string.low_score)
         }
-
-    override fun setChecked(checked: Boolean) {
-        binding.gameRuleSwitch.isChecked = checked
-    }
-
-    override fun isChecked(): Boolean =  binding.gameRuleSwitch.isChecked
-
-
-    override fun toggle() = binding.gameRuleSwitch.toggle()
 }

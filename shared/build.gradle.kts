@@ -33,15 +33,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-//                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0")
-//                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.14.0")
-//                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.14.0")
-//                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:0.14.0")
-//                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
-//                implementation("dev.icerock.moko:parcelize:0.6.1")
                 implementation("com.squareup.sqldelight:runtime:1.4.4")
-//                api("org.jetbrains.kotlin:kotlin-stdlib-common")
             }
         }
         val commonTest by getting {
@@ -71,14 +64,9 @@ kotlin {
         val iosTest by getting
     }
     dependencies {
-//        implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.14.0")
-//        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
         implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC")
         implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-common")
-//        implementation("io.ktor:ktor-client-andro id:1.2.6")
-//        implementation("io.ktor:ktor-client-serialization-vm:1.2.6")
-//        implementation("io.ktor:ktor-gson:1.2.6")
     }
 }
 

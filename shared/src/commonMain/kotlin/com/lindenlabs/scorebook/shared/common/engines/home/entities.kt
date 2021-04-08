@@ -33,7 +33,7 @@ sealed class HomeViewEvent {
 
 sealed class HomeInteraction : BaseInteraction {
     object Refresh : HomeInteraction()
-    data class GameDetailsEntered(val name: String?, val lowestScoreWins: Boolean = false) : HomeInteraction()
+    data class GameDetailsEntered(val name: String?, val lowestScoreWins: Boolean) : HomeInteraction()
     data class GameClicked(val game: Game) : HomeInteraction()
     data class SwipeToDelete(val game: Game) : HomeInteraction()
     data class UndoDelete(val game: Game, val restoreIndex: Int) : HomeInteraction()
