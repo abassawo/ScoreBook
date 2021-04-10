@@ -1,8 +1,11 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
 import com.lindenlabs.scorebook.androidApp.base.BaseViewModelTest
-import com.lindenlabs.scorebook.androidApp.screens.home.entities.HomeViewEvent
+import com.lindenlabs.scorebook.shared.common.Event
+import com.lindenlabs.scorebook.shared.common.engines.home.GameRowEntity
+import com.lindenlabs.scorebook.shared.common.engines.home.HomeInteraction
+import com.lindenlabs.scorebook.shared.common.engines.home.HomeViewEvent
+import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.nhaarman.mockitokotlin2.verify
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -56,15 +59,15 @@ class HomeViewModelTest : BaseViewModelTest() {
         val interaction = HomeInteraction.GameDetailsEntered("Game1")
         underTest.handleInteraction(interaction)
         val emittedEvent = requireNotNull(underTest.viewEvent.value)
-        assert(emittedEvent is HomeViewEvent.ShowAddPlayersScreen)
+        assert(emittedEvent.getContentIfNotHandled() is HomeViewEvent.ShowAddPlayersScreen)
     }
 
     @Test
     fun `entering empty game name should trigger error`() {
-        val interaction = HomeInteraction.GameDetailsEntered("")
+        val interaction = HomeInteraction.GameDetailsEntered("", false)
         underTest.handleInteraction(interaction)
         val emittedEvent = requireNotNull(underTest.viewEvent.value)
-        assert(emittedEvent is HomeViewEvent.AlertNoTextEntered)
+        assert(emittedEvent.getContentIfNotHandled() is HomeViewEvent.AlertNoTextEntered)
     }
 
     @Test
