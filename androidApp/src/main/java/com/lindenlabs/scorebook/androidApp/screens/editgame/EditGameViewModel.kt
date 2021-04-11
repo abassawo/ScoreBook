@@ -4,13 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.lindenlabs.scorebook.shared.common.Environment
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
-import com.lindenlabs.scorebook.shared.common.data.persistence.ScoreBookDatabase
-import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameEngine
-import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameInteraction
-import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameViewEvent
-import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameViewState
+import com.lindenlabs.scorebook.shared.common.viewmodels.editgame.EditGameEngine
+import com.lindenlabs.scorebook.shared.common.viewmodels.editgame.EditGameInteraction
+import com.lindenlabs.scorebook.shared.common.viewmodels.editgame.EditGameViewEvent
+import com.lindenlabs.scorebook.shared.common.viewmodels.editgame.EditGameViewState
 
 class EditGameViewModel(val gameId: String, val appRepository: AppRepository) : ViewModel() {
     private val engine = EditGameEngine(viewModelScope, appRepository)

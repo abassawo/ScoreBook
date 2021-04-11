@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.shared.common.engines.victory
+package com.lindenlabs.scorebook.shared.common.viewmodels.victory
 
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
 import kotlinx.coroutines.CoroutineScope

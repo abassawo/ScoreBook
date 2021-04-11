@@ -1,10 +1,9 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 
 import com.lindenlabs.scorebook.androidApp.base.BaseViewModelTest
-import com.lindenlabs.scorebook.shared.common.Event
-import com.lindenlabs.scorebook.shared.common.engines.home.GameRowEntity
-import com.lindenlabs.scorebook.shared.common.engines.home.HomeInteraction
-import com.lindenlabs.scorebook.shared.common.engines.home.HomeViewEvent
+import com.lindenlabs.scorebook.shared.common.viewmodels.home.GameRowEntity
+import com.lindenlabs.scorebook.shared.common.viewmodels.home.HomeInteraction
+import com.lindenlabs.scorebook.shared.common.viewmodels.home.HomeViewEvent
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.nhaarman.mockitokotlin2.verify
 import junit.framework.Assert.assertEquals

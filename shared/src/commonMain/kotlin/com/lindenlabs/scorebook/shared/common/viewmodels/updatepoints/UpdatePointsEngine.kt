@@ -1,8 +1,8 @@
-package com.lindenlabs.scorebook.shared.common.engines.updatepoints
+package com.lindenlabs.scorebook.shared.common.viewmodels.updatepoints
 
 import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
-import com.lindenlabs.scorebook.shared.common.engines.postValue
+import com.lindenlabs.scorebook.shared.common.viewmodels.postValue
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.Player
 import kotlinx.coroutines.CoroutineScope

@@ -1,8 +1,8 @@
-package com.lindenlabs.scorebook.shared.common.engines.addplayers
+package com.lindenlabs.scorebook.shared.common.viewmodels.addplayers
 
 import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
-import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewState.*
+import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayersViewState.*
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.Player
 import com.lindenlabs.scorebook.shared.common.raw.toText
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AddPlayersEngine(private val coroutineScope: CoroutineScope, private val appRepository: AppRepository) {
+class AddPlayersEngine(private val coroutineScope: CoroutineScope, private val appRepository: AppRepository){
     private lateinit var currentGame: Game
     val viewState: MutableStateFlow<AddPlayersViewState> = MutableStateFlow(None)
     val viewEvent: MutableStateFlow<Event<AddPlayersViewEvent>> = MutableStateFlow(Event(AddPlayersViewEvent.None))

@@ -13,9 +13,9 @@ import com.lindenlabs.scorebook.androidApp.databinding.EditGameFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.EditGameModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.navigation.Destination
-import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameInteraction
-import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameViewEvent
-import com.lindenlabs.scorebook.shared.common.engines.editgame.EditGameViewState
+import com.lindenlabs.scorebook.shared.common.viewmodels.editgame.EditGameInteraction
+import com.lindenlabs.scorebook.shared.common.viewmodels.editgame.EditGameViewEvent
+import com.lindenlabs.scorebook.shared.common.viewmodels.editgame.EditGameViewState
 import com.lindenlabs.scorebook.shared.common.raw.GameStrategy
 import javax.inject.Inject
 

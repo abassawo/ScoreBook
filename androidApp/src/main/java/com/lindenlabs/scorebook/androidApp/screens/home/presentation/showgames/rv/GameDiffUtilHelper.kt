@@ -1,7 +1,7 @@
 package com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv
 
 import androidx.recyclerview.widget.DiffUtil
-import com.lindenlabs.scorebook.shared.common.engines.home.GameRowEntity
+import com.lindenlabs.scorebook.shared.common.viewmodels.home.GameRowEntity
 
 class GameDiffUtilCallback(val oldList: List<GameRowEntity>, val newList: List<GameRowEntity>) : DiffUtil.Callback() {
     override fun getOldListSize(): Int = oldList.size

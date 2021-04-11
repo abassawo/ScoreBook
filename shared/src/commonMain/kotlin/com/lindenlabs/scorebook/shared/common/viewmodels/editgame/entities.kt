@@ -1,6 +1,6 @@
-package com.lindenlabs.scorebook.shared.common.engines.editgame
+package com.lindenlabs.scorebook.shared.common.viewmodels.editgame
 
-import com.lindenlabs.scorebook.shared.common.engines.BaseInteraction
+import com.lindenlabs.scorebook.shared.common.viewmodels.BaseInteraction
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.GameStrategy
 

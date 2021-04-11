@@ -64,9 +64,11 @@ kotlin {
         val iosTest by getting
     }
     dependencies {
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2-native-mt")
         implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC")
         implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-common")
+
     }
 }
 

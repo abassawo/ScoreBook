@@ -20,10 +20,10 @@ import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.AddPlayersArgsModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.navigation.Destination
-import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayerInteraction.*
-import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewEvent
-import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewState
-import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewState.*
+import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayerInteraction.*
+import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayersViewEvent
+import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayersViewState
+import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayersViewState.*
 import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 

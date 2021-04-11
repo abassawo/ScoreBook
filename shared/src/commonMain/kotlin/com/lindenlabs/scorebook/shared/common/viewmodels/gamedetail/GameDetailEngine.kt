@@ -1,9 +1,9 @@
-package com.lindenlabs.scorebook.shared.common.engines.gamedetail
+package com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail
 
 import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
-import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewState.Loading
-import com.lindenlabs.scorebook.shared.common.engines.gamedetail.GameDetailViewState.WithGameData.*
+import com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail.GameDetailViewState.Loading
+import com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail.GameDetailViewState.WithGameData.*
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow

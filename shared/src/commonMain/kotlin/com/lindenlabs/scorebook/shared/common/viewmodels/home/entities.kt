@@ -1,6 +1,6 @@
-package com.lindenlabs.scorebook.shared.common.engines.home
+package com.lindenlabs.scorebook.shared.common.viewmodels.home
 
-import com.lindenlabs.scorebook.shared.common.engines.BaseInteraction
+import com.lindenlabs.scorebook.shared.common.viewmodels.BaseInteraction
 import com.lindenlabs.scorebook.shared.common.raw.Game
 
 data class HomeViewState(val entities: List<GameRowEntity>)

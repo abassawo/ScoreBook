@@ -1,6 +1,5 @@
-package com.lindenlabs.scorebook.shared.common.engines.editgame
+package com.lindenlabs.scorebook.shared.common.viewmodels.editgame
 
-import com.lindenlabs.scorebook.shared.common.Environment
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import kotlinx.coroutines.CoroutineScope

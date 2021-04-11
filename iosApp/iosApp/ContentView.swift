@@ -1,6 +1,17 @@
 import SwiftUI
 import shared
 
+// class HomeViewModel : ObservableObject, Identifiable {
+//
+//  @State private var engine: HomeEngine =
+//        HomeEngine(coroutineScope: MainScope(), environment: Environment(database: DatabaseFactory().createDB()),
+//        userSettings: UserSettingsStore())
+//
+//  @Published var viewState: [HomeViewState] = []
+//  @Published var viewEvent: [HomeViewEvent] = []
+//
+// }
+
 func greet() -> String {
     return Greeting().greeting()
 }
@@ -9,6 +20,11 @@ struct ContentView: View {
     @State private var gameName: String = ""
     @State private var isEditing = false
     @State private var selection: String? = nil
+//     @ObservedObject var viewModel:  HomeViewModel
+
+//     init(viewModel: HomeViewModel) {
+//       self.viewModel = viewModel
+//     }
 
     var body: some View {
         NavigationView {

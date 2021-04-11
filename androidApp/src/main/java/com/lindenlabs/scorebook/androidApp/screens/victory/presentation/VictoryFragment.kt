@@ -3,7 +3,6 @@ package com.lindenlabs.scorebook.androidApp.screens.victory.presentation
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
@@ -11,8 +10,8 @@ import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
 import com.lindenlabs.scorebook.androidApp.databinding.FragmentVictoryBinding
 import com.lindenlabs.scorebook.androidApp.di.VictoryModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
-import com.lindenlabs.scorebook.shared.common.engines.victory.VictoryState
-import com.lindenlabs.scorebook.shared.common.engines.victory.VictoryViewEvent
+import com.lindenlabs.scorebook.shared.common.viewmodels.victory.VictoryState
+import com.lindenlabs.scorebook.shared.common.viewmodels.victory.VictoryViewEvent
 import javax.inject.Inject
 
 class VictoryFragment : Fragment(R.layout.fragment_victory) {
