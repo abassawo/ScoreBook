@@ -51,6 +51,8 @@ class HomeEngine(
     }
 
     private fun showGames(games: List<Game>) {
+        val games = games.toMutableList()
+        games += Game(name = "Test")
         this.games.run {
             clear()
             addAll(games)
