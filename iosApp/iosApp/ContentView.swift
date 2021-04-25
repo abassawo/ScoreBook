@@ -6,13 +6,13 @@ class HomeViewModel : ObservableObject, Identifiable {
     @State private var engine: HomeEngine = HomeEngine(coroutineScope: MainScope(), environment: Environment(database: DatabaseFactory().createDB()),
                                                                 userSettings: UserSettingsStore())
     @Published var viewState: [HomeViewState] = []
-    @Published var viewEvent: [HomeViewEvent] = []
+    @Published var viewEvent: [Event<HomeViewEvent>] = []
 
     init() {
         viewState.removeAll()
         viewEvent.removeAll()
         viewState.append(engine.viewState.value as! HomeViewState)
-        viewEvent.append(engine.viewState.value as! HomeViewEvent)
+        viewEvent.append(engine.viewEvent.value as! Event<HomeViewEvent>)
     }
 }
 
