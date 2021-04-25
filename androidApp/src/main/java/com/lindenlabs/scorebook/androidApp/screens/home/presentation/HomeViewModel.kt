@@ -5,10 +5,10 @@ import androidx.lifecycle.*
 import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.androidApp.ScoreBookApplication
 import com.lindenlabs.scorebook.shared.common.data.UserSettingsStore
-import com.lindenlabs.scorebook.shared.common.engines.home.HomeEngine
-import com.lindenlabs.scorebook.shared.common.engines.home.HomeInteraction
-import com.lindenlabs.scorebook.shared.common.engines.home.HomeViewEvent
-import com.lindenlabs.scorebook.shared.common.engines.home.HomeViewState
+import com.lindenlabs.scorebook.shared.common.viewmodels.home.HomeEngine
+import com.lindenlabs.scorebook.shared.common.viewmodels.home.HomeInteraction
+import com.lindenlabs.scorebook.shared.common.viewmodels.home.HomeViewEvent
+import com.lindenlabs.scorebook.shared.common.viewmodels.home.HomeViewState
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val homeEngine: HomeEngine = HomeEngine(viewModelScope, (application as ScoreBookApplication).environment, UserSettingsStore(application))

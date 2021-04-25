@@ -1,6 +1,6 @@
-package com.lindenlabs.scorebook.shared.common.engines.victory
+package com.lindenlabs.scorebook.shared.common.viewmodels.victory
 
-import com.lindenlabs.scorebook.shared.common.engines.BaseInteraction
+import com.lindenlabs.scorebook.shared.common.viewmodels.BaseInteraction
 
 data class VictoryState(val victoryText: String)
 

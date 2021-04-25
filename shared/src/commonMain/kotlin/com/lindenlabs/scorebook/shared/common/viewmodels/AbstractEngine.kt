@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.shared.common.engines
+package com.lindenlabs.scorebook.shared.common.viewmodels
 
 abstract class AbstractEngine<T : BaseInteraction> {
 

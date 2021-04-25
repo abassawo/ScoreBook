@@ -1,4 +1,4 @@
-package com.lindenlabs.scorebook.shared.common.engines.addplayers
+package com.lindenlabs.scorebook.shared.common.viewmodels.addplayers
 
 import com.lindenlabs.scorebook.shared.common.raw.Game
 

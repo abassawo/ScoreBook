@@ -6,10 +6,10 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
-import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayerInteraction
-import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersEngine
-import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewEvent
-import com.lindenlabs.scorebook.shared.common.engines.addplayers.AddPlayersViewState
+import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayerInteraction
+import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayersEngine
+import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayersViewEvent
+import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayersViewState
 
 class AddPlayersViewModel(val gameId: String, val appRepository: AppRepository) : ViewModel() {
     private val engine: AddPlayersEngine = AddPlayersEngine(viewModelScope, appRepository)

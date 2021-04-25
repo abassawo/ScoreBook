@@ -22,9 +22,9 @@ import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv.GameAdapter
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.welcome.WelcomeDialogFragment
 import com.lindenlabs.scorebook.androidApp.views.rv.SwipeToDismissCallback
-import com.lindenlabs.scorebook.shared.common.engines.home.HomeInteraction
-import com.lindenlabs.scorebook.shared.common.engines.home.HomeViewEvent
-import com.lindenlabs.scorebook.shared.common.engines.home.HomeViewState
+import com.lindenlabs.scorebook.shared.common.viewmodels.home.HomeInteraction
+import com.lindenlabs.scorebook.shared.common.viewmodels.home.HomeViewEvent
+import com.lindenlabs.scorebook.shared.common.viewmodels.home.HomeViewState
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import nl.dionsegijn.konfetti.emitters.StreamEmitter
 import nl.dionsegijn.konfetti.models.Shape

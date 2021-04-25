@@ -1,11 +1,11 @@
-package com.lindenlabs.scorebook.shared.common.engines.home
+package com.lindenlabs.scorebook.shared.common.viewmodels.home
 
 import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.Environment
 import com.lindenlabs.scorebook.shared.common.domain.GamesMapper
 import com.lindenlabs.scorebook.shared.common.domain.GamesWrapper
 import com.lindenlabs.scorebook.shared.common.domain.UserSettings
-import com.lindenlabs.scorebook.shared.common.engines.AbstractEngine
+import com.lindenlabs.scorebook.shared.common.viewmodels.AbstractEngine
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.GameStrategy
 import kotlinx.coroutines.CoroutineScope
@@ -51,6 +51,8 @@ class HomeEngine(
     }
 
     private fun showGames(games: List<Game>) {
+        val games = games.toMutableList()
+        games += Game(name = "Test")
         this.games.run {
             clear()
             addAll(games)

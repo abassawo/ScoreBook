@@ -6,10 +6,10 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
-import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsEngine
-import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsInteraction
-import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsViewEvent
-import com.lindenlabs.scorebook.shared.common.engines.updatepoints.UpdatePointsViewState
+import com.lindenlabs.scorebook.shared.common.viewmodels.updatepoints.UpdatePointsEngine
+import com.lindenlabs.scorebook.shared.common.viewmodels.updatepoints.UpdatePointsInteraction
+import com.lindenlabs.scorebook.shared.common.viewmodels.updatepoints.UpdatePointsViewEvent
+import com.lindenlabs.scorebook.shared.common.viewmodels.updatepoints.UpdatePointsViewState
 
 class UpdatePointsViewModel(private val appRepository: AppRepository, private val gameId: String, private val playerId: String) : ViewModel() {
     private val engine: UpdatePointsEngine = UpdatePointsEngine(viewModelScope, appRepository)

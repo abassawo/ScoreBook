@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager.getDefaultSharedPreferences
 import com.lindenlabs.scorebook.shared.common.domain.UserSettings
 
-class UserSettingsStore(context: Context): UserSettings {
+actual class UserSettingsStore(context: Context): UserSettings {
     private val preferences: SharedPreferences = getDefaultSharedPreferences(context)
 
     override fun isFirstRun(): Boolean =
