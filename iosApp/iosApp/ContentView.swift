@@ -2,11 +2,10 @@ import SwiftUI
 import shared
 
 class HomeViewModel : ObservableObject, Identifiable {
-
     @State private var engine: HomeEngine = HomeEngine(coroutineScope: MainScope(), environment: Environment(database: DatabaseFactory().createDB()),
                                                                 userSettings: UserSettingsStore())
-    @Published var viewState: [HomeViewState] = []
-    @Published var viewEvent: [Event<HomeViewEvent>] = []
+    @Published var viewState: HomeViewState = engine.
+    @Published var viewEvent: Event<HomeViewEvent> = []
 
     init() {
         viewState.removeAll()
@@ -27,7 +26,6 @@ struct ContentView: View {
     @State private var viewModel:  HomeViewModel = HomeViewModel()
 
     init() {
-//         viewModel.launch()
         for entity in viewModel.viewState.first!.entities {
             let unwrappedEntity = entity as? GameRowEntity.HeaderType
             let title = unwrappedEntity?.title ?? ""
@@ -38,15 +36,11 @@ struct ContentView: View {
 
     var body: some View {
         NavigationView {
-//             VStack(spacing: 0) {
-//                 ForEach(viewModel.viewState.entities) { entity in
-//                     if entity is GameRowEntity.HeaderType {
-//                         Text((entity as GameRowEntity.HeaderType).title)
-//                     } else {
-//                         Text((entity as GameRowEntity.BodyType).game.name)
-//                     }
-//                 }
-//             }
+            VStack(spacing: 0) {
+                ForEach(viewModel.viewState.value.entities { entity in
+                    Text("Testing ")
+                }
+            }
             VStack(spacing: 0) {
                 Text("Create a new game").multilineTextAlignment(.center)
                 TextField(

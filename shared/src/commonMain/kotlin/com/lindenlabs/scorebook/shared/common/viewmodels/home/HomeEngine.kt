@@ -52,7 +52,7 @@ class HomeEngine(
 
     private fun showGames(games: List<Game>) {
         val games = games.toMutableList()
-        games += Game(name = "Test")
+//        games += Game(name = "Test") // testing
         this.games.run {
             clear()
             addAll(games)
