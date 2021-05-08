@@ -4,8 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.1" />
-        <entry key="androidApp/src/main/res/layout/game_strategy_switch.xml" value="0.11354166666666667" />
-        <entry key="androidApp/src/main/res/layout/include_home_screen.xml" value="0.1" />
+        <entry key="androidApp/src/main/res/layout/add_players_fragment.xml" value="0.14412360688956433" />
+        <entry key="androidApp/src/main/res/layout/edit_game_fragment.xml" value="0.1" />
+        <entry key="androidApp/src/main/res/layout/home_fragment.xml" value="0.14412360688956433" />
       </map>
     </option>
   </component>

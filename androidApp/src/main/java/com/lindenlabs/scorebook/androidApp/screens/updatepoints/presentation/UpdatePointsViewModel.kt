@@ -3,12 +3,7 @@ package com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation
 import androidx.lifecycle.*
 import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
-<<<<<<< HEAD
-import com.lindenlabs.scorebook.shared.common.viewmodels.updatepoints.UpdatePointsEngine
-import com.lindenlabs.scorebook.shared.common.viewmodels.updatepoints.UpdatePointsInteraction
-import com.lindenlabs.scorebook.shared.common.viewmodels.updatepoints.UpdatePointsViewEvent
-import com.lindenlabs.scorebook.shared.common.viewmodels.updatepoints.UpdatePointsViewState
-=======
+
 import com.lindenlabs.scorebook.shared.common.entities.updatepoints.UpdatePointsInteraction
 import com.lindenlabs.scorebook.shared.common.entities.updatepoints.UpdatePointsViewEvent
 import com.lindenlabs.scorebook.shared.common.entities.updatepoints.UpdatePointsViewState
@@ -16,7 +11,6 @@ import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.Player
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
->>>>>>> Use passed in constructor values for viewmodel
 
 class UpdatePointsViewModel(
     private val appRepository: AppRepository,

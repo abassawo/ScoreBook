@@ -1,11 +1,6 @@
 package com.lindenlabs.scorebook.androidApp.views.rv
 
-<<<<<<< HEAD
-import com.lindenlabs.scorebook.shared.common.viewmodels.home.GameRowEntity
-=======
 import com.lindenlabs.scorebook.shared.common.entities.home.GameRowEntity
->>>>>>> Use passed in constructor values for viewmodel
-
 
 interface ItemTouchHelperAdapter {
 

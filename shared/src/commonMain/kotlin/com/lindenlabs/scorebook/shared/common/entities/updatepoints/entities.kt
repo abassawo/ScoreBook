@@ -1,11 +1,5 @@
-<<<<<<< HEAD:shared/src/commonMain/kotlin/com/lindenlabs/scorebook/shared/common/viewmodels/updatepoints/entities.kt
-package com.lindenlabs.scorebook.shared.common.viewmodels.updatepoints
-
-import com.lindenlabs.scorebook.shared.common.viewmodels.BaseInteraction
-=======
 package com.lindenlabs.scorebook.shared.common.entities.updatepoints
 
->>>>>>> Use passed in constructor values for viewmodel:shared/src/commonMain/kotlin/com/lindenlabs/scorebook/shared/common/entities/updatepoints/entities.kt
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.Player
 

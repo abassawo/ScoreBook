@@ -1,8 +1,5 @@
 package com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation
 
-import UpdatePointsInteraction
-import UpdatePointsViewEvent
-import UpdatePointsViewState
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +16,9 @@ import com.lindenlabs.scorebook.androidApp.di.ArgModule
 import com.lindenlabs.scorebook.androidApp.di.ArgumentPayload.WithGameIdAndPlayerId
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.shared.common.Event
+import com.lindenlabs.scorebook.shared.common.entities.updatepoints.UpdatePointsInteraction
+import com.lindenlabs.scorebook.shared.common.entities.updatepoints.UpdatePointsViewEvent
+import com.lindenlabs.scorebook.shared.common.entities.updatepoints.UpdatePointsViewState
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.Player
 import javax.inject.Inject

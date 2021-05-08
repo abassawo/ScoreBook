@@ -25,15 +25,9 @@ import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv.GameAdapter
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.welcome.WelcomeDialogFragment
 import com.lindenlabs.scorebook.androidApp.views.rv.SwipeToDismissCallback
-<<<<<<< HEAD
-import com.lindenlabs.scorebook.shared.common.viewmodels.home.HomeInteraction
-import com.lindenlabs.scorebook.shared.common.viewmodels.home.HomeViewEvent
-import com.lindenlabs.scorebook.shared.common.viewmodels.home.HomeViewState
-=======
 import com.lindenlabs.scorebook.shared.common.entities.home.HomeInteraction
 import com.lindenlabs.scorebook.shared.common.entities.home.HomeViewEvent
 import com.lindenlabs.scorebook.shared.common.entities.home.HomeViewState
->>>>>>> Use passed in constructor values for viewmodel
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import nl.dionsegijn.konfetti.emitters.StreamEmitter
 import nl.dionsegijn.konfetti.models.Shape

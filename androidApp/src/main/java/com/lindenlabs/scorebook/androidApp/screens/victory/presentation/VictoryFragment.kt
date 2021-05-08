@@ -11,13 +11,8 @@ import com.lindenlabs.scorebook.androidApp.databinding.FragmentVictoryBinding
 import com.lindenlabs.scorebook.androidApp.di.ArgModule
 import com.lindenlabs.scorebook.androidApp.di.ArgumentPayload
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
-<<<<<<< HEAD
-import com.lindenlabs.scorebook.shared.common.viewmodels.victory.VictoryState
-import com.lindenlabs.scorebook.shared.common.viewmodels.victory.VictoryViewEvent
-=======
 import com.lindenlabs.scorebook.shared.common.entities.victory.VictoryState
 import com.lindenlabs.scorebook.shared.common.entities.victory.VictoryViewEvent
->>>>>>> Use passed in constructor values for viewmodel
 import javax.inject.Inject
 
 class VictoryFragment : Fragment(R.layout.fragment_victory) {

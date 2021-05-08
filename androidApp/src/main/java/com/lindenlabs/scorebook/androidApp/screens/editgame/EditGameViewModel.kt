@@ -1,17 +1,14 @@
 package com.lindenlabs.scorebook.androidApp.screens.editgame
 
-<<<<<<< HEAD
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
 import com.lindenlabs.scorebook.shared.common.entities.editgame.EditGameInteraction
 import com.lindenlabs.scorebook.shared.common.entities.editgame.EditGameViewEvent
 import com.lindenlabs.scorebook.shared.common.entities.editgame.EditGameViewState
-=======
 import androidx.lifecycle.*
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import kotlinx.coroutines.launch
->>>>>>> Use passed in constructor values for viewmodel
 
 class EditGameViewModel(val appRepository: AppRepository, gameId: String) : ViewModel() {
     private lateinit var game: Game

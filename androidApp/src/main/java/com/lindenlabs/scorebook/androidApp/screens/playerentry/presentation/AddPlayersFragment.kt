@@ -1,9 +1,5 @@
 package com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation
 
-import AddPlayerInteraction.*
-import AddPlayersViewEvent
-import AddPlayersViewState
-import AddPlayersViewState.*
 import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
@@ -23,6 +19,10 @@ import com.lindenlabs.scorebook.androidApp.di.ArgumentPayload
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.shared.common.Event
+import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayerInteraction
+import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayersViewEvent
+import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayersViewState
+import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayersViewState.*
 import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 
@@ -129,11 +129,11 @@ class AddPlayersFragment : Fragment() {
     private fun AddPlayersFragmentBinding.updateUI() {
         this.addPlayersButton.setOnClickListener {
 //            val name = binding.enterNewPlayerEditText.text.toString()
-            viewModel.handleInteraction(SavePlayerDataAndExit) // new player routes back to Game Detail Screen
+            viewModel.handleInteraction(AddPlayerInteraction.SavePlayerDataAndExit) // new player routes back to Game Detail Screen
         }
         this.addAnotherPlayer.setOnClickListener { // keeps screen on same screen
             val name = binding.enterNewPlayerEditText.text.toString()
-            viewModel.handleInteraction(AddAnotherPlayer(name))
+            viewModel.handleInteraction(AddPlayerInteraction.AddAnotherPlayer(name))
         }
 
         this.enterNewPlayerEditText.addTextChangedListener(object : TextWatcher {
@@ -146,11 +146,11 @@ class AddPlayersFragment : Fragment() {
                 Unit
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                s?.let { viewModel.handleInteraction(Typing) }
+                s?.let { viewModel.handleInteraction(AddPlayerInteraction.Typing) }
             }
 
             override fun afterTextChanged(s: Editable?) {
-                s?.let { viewModel.handleInteraction(if (it.isEmpty()) EmptyText else TextEntered) }
+                s?.let { viewModel.handleInteraction(if (it.isEmpty()) AddPlayerInteraction.EmptyText else AddPlayerInteraction.TextEntered) }
             }
         })
     }

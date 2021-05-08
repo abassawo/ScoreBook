@@ -3,18 +3,11 @@ package com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation
 import androidx.lifecycle.*
 import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
-<<<<<<< HEAD
-import com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail.GameDetailEngine
-import com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail.GameDetailInteraction
-import com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail.GameDetailViewEvent
-import com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail.GameDetailViewState
-=======
 import com.lindenlabs.scorebook.shared.common.domain.UserSettings
 import com.lindenlabs.scorebook.shared.common.entities.gamedetail.*
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
->>>>>>> Use passed in constructor values for viewmodel
 import javax.inject.Inject
 
 class GameViewModel @Inject constructor(val appRepository: AppRepository, userSettings: UserSettings, val gameId: String) : ViewModel() {

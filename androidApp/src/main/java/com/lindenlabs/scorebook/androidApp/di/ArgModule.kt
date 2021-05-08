@@ -7,7 +7,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class ArgModule(val payload: ArgumentPayload) {
+class ArgModule(private val payload: ArgumentPayload) {
 
     @Provides
     @FragmentScope

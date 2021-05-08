@@ -17,8 +17,6 @@ import com.lindenlabs.scorebook.shared.common.raw.GameStrategy
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-
-
 class HomeViewModel(val appRepository: AppRepository, private val userSettingsStore: UserSettings) :
     ViewModel() {
     val viewState: MutableLiveData<HomeViewState> = MutableLiveData()

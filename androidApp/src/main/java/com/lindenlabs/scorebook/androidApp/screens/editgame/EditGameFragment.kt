@@ -6,18 +6,17 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseFragment
-import com.lindenlabs.scorebook.androidApp.base.utils.*
+import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
+import com.lindenlabs.scorebook.androidApp.base.utils.gameIdArg
+import com.lindenlabs.scorebook.androidApp.base.utils.navigate
 import com.lindenlabs.scorebook.androidApp.databinding.EditGameFragmentBinding
 import com.lindenlabs.scorebook.androidApp.di.ArgModule
 import com.lindenlabs.scorebook.androidApp.di.ArgumentPayload
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.navigation.Destination
-<<<<<<< HEAD
 import com.lindenlabs.scorebook.shared.common.entities.editgame.EditGameInteraction
 import com.lindenlabs.scorebook.shared.common.entities.editgame.EditGameViewEvent
 import com.lindenlabs.scorebook.shared.common.entities.editgame.EditGameViewState
-=======
->>>>>>> Use passed in constructor values for viewmodel
 import com.lindenlabs.scorebook.shared.common.raw.GameStrategy
 import javax.inject.Inject
 
@@ -52,12 +51,10 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
         when (viewState) {
             is EditGameViewState.Initial -> {
                 binding.editGameName.setText(viewState.game.name)
-<<<<<<< HEAD
                 binding.gameRuleSwitchView.setLowestScoreStrategyGameEnabled((viewState.game.strategy == GameStrategy.LowestScoreWins))
-=======
-                binding.gameRuleSwitchView.isChecked =
-                    viewState.game.strategy == GameStrategy.LowestScoreWins
->>>>>>> Use passed in constructor values for viewmodel
+                binding.gameRuleSwitchView. setLowestScoreStrategyGameEnabled(
+                    enabled = viewState.game.strategy == GameStrategy.LowestScoreWins
+                )
             }
             EditGameViewState.Loading -> Unit
         }

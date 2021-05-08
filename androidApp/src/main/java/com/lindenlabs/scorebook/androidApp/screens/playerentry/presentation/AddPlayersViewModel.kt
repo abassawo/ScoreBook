@@ -3,8 +3,6 @@ package com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation
 import androidx.lifecycle.*
 import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
-<<<<<<< HEAD
-=======
 import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayerInteraction
 import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayersViewEvent
 import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayersViewState
@@ -13,7 +11,6 @@ import com.lindenlabs.scorebook.shared.common.raw.Player
 import com.lindenlabs.scorebook.shared.common.raw.toText
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
->>>>>>> Use passed in constructor values for viewmodel
 
 class AddPlayersViewModel(val appRepository: AppRepository, val gameId: String) : ViewModel() {
     private lateinit var currentGame: Game
