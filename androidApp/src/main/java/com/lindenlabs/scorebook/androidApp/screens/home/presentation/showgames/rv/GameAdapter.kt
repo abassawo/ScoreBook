@@ -9,7 +9,11 @@ import com.lindenlabs.scorebook.androidApp.databinding.HeaderItemRowBinding
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv.GameViewHolder.BodyViewHolder
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv.GameViewHolder.HeaderViewHolder
 import com.lindenlabs.scorebook.androidApp.views.rv.ItemTouchHelperAdapter
+<<<<<<< HEAD
 import com.lindenlabs.scorebook.shared.common.viewmodels.home.GameRowEntity
+=======
+import com.lindenlabs.scorebook.shared.common.entities.home.GameRowEntity
+>>>>>>> Use passed in constructor values for viewmodel
 
 internal class GameAdapter : RecyclerView.Adapter<GameViewHolder>(), ItemTouchHelperAdapter {
     val data: MutableList<GameRowEntity> = mutableListOf()

@@ -1,5 +1,8 @@
 package com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation
 
+import UpdatePointsInteraction
+import UpdatePointsViewEvent
+import UpdatePointsViewState
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,14 +12,13 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LifecycleOwner
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
-import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
+import com.lindenlabs.scorebook.androidApp.base.utils.gameIdArg
+import com.lindenlabs.scorebook.androidApp.base.utils.playerIdArg
 import com.lindenlabs.scorebook.androidApp.databinding.UpdatePointsFragmentBinding
-import com.lindenlabs.scorebook.androidApp.di.UpdatePointsModule
+import com.lindenlabs.scorebook.androidApp.di.ArgModule
+import com.lindenlabs.scorebook.androidApp.di.ArgumentPayload.WithGameIdAndPlayerId
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.shared.common.Event
-import com.lindenlabs.scorebook.shared.common.viewmodels.updatepoints.UpdatePointsInteraction
-import com.lindenlabs.scorebook.shared.common.viewmodels.updatepoints.UpdatePointsViewEvent
-import com.lindenlabs.scorebook.shared.common.viewmodels.updatepoints.UpdatePointsViewState
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.Player
 import javax.inject.Inject
@@ -46,16 +48,9 @@ class UpdatePointsDialogFragment(val refreshAction: () -> Unit)  : DialogFragmen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val args = requireArguments()
         appComponent().value
-            .updatePointsComponentBuilder()
-            .plus(
-                UpdatePointsModule(
-                    gameId = args["gameArg"] as String,
-                    playerId = args["playerArg"] as String,
-                    appRepository = appRepository()
-                )
-            )
+            .componentBuilder()
+            .plus(ArgModule(WithGameIdAndPlayerId(gameIdArg(), playerIdArg())))
             .build()
             .inject(this)
     }
@@ -64,17 +59,18 @@ class UpdatePointsDialogFragment(val refreshAction: () -> Unit)  : DialogFragmen
         super.onViewCreated(view, savedInstanceState)
         viewModel.viewState.observe(this as LifecycleOwner, ::processState)
         viewModel.viewEvent.observe(this as LifecycleOwner, ::processEvent)
-        binding.pointsEditText.requestFocus()
 
-        binding.addPointsButton.setOnClickListener {
-            val text = binding.pointsEditText.text.toString()
-            viewModel.handleInteraction(UpdatePointsInteraction.ScoreIncreaseBy(text))
+        binding.run {
+            pointsEditText.requestFocus()
+            addPointsButton.setOnClickListener {
+                val text = pointsEditText.text.toString()
+                viewModel.handleInteraction(UpdatePointsInteraction.ScoreIncreaseBy(text))
+            }
+            deductPointsButton.setOnClickListener {
+                val text = binding.pointsEditText.text.toString()
+                viewModel.handleInteraction(UpdatePointsInteraction.ScoreLoweredBy(text))
+            }
         }
-        binding.deductPointsButton.setOnClickListener {
-            val text = binding.pointsEditText.text.toString()
-            viewModel.handleInteraction(UpdatePointsInteraction.ScoreLoweredBy(text))
-        }
-
     }
 
     private fun processEvent(viewEvent: Event<UpdatePointsViewEvent>) {

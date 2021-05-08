@@ -7,5 +7,5 @@ import javax.inject.Singleton
 @Component(modules = [AppModule::class])
 @Singleton
 interface AppComponent {
-    fun component(): HomeFragmentComponent
+    fun componentBuilder(): SubComponent.Builder
 }

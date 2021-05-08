@@ -5,8 +5,13 @@ import androidx.viewbinding.ViewBinding
 import com.lindenlabs.scorebook.androidApp.databinding.GameItemRowBinding
 import com.lindenlabs.scorebook.androidApp.databinding.HeaderItemRowBinding
 import com.lindenlabs.scorebook.androidApp.views.rv.SwipableViewHolder
+<<<<<<< HEAD
 import com.lindenlabs.scorebook.shared.common.viewmodels.home.GameRowEntity
 import com.lindenlabs.scorebook.shared.common.viewmodels.home.HomeInteraction
+=======
+import com.lindenlabs.scorebook.shared.common.entities.home.GameRowEntity
+import com.lindenlabs.scorebook.shared.common.entities.home.HomeInteraction
+>>>>>>> Use passed in constructor values for viewmodel
 
 sealed class GameViewHolder(binding: ViewBinding) :
     RecyclerView.ViewHolder(binding.root) {

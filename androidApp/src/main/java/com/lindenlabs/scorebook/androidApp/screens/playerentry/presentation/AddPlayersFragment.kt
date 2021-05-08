@@ -1,5 +1,9 @@
 package com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation
 
+import AddPlayerInteraction.*
+import AddPlayersViewEvent
+import AddPlayersViewState
+import AddPlayersViewState.*
 import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
@@ -12,14 +16,13 @@ import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.lindenlabs.scorebook.androidApp.R
-import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
-import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
-import com.lindenlabs.scorebook.androidApp.base.utils.navigate
-import com.lindenlabs.scorebook.shared.common.Event
+import com.lindenlabs.scorebook.androidApp.base.utils.*
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
+import com.lindenlabs.scorebook.androidApp.di.ArgModule
+import com.lindenlabs.scorebook.androidApp.di.ArgumentPayload
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.navigation.Destination
-import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayersViewState
+import com.lindenlabs.scorebook.shared.common.Event
 import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 
@@ -42,8 +45,11 @@ class AddPlayersFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appComponent().value.addPlayersComponentBuilder()
-            .plus(AddPlayersArgsModule(requireArguments()["gameArg"] as String, appRepository()))
+//        appComponent().value.component().inject(this)
+
+        appComponent().value
+            .componentBuilder()
+            .plus(ArgModule(ArgumentPayload.WithGameId(gameIdArg())))
             .build()
             .inject(this)
 
@@ -67,27 +73,27 @@ class AddPlayersFragment : Fragment() {
             viewState.observe(viewLifecycleOwner, ::processViewState)
             viewEvent.observe(viewLifecycleOwner, ::processViewEvent)
             if(savedInstanceState == null) {
-                launch()
+//                launch(gameId = requireArguments()["gameArg"] as String)
             }
         }
         binding.updateUI()
     }
 
     private fun processViewState(viewState: AddPlayersViewState) = when (viewState) {
-        is AddPlayersViewState.TextEntryError -> binding.enterNewPlayerEditText.setError("Enter a valid name")
-        is AddPlayersViewState.UpdateCurrentPlayersText -> {
+        is TextEntryError -> binding.enterNewPlayerEditText.setError("Enter a valid name")
+        is UpdateCurrentPlayersText -> {
             binding.addPlayersButton.visibility = View.VISIBLE
             binding.playersText.text = viewState.playersText
             binding.enterNewPlayerEditText.setText("")
         }
-        is AddPlayersViewState.PlusButtonEnabled -> {
+        is PlusButtonEnabled -> {
             binding.addAnotherPlayer.run {
                 isEnabled = viewState.isEnabled
                 visibility = if (isEnabled) View.VISIBLE else View.GONE
             }
         }
-        AddPlayersViewState.TypingState -> binding.addPlayersButton.visibility = View.GONE
-        is AddPlayersViewState.LoadAutocompleteAdapter -> {
+        TypingState -> binding.addPlayersButton.visibility = View.GONE
+        is LoadAutocompleteAdapter -> {
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_dropdown_item_1line,
@@ -95,6 +101,7 @@ class AddPlayersFragment : Fragment() {
             );
             binding.enterNewPlayerEditText.setAdapter(adapter)
         }
+        None -> Unit
     }
 
     private fun processViewEvent(viewEvent: Event<AddPlayersViewEvent>) {

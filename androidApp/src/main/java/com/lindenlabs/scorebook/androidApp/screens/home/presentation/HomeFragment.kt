@@ -18,14 +18,22 @@ import com.lindenlabs.scorebook.androidApp.base.utils.navigate
 import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.androidApp.databinding.HomeFragmentBinding
 import com.lindenlabs.scorebook.androidApp.databinding.IncludeHomeScreenBinding
+import com.lindenlabs.scorebook.androidApp.di.ArgModule
+import com.lindenlabs.scorebook.androidApp.di.ArgumentPayload
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.showgames.rv.GameAdapter
 import com.lindenlabs.scorebook.androidApp.screens.home.presentation.welcome.WelcomeDialogFragment
 import com.lindenlabs.scorebook.androidApp.views.rv.SwipeToDismissCallback
+<<<<<<< HEAD
 import com.lindenlabs.scorebook.shared.common.viewmodels.home.HomeInteraction
 import com.lindenlabs.scorebook.shared.common.viewmodels.home.HomeViewEvent
 import com.lindenlabs.scorebook.shared.common.viewmodels.home.HomeViewState
+=======
+import com.lindenlabs.scorebook.shared.common.entities.home.HomeInteraction
+import com.lindenlabs.scorebook.shared.common.entities.home.HomeViewEvent
+import com.lindenlabs.scorebook.shared.common.entities.home.HomeViewState
+>>>>>>> Use passed in constructor values for viewmodel
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import nl.dionsegijn.konfetti.emitters.StreamEmitter
 import nl.dionsegijn.konfetti.models.Shape
@@ -48,7 +56,11 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appComponent().value.component().inject(this)
+        appComponent().value
+            .componentBuilder()
+            .plus(ArgModule(ArgumentPayload.None))
+            .build()
+            .inject(this)
     }
 
 //    override fun onResume() {

@@ -14,6 +14,8 @@ class ScoreBookApplication : Application() {
     val appComponent: AppComponent by lazy { initAppComponent() }
     val scoreBookDatabase by lazy { DatabaseFactory(this).createDB() }
     val environment by lazy { Environment(scoreBookDatabase) }
+    val settings by lazy { initSettings() }
+
     private fun initSettings() = UserSettingsStore(this)
 
     override fun onCreate() {

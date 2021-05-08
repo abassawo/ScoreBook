@@ -16,6 +16,15 @@ fun Fragment.appComponent(): Lazy<AppComponent> = lazy {
 fun Fragment.appRepository() =
     (requireActivity().application as ScoreBookApplication).environment.appRepository
 
+fun Fragment.userSettings() =
+    (requireActivity().application as ScoreBookApplication).settings
+
+fun Fragment.gameIdArg() =
+    requireArguments()["gameArg"] as String
+
+fun Fragment.playerIdArg() =
+    requireArguments()["playerArg"] as String
+
 fun Fragment.navigate(destination: Destination) {
     val sharedViewModel by activityViewModels<SharedNavigationViewModel>()
     sharedViewModel.navigateTo(destination)
