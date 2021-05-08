@@ -1,7 +1,6 @@
 package com.lindenlabs.scorebook.androidApp.views.rv
 
-import com.lindenlabs.scorebook.shared.common.viewmodels.home.GameRowEntity
-
+import com.lindenlabs.scorebook.shared.common.entities.home.GameRowEntity
 
 interface ItemTouchHelperAdapter {
 

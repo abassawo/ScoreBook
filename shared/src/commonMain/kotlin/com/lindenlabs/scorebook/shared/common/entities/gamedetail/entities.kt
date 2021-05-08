@@ -1,6 +1,5 @@
-package com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail
+package com.lindenlabs.scorebook.shared.common.entities.gamedetail
 
-import com.lindenlabs.scorebook.shared.common.viewmodels.BaseInteraction
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.Player
 
@@ -53,7 +52,7 @@ sealed class GameDetailViewEvent {
     data class NavigateToEditHome(val game: Game) : GameDetailViewEvent()
 }
 
-sealed class GameDetailInteraction : BaseInteraction {
+sealed class GameDetailInteraction {
     object AddPlayerClicked : GameDetailInteraction()
     data class RefreshScores(val game: Game) : GameDetailInteraction()
     data class PlayerClicked(val player : Player) : GameDetailInteraction()

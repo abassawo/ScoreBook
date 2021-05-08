@@ -4,8 +4,13 @@ import com.lindenlabs.scorebook.androidApp.base.BaseViewModelTest
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.GameViewModel
 import com.lindenlabs.scorebook.androidApp.utils.game
 import com.lindenlabs.scorebook.androidApp.utils.gameWithPlayers
+<<<<<<< HEAD
 import com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail.GameDetailInteraction
 import com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail.GameDetailViewEvent
+=======
+import com.lindenlabs.scorebook.shared.common.entities.gamedetail.GameDetailInteraction
+import com.lindenlabs.scorebook.shared.common.entities.gamedetail.GameDetailViewEvent
+>>>>>>> Use passed in constructor values for viewmodel
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope

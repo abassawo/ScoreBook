@@ -1,10 +1,8 @@
-package com.lindenlabs.scorebook.shared.common.viewmodels.victory
-
-import com.lindenlabs.scorebook.shared.common.viewmodels.BaseInteraction
+package com.lindenlabs.scorebook.shared.common.entities.victory
 
 data class VictoryState(val victoryText: String)
 
-sealed class VictoryInteraction : BaseInteraction {
+sealed class VictoryInteraction {
     object GoHome : VictoryInteraction()
 }
 

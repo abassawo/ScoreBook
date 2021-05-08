@@ -10,21 +10,22 @@ import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseFragment
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
-import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
+import com.lindenlabs.scorebook.androidApp.base.utils.gameIdArg
 import com.lindenlabs.scorebook.androidApp.base.utils.navigate
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailFragmentBinding
-import com.lindenlabs.scorebook.androidApp.di.GameScoreModule
+import com.lindenlabs.scorebook.androidApp.di.ArgModule
+import com.lindenlabs.scorebook.androidApp.di.ArgumentPayload
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showplayers.PlayerAdapter
 import com.lindenlabs.scorebook.shared.common.Event
-import com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail.GameDetailInteraction
-import com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail.GameDetailViewEvent
-import com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail.GameDetailViewEvent.*
-import com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail.GameDetailViewState
-import com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail.GameDetailViewState.WithGameData
-import com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail.GameDetailViewState.WithGameData.*
-import com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail.PlayerDataEntity
+import com.lindenlabs.scorebook.shared.common.entities.gamedetail.GameDetailInteraction
+import com.lindenlabs.scorebook.shared.common.entities.gamedetail.GameDetailViewEvent
+import com.lindenlabs.scorebook.shared.common.entities.gamedetail.GameDetailViewEvent.*
+import com.lindenlabs.scorebook.shared.common.entities.gamedetail.GameDetailViewState
+import com.lindenlabs.scorebook.shared.common.entities.gamedetail.GameDetailViewState.WithGameData
+import com.lindenlabs.scorebook.shared.common.entities.gamedetail.GameDetailViewState.WithGameData.*
+import com.lindenlabs.scorebook.shared.common.entities.gamedetail.PlayerDataEntity
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import java.text.SimpleDateFormat
 import java.util.*
@@ -50,8 +51,8 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
         setHasOptionsMenu(true)
 
         appComponent().value
-            .gameScoreComponentBuilder()
-            .plus(GameScoreModule(arguments?.get("gameArg") as String, appRepository()))
+            .componentBuilder()
+            .plus(ArgModule(ArgumentPayload.WithGameId(gameIdArg())))
             .build()
             .inject(this)
     }
@@ -89,13 +90,18 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
         viewModel.run {
             viewState.observe(viewLifecycleOwner, ::showGameState)
             viewEvent.observe(viewLifecycleOwner, ::processViewEvent)
+            requireArguments().getString("gameArg")?.let { launch(it) }
         }
         binding.updateUi()
         addToolbarListener()
     }
 
     private fun GameDetailFragmentBinding.updateUi() {
-        this.addNewPlayerButton.setOnClickListener { viewModel.handleInteraction(GameDetailInteraction.AddPlayerClicked)}
+        this.addNewPlayerButton.setOnClickListener {
+            viewModel.handleInteraction(
+                GameDetailInteraction.AddPlayerClicked
+            )
+        }
         this.gameParticipantsRv.adapter = adapter
         this.gameParticipantsRv.addItemDecoration(DividerItemDecoration(requireContext(), 1))
         this.toolbar.title = "Games"

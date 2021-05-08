@@ -1,23 +1,48 @@
 package com.lindenlabs.scorebook.androidApp.screens.editgame
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
-import com.lindenlabs.scorebook.shared.common.viewmodels.editgame.EditGameEngine
-import com.lindenlabs.scorebook.shared.common.viewmodels.editgame.EditGameInteraction
-import com.lindenlabs.scorebook.shared.common.viewmodels.editgame.EditGameViewEvent
-import com.lindenlabs.scorebook.shared.common.viewmodels.editgame.EditGameViewState
+import com.lindenlabs.scorebook.shared.common.entities.editgame.EditGameInteraction
+import com.lindenlabs.scorebook.shared.common.entities.editgame.EditGameViewEvent
+import com.lindenlabs.scorebook.shared.common.entities.editgame.EditGameViewState
+import androidx.lifecycle.*
+import com.lindenlabs.scorebook.shared.common.raw.Game
+import kotlinx.coroutines.launch
 
-class EditGameViewModel(val gameId: String, val appRepository: AppRepository) : ViewModel() {
-    private val engine = EditGameEngine(viewModelScope, appRepository)
-    val viewState: LiveData<EditGameViewState> =
-        engine.viewState.asLiveData(viewModelScope.coroutineContext)
-    val viewEvent: LiveData<EditGameViewEvent> =
-       engine.viewEvent.asLiveData(viewModelScope.coroutineContext)
+class EditGameViewModel(val appRepository: AppRepository, gameId: String) : ViewModel() {
+    private lateinit var game: Game
+    val viewState: MutableLiveData<EditGameViewState> =
+        MutableLiveData()
+    val viewEvent: MutableLiveData<EditGameViewEvent> =
+        MutableLiveData()
 
-    fun launch(gameId: String) = engine.launch(gameId)
+    init {
+        launch(gameId)
+    }
 
-    fun handleInteraction(interaction: EditGameInteraction) = engine.handleInteraction(interaction)
+    fun launch(gameId: String) {
+        viewModelScope.launch {
+            game = requireNotNull(appRepository.getGame(gameId))
+            viewState.value = EditGameViewState.Initial(game)
+        }
+    }
+
+    fun handleInteraction(interaction: EditGameInteraction) {
+        if (interaction is EditGameInteraction.Cancel) {
+            viewEvent.value = EditGameViewEvent.ReturnToGameDetail(game)
+        } else if (interaction is EditGameInteraction.SaveChanges) {
+            val enteredText = interaction.newlyEnteredGameName
+            if (enteredText.isNullOrEmpty()) {
+                viewEvent.value = EditGameViewEvent.ShowTextEntryError
+            } else {
+                game.name = enteredText
+                game.strategy = interaction.newGameStrategy
+                viewModelScope.launch {
+                    appRepository.updateGame(game)
+                }
+                viewEvent.value = EditGameViewEvent.ReturnToGameDetail(game)
+            }
+        }
+    }
 }

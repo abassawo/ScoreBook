@@ -2,9 +2,15 @@ package com.lindenlabs.scorebook.androidApp.screens.playerentry
 
 import com.lindenlabs.scorebook.androidApp.base.BaseViewModelTest
 import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
+<<<<<<< HEAD
 import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayersViewState.*
 import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayerInteraction.*
 import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayersViewEvent
+=======
+import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayersViewState.*
+import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayerInteraction.*
+import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayersViewEvent
+>>>>>>> Use passed in constructor values for viewmodel
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersViewModel
 import com.lindenlabs.scorebook.androidApp.utils.gameWithPlayers
