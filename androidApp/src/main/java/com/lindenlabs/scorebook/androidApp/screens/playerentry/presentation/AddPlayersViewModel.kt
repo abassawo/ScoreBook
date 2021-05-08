@@ -11,12 +11,12 @@ import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayersEn
 import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayersViewEvent
 import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayersViewState
 
-class AddPlayersViewModel(val gameId: String, val appRepository: AppRepository) : ViewModel() {
+class AddPlayersViewModel(val appRepository: AppRepository) : ViewModel() {
     private val engine: AddPlayersEngine = AddPlayersEngine(viewModelScope, appRepository)
     val viewState: LiveData<AddPlayersViewState> = engine.viewState.asLiveData(viewModelScope.coroutineContext)
     val viewEvent: LiveData<Event<AddPlayersViewEvent>> = engine.viewEvent.asLiveData(viewModelScope.coroutineContext)
 
-    fun launch() = engine.launch(gameId)
+    fun launch(gameId: String) = engine.launch(gameId)
 
     fun handleInteraction(interaction: AddPlayerInteraction) =
         engine.handleInteraction(interaction)

@@ -7,10 +7,8 @@ import androidx.lifecycle.LifecycleOwner
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseFragment
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
-import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
 import com.lindenlabs.scorebook.androidApp.base.utils.navigate
 import com.lindenlabs.scorebook.androidApp.databinding.EditGameFragmentBinding
-import com.lindenlabs.scorebook.androidApp.di.EditGameModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.shared.common.viewmodels.editgame.EditGameInteraction
@@ -31,11 +29,11 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        appComponent().value
-            .editGameComponentBuilder()
-            .plus(EditGameModule(appRepository(), requireArguments()["gameArg"] as String))
-            .build()
-            .inject(this)
+        appComponent().value.component().inject(this)
+//            .editGameComponentBuilder()
+//            .plus(EditGameModule(appRepository(), requireArguments()["gameArg"] as String))
+//            .build()
+//            .inject(this)
     }
 
     override fun handleBackPress() = viewModel.handleInteraction(EditGameInteraction.Cancel)

@@ -10,10 +10,8 @@ import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.BaseFragment
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
-import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
 import com.lindenlabs.scorebook.androidApp.base.utils.navigate
 import com.lindenlabs.scorebook.androidApp.databinding.GameDetailFragmentBinding
-import com.lindenlabs.scorebook.androidApp.di.GameScoreModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.androidApp.screens.gamedetail.presentation.showplayers.PlayerAdapter
@@ -48,12 +46,7 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
-        appComponent().value
-            .gameScoreComponentBuilder()
-            .plus(GameScoreModule(arguments?.get("gameArg") as String, appRepository()))
-            .build()
-            .inject(this)
+        appComponent().value.component().inject(this)
     }
 
     override fun onAttach(context: Context) {
@@ -89,6 +82,7 @@ class GameDetailFragment : BaseFragment(R.layout.game_detail_fragment) {
         viewModel.run {
             viewState.observe(viewLifecycleOwner, ::showGameState)
             viewEvent.observe(viewLifecycleOwner, ::processViewEvent)
+            requireArguments().getString("gameArg")?.let { launch(it) }
         }
         binding.updateUi()
         addToolbarListener()

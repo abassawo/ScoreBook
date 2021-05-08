@@ -7,14 +7,14 @@ import com.lindenlabs.scorebook.shared.common.viewmodels.victory.VictoryInteract
 import com.lindenlabs.scorebook.shared.common.viewmodels.victory.VictoryState
 import com.lindenlabs.scorebook.shared.common.viewmodels.victory.VictoryViewEvent
 
-class VictoryViewModel(val gameId: String, appRepository: AppRepository) : ViewModel() {
+class VictoryViewModel(appRepository: AppRepository) : ViewModel() {
     private val victoryEngine: VictoryEngine = VictoryEngine(viewModelScope, appRepository)
     val viewState: LiveData<VictoryState> =
         victoryEngine.viewState.asLiveData(viewModelScope.coroutineContext)
     val viewEvent: LiveData<VictoryViewEvent> =
         victoryEngine.viewEvent.asLiveData(viewModelScope.coroutineContext)
 
-    init {
+    fun launch(gameId: String) {
         victoryEngine.launch(gameId)
     }
 

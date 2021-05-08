@@ -17,13 +17,9 @@ import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
 import com.lindenlabs.scorebook.androidApp.base.utils.navigate
 import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.androidApp.databinding.AddPlayersFragmentBinding
-import com.lindenlabs.scorebook.androidApp.di.AddPlayersArgsModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.androidApp.navigation.Destination
-import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayerInteraction.*
-import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayersViewEvent
-import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayersViewState
-import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayersViewState.*
+import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayersViewState
 import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 
@@ -78,20 +74,20 @@ class AddPlayersFragment : Fragment() {
     }
 
     private fun processViewState(viewState: AddPlayersViewState) = when (viewState) {
-        is TextEntryError -> binding.enterNewPlayerEditText.setError("Enter a valid name")
-        is UpdateCurrentPlayersText -> {
+        is AddPlayersViewState.TextEntryError -> binding.enterNewPlayerEditText.setError("Enter a valid name")
+        is AddPlayersViewState.UpdateCurrentPlayersText -> {
             binding.addPlayersButton.visibility = View.VISIBLE
             binding.playersText.text = viewState.playersText
             binding.enterNewPlayerEditText.setText("")
         }
-        is PlusButtonEnabled -> {
+        is AddPlayersViewState.PlusButtonEnabled -> {
             binding.addAnotherPlayer.run {
                 isEnabled = viewState.isEnabled
                 visibility = if (isEnabled) View.VISIBLE else View.GONE
             }
         }
-        TypingState -> binding.addPlayersButton.visibility = View.GONE
-        is LoadAutocompleteAdapter -> {
+        AddPlayersViewState.TypingState -> binding.addPlayersButton.visibility = View.GONE
+        is AddPlayersViewState.LoadAutocompleteAdapter -> {
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_dropdown_item_1line,
@@ -99,7 +95,6 @@ class AddPlayersFragment : Fragment() {
             );
             binding.enterNewPlayerEditText.setAdapter(adapter)
         }
-        None -> Unit
     }
 
     private fun processViewEvent(viewEvent: Event<AddPlayersViewEvent>) {

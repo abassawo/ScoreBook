@@ -6,9 +6,7 @@ import androidx.fragment.app.Fragment
 import com.lindenlabs.scorebook.androidApp.MainActivity
 import com.lindenlabs.scorebook.androidApp.R
 import com.lindenlabs.scorebook.androidApp.base.utils.appComponent
-import com.lindenlabs.scorebook.androidApp.base.utils.appRepository
 import com.lindenlabs.scorebook.androidApp.databinding.FragmentVictoryBinding
-import com.lindenlabs.scorebook.androidApp.di.VictoryModule
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
 import com.lindenlabs.scorebook.shared.common.viewmodels.victory.VictoryState
 import com.lindenlabs.scorebook.shared.common.viewmodels.victory.VictoryViewEvent
@@ -29,11 +27,12 @@ class VictoryFragment : Fragment(R.layout.fragment_victory) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        appComponent().value
-            .victoryFragmentComponentBuilder()
-            .plus(VictoryModule(appRepository(), requireArguments()["gameArg"] as String))
-            .build()
-            .inject(this)
+        appComponent().value.component().inject(this)
+//        appComponent().value
+//            .victoryFragmentComponentBuilder()
+//            .plus(VictoryModule(appRepository(), requireArguments()["gameArg"] as String))
+//            .build()
+//            .inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,6 +40,7 @@ class VictoryFragment : Fragment(R.layout.fragment_victory) {
         val gameId = requireArguments()["gameArg"] as String
         viewModel.viewState.observe(viewLifecycleOwner, ::showVictory)
         viewModel.viewEvent.observe(viewLifecycleOwner, ::handleViewEvent )
+        viewModel.launch( requireArguments()["gameArg"] as String)
     }
 
     private fun handleViewEvent(viewEvent: VictoryViewEvent) {

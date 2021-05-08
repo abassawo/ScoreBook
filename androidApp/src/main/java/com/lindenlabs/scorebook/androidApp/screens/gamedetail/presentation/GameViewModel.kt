@@ -12,18 +12,21 @@ import com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail.GameDetailVi
 import com.lindenlabs.scorebook.shared.common.viewmodels.gamedetail.GameDetailViewState
 import javax.inject.Inject
 
-class GameViewModel @Inject constructor(val gameId: String, appRepository: AppRepository) : ViewModel() {
+class GameViewModel @Inject constructor(appRepository: AppRepository) : ViewModel() {
+    private var gameId: String? = null
     private val engine: GameDetailEngine = GameDetailEngine(viewModelScope, appRepository)
     val viewState: LiveData <GameDetailViewState> =
         engine.viewState.asLiveData(viewModelScope.coroutineContext)
     val viewEvent: LiveData<Event<GameDetailViewEvent>> =
         engine.viewEvent.asLiveData(viewModelScope.coroutineContext)
 
-    init {
-        refresh()
+
+    fun launch(gameId: String) {
+        this.gameId = gameId
+        engine.launch(gameId)
     }
 
-    fun refresh() = engine.launch(gameId)
+    fun refresh() = this.gameId?.let { launch(it) }
 
     fun handleInteraction(interaction: GameDetailInteraction) =
         engine.handleInteraction(interaction)
