@@ -15,8 +15,6 @@ sealed class GameRowEntity {
 }
 
 sealed class HomeViewEvent {
-    object None : HomeViewEvent()
-
     object ShowWelcomeScreen : HomeViewEvent()
 
     object DismissWelcomeMessage : HomeViewEvent()

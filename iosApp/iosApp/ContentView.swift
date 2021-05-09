@@ -36,11 +36,11 @@ struct ContentView: View {
 
     var body: some View {
         NavigationView {
-            VStack(spacing: 0) {
-
-//                  ForEach(viewModel.games { entity in
-//                     Text(String.valueOf(viewModel.games))
-//                 }) ≥
+            List {
+                ForEach(viewModel.games, id: \.id) { game in
+                    Text("Id value " + game.id())
+//                     CharactersListRowView(character: character)
+                }
             }
             VStack(spacing: 0) {
                 Text("Create a new game").multilineTextAlignment(.center)

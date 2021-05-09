@@ -11,6 +11,7 @@ import com.lindenlabs.scorebook.shared.common.raw.Player
 import com.lindenlabs.scorebook.shared.common.raw.toText
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class AddPlayersViewModel(val appRepository: AppRepository, val gameId: String) : ViewModel() {
     private lateinit var currentGame: Game
@@ -31,7 +32,7 @@ class AddPlayersViewModel(val appRepository: AppRepository, val gameId: String) 
 
     private fun populateAutocompleteAdapter() {
         viewModelScope.launch {
-            runCatching { appRepository.getPlayers() - currentGame.players}
+            runCatching { appRepository.getPlayers() - currentGame.players }
                 .onSuccess { players ->
                     viewState.value =
                         AddPlayersViewState.LoadAutocompleteAdapter(players.map { it.name })
@@ -84,14 +85,16 @@ class AddPlayersViewModel(val appRepository: AppRepository, val gameId: String) 
             viewState.value = AddPlayersViewState.TextEntryError
         } else {
             // navigate to Game Detail screen
-
             viewModelScope.launch {
-                withContext(appRepository.dispatcher) {
-                    appRepository.updateGame(currentGame)
-                }
+                runCatching { appRepository.updateGame(currentGame) }
+                    .onSuccess {
+                        navigateToGameDetail()
+                    }
+                    .onFailure { Timber.e(it) }
             }
-
-            viewEvent.value = Event(AddPlayersViewEvent.NavigateToGameDetail(currentGame))
         }
     }
+
+    private fun navigateToGameDetail() =
+        viewEvent.postValue(Event(AddPlayersViewEvent.NavigateToGameDetail(currentGame)))
 }
