@@ -1,16 +1,21 @@
 package com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation
 
 import androidx.lifecycle.*
+import com.lindenlabs.scorebook.androidApp.base.utils.postEvent
 import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
 import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayerInteraction
+import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayerInteraction.*
 import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayersViewEvent
+import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayersViewEvent.NavigateHome
 import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayersViewState
+import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayersViewState.*
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.Player
 import com.lindenlabs.scorebook.shared.common.raw.toText
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class AddPlayersViewModel(val appRepository: AppRepository, val gameId: String) : ViewModel() {
     private lateinit var currentGame: Game
@@ -31,10 +36,10 @@ class AddPlayersViewModel(val appRepository: AppRepository, val gameId: String) 
 
     private fun populateAutocompleteAdapter() {
         viewModelScope.launch {
-            runCatching { appRepository.getPlayers() - currentGame.players}
+            runCatching { appRepository.getPlayers() - currentGame.players }
                 .onSuccess { players ->
                     viewState.value =
-                        AddPlayersViewState.LoadAutocompleteAdapter(players.map { it.name })
+                        LoadAutocompleteAdapter(players.map { it.name })
                 }
                 .onFailure { }
         }
@@ -42,32 +47,22 @@ class AddPlayersViewModel(val appRepository: AppRepository, val gameId: String) 
 
     private fun showPlayers(players: List<Player>) {
         if (players.isNotEmpty())
-            viewState.value = AddPlayersViewState.UpdateCurrentPlayersText(players.toText())
+            viewState.value = UpdateCurrentPlayersText(players.toText())
     }
-
 
     fun handleInteraction(interaction: AddPlayerInteraction) =
         when (interaction) {
-            is AddPlayerInteraction.SavePlayerDataAndExit -> savePlayerDataAndExit()
-            is AddPlayerInteraction.AddAnotherPlayer -> addAnotherPlayer(interaction.playerName)
-            is AddPlayerInteraction.TextEntered -> viewState.value =
-                AddPlayersViewState.PlusButtonEnabled(isEnabled = true)
-            is AddPlayerInteraction.EmptyText -> viewState.value =
-                AddPlayersViewState.PlusButtonEnabled(isEnabled = false)
-            is AddPlayerInteraction.Typing -> viewState.value = AddPlayersViewState.TypingState
-            is AddPlayerInteraction.GoBackHome -> navigateHome()
+            is SavePlayerDataAndExit -> savePlayerDataAndExit()
+            is AddAnotherPlayer -> addAnotherPlayer(interaction.playerName)
+            is TextEntered -> viewState.postValue(PlusButtonEnabled(isEnabled = true))
+            is EmptyText -> viewState.postValue(PlusButtonEnabled(isEnabled = false))
+            is Typing -> viewState.postValue(TypingState)
+            is GoBackHome -> viewEvent.postEvent(NavigateHome)
         }
-
-    private fun navigateHome() {
-        viewModelScope.launch {
-            appRepository.updateGame(currentGame)
-        }
-        viewEvent.value = Event(AddPlayersViewEvent.NavigateHome)
-    }
 
     private fun addAnotherPlayer(playerName: String) {
         if (playerName.isEmpty())
-            viewState.value = AddPlayersViewState.TextEntryError
+            viewState.value = TextEntryError
         else {
             val player = Player(playerName, scoreTotal = 0)
             currentGame.players += player
@@ -75,23 +70,25 @@ class AddPlayersViewModel(val appRepository: AppRepository, val gameId: String) 
                 appRepository.addPlayer(player)
             }
             val playersText = currentGame.players.toText()
-            viewState.value = AddPlayersViewState.UpdateCurrentPlayersText(playersText)
+            viewState.value = UpdateCurrentPlayersText(playersText)
         }
     }
 
     private fun savePlayerDataAndExit() {
         if (currentGame.players.isEmpty()) {
-            viewState.value = AddPlayersViewState.TextEntryError
+            viewState.value = TextEntryError
         } else {
             // navigate to Game Detail screen
-
             viewModelScope.launch {
-                withContext(appRepository.dispatcher) {
-                    appRepository.updateGame(currentGame)
-                }
+                runCatching { appRepository.updateGame(currentGame) }
+                    .onSuccess {
+                        navigateToGameDetail()
+                    }
+                    .onFailure { Timber.e(it) }
             }
-
-            viewEvent.value = Event(AddPlayersViewEvent.NavigateToGameDetail(currentGame))
         }
     }
+
+    private fun navigateToGameDetail() =
+        viewEvent.postEvent(AddPlayersViewEvent.NavigateToGameDetail(currentGame))
 }

@@ -101,7 +101,6 @@ class AddPlayersFragment : Fragment() {
             );
             binding.enterNewPlayerEditText.setAdapter(adapter)
         }
-        None -> Unit
     }
 
     private fun processViewEvent(viewEvent: Event<AddPlayersViewEvent>) {
@@ -116,7 +115,6 @@ class AddPlayersFragment : Fragment() {
                         hideKeyboard()
                     }
             }
-            AddPlayersViewEvent.None -> Unit
         }
     }
 
@@ -142,8 +140,7 @@ class AddPlayersFragment : Fragment() {
                 start: Int,
                 count: Int,
                 after: Int
-            ) =
-                Unit
+            ) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 s?.let { viewModel.handleInteraction(AddPlayerInteraction.Typing) }

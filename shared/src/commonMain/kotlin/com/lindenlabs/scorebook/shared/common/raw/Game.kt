@@ -6,7 +6,8 @@ import com.lindenlabs.scorebook.shared.common.data.PlayerListConverter
 import comlindenlabsscorebooksharedcommon.Games
 import kotlin.collections.List
 
-data class Game(
+data class
+Game(
     val id: String = Id().id,
     var name: String,
     val dateCreated: Long = Date().getTime(),

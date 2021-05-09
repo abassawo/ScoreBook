@@ -6,7 +6,6 @@ sealed class VictoryInteraction {
     object GoHome : VictoryInteraction()
 }
 
-sealed class VictoryViewEvent {
-    object None : VictoryViewEvent()
+sealed class VictoryViewEvent  {
     object GoHome : VictoryViewEvent()
 }
