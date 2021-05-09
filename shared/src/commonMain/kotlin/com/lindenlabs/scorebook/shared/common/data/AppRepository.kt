@@ -5,6 +5,7 @@ import com.lindenlabs.scorebook.shared.common.raw.GameStrategy
 import com.lindenlabs.scorebook.shared.common.raw.Player
 import comlindenlabsscorebooksharedcommon.GameHistoryQueries
 import comlindenlabsscorebooksharedcommon.PlayerHistoryQueries
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class AppRepository(database: AppDatabase) {
     private val gameHistoryQueries: GameHistoryQueries = database.gameHistoryQueries
@@ -13,16 +14,16 @@ class AppRepository(database: AppDatabase) {
     suspend fun storeDummyGame() = storeGame(Game(name = "Testing"))
 
     suspend fun loadGames(): List<Game> =
-        gameHistoryQueries.selectAll().executeAsList().map { game ->
-            Game(
-                id = game.id,
-                name = game.name,
-                dateCreated = game.dateCreated,
-                isClosed = game.isClosed ?: false,
-                strategy = GameStrategy.valueOf(game.strategy),
-                players = PlayerListConverter.stringToPlayers(game.players).toMutableList()
-            )
-        }
+            gameHistoryQueries.selectAll().executeAsList().map { game ->
+                Game(
+                    id = game.id,
+                    name = game.name,
+                    dateCreated = game.dateCreated,
+                    isClosed = game.isClosed ?: false,
+                    strategy = GameStrategy.valueOf(game.strategy),
+                    players = PlayerListConverter.stringToPlayers(game.players).toMutableList()
+                )
+            }
 
 
     suspend fun getGame(id: String): Game {
@@ -40,14 +41,9 @@ class AppRepository(database: AppDatabase) {
 
     suspend fun updateGame(game: Game) = gameHistoryQueries.insertFullGameObject(game.toDao())
 
-//        games[games.indexOf(game)] = game
-//        withContext(dispatcher) {
-
     suspend fun deleteGame(t: Game) = gameHistoryQueries.deleteByLabel(t.id)
 
-
     suspend fun clearGames() = gameHistoryQueries.empty()
-
 
     suspend fun getPlayers(): List<Player> {
         return playerHistoryQueries.selectAll().executeAsList().map { player ->

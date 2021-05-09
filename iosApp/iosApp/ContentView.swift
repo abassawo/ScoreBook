@@ -7,23 +7,24 @@ func greet() -> String {
 }
 
 class HomeViewModel: ObservableObject {
-    @Published var games = [Game]()
 
     private let repository = AppRepository(database: DatabaseFactory().createDB())
+      @Published var games = [Game]()
+
+    func addGame() {
+         repository.storeDummyGame(completionHandler :{ gamesData, error in
+       })
+    }
 
     func fetch() {
-//         repository.storeDummyGame(completionHandler: { unit, error in
-//             print(result)
-//          }
-        repository.loadGames(completionHandler: { game, error in
-                    if game != nil {
-//                         print("Game processed " + game.name())
-                        self.games = game!
-                    } else {
-                        // log error
-                    }
-
-                })
+        addGame()
+        games.removeAll()
+        repository.loadGames(completionHandler: { gamesData, error in
+                guard let gamesData = gamesData else { return }
+                var games = gamesData as! [Game]
+                self.games += games
+                print( "size of values is : \(games.count)" )
+        })
     }
 }
 
@@ -37,10 +38,9 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-
-//                  ForEach(viewModel.games { entity in
-//                     Text(String.valueOf(viewModel.games))
-//                 }) ≥
+                ForEach(viewModel.games, id: \.id) { game in
+                    Text(game.name)
+                }
             }
             VStack(spacing: 0) {
                 Text("Create a new game").multilineTextAlignment(.center)
@@ -50,7 +50,7 @@ struct ContentView: View {
                     ) { isEditing in
                         self.isEditing = isEditing
                     } onCommit: {
-//                         validate(name: gameName)
+                        viewModel.addGame()
                     }
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
@@ -68,7 +68,6 @@ struct ContentView: View {
         }.padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
     }
 }
-
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
