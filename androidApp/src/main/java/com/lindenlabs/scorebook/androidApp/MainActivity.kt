@@ -5,12 +5,15 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.lindenlabs.scorebook.androidApp.base.BaseFragment
+import com.lindenlabs.scorebook.androidApp.base.utils.postEvent
 import com.lindenlabs.scorebook.androidApp.databinding.ActivityMainBinding
 import com.lindenlabs.scorebook.androidApp.navigation.Destination
 import com.lindenlabs.scorebook.androidApp.screens.editgame.EditGameFragment
@@ -20,6 +23,13 @@ import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddP
 import com.lindenlabs.scorebook.androidApp.screens.updatepoints.presentation.UpdatePointsDialogFragment
 import com.lindenlabs.scorebook.androidApp.screens.victory.presentation.VictoryFragment
 import com.lindenlabs.scorebook.shared.common.Event
+
+class SharedNavigationViewModel : ViewModel() {
+    val destinationLiveData = MutableLiveData<Event<Destination>>()
+
+    fun navigateTo(destination: Destination) =
+        destinationLiveData.postEvent(destination)
+}
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
@@ -34,7 +44,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        sharedNavigationViewModel.destinationEvent.observe(this, this::navigate)
+        sharedNavigationViewModel.destinationLiveData.observe(this, this::navigate)
 
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment

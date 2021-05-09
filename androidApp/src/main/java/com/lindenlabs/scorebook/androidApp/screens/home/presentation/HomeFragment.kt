@@ -36,10 +36,7 @@ import javax.inject.Inject
 
 class HomeFragment : Fragment(R.layout.home_fragment) {
     private val viewModel: HomeViewModel by lazy {
-        viewModelFactory.makeViewModel(
-            this,
-            HomeViewModel::class.java
-        )
+        viewModelFactory.makeViewModel(this, HomeViewModel::class.java)
     }
     private lateinit var binding: HomeFragmentBinding
     private lateinit var gameBinding: IncludeHomeScreenBinding
@@ -56,13 +53,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             .build()
             .inject(this)
     }
-
-//    override fun onResume() {
-//        super.onResume()
-////        (requireActivity() as MainActivity).setNavigationIcon(R.drawable.ic_menu) {
-////            requireActivity().onBackPressed()
-////        }
-//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -96,7 +86,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             is HomeViewEvent.ShowUndoDeletePrompt -> showUndoPrompt(action)
             HomeViewEvent.ShowWelcomeScreen -> showWelcomeConfetti()
             HomeViewEvent.DismissWelcomeMessage -> binding.viewKonfetti.stopGracefully()
-            HomeViewEvent.None -> Unit
         }
     }
 
@@ -186,9 +175,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         }
     }
 
-
     private fun showGames(viewState: HomeViewState) =
         gameAdapter.setData(viewState.entities)
-
 }
-

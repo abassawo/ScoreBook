@@ -1,19 +1,14 @@
 package com.lindenlabs.scorebook.androidApp.screens.playerentry
 
 import com.lindenlabs.scorebook.androidApp.base.BaseViewModelTest
-import com.lindenlabs.scorebook.androidApp.base.data.raw.Game
-<<<<<<< HEAD
-import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayersViewState.*
-import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayerInteraction.*
-import com.lindenlabs.scorebook.shared.common.viewmodels.addplayers.AddPlayersViewEvent
-=======
 import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayersViewState.*
 import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayerInteraction.*
 import com.lindenlabs.scorebook.shared.common.entities.addplayers.AddPlayersViewEvent
->>>>>>> Use passed in constructor values for viewmodel
-import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersFragmentArgs
 import com.lindenlabs.scorebook.androidApp.screens.playerentry.presentation.AddPlayersViewModel
+import com.lindenlabs.scorebook.androidApp.utils.game
 import com.lindenlabs.scorebook.androidApp.utils.gameWithPlayers
+import com.lindenlabs.scorebook.shared.common.Event
+import com.lindenlabs.scorebook.shared.common.raw.Game
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -27,8 +22,7 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class AddPlayersViewModelTest : BaseViewModelTest() {
     private val arrangeBuilder = ArrangeBuilder()
-    private val underTest =
-        AddPlayersViewModel(appRepository, AddPlayersFragmentArgs(gameWithPlayers()))
+    private val underTest = AddPlayersViewModel(appRepository, "id")
 
     @Before
     override fun before() {
@@ -42,7 +36,7 @@ class AddPlayersViewModelTest : BaseViewModelTest() {
             val game = Game(name = "test1")
             val openGames = listOf(game)
             MainScope().launch {
-//                arrangeBuilder.withGamesLoaded(openGames)
+                arrangeBuilder.withGamesLoaded(openGames)
                 assert(underTest.viewState.value is LoadAutocompleteAdapter)
             }
         }
@@ -53,7 +47,6 @@ class AddPlayersViewModelTest : BaseViewModelTest() {
         runBlockingTest {
             MainScope().launch {
                 arrangeBuilder.withGamesLoaded(listOf(gameWithPlayers()))
-//                underTest.launch()
                 assert(underTest.viewState.value is UpdateCurrentPlayersText)
             }
         }
@@ -63,7 +56,6 @@ class AddPlayersViewModelTest : BaseViewModelTest() {
     fun `on updating player name text field, validation should occur`() {
         runBlockingTest {
             MainScope().launch {
-//                underTest.launch()
                 underTest.handleInteraction(TextEntered)
                 assert(underTest.viewState.value is PlusButtonEnabled)
             }
@@ -74,7 +66,6 @@ class AddPlayersViewModelTest : BaseViewModelTest() {
     fun `valid first player name yields update player text`() {
         runBlockingTest {
             MainScope().launch {
-//                underTest.launch()
                 underTest.handleInteraction(AddAnotherPlayer("Player 1"))
                 val emittedState = underTest.viewState.value as UpdateCurrentPlayersText
                 assertEquals("Player 1", emittedState.playersText)
@@ -88,7 +79,6 @@ class AddPlayersViewModelTest : BaseViewModelTest() {
         runBlockingTest {
             MainScope().launch {
                 underTest.run {
-//                    launch()
                     handleInteraction(AddAnotherPlayer("Player 1"))
                     handleInteraction(AddAnotherPlayer("Player 2"))
                     handleInteraction(AddAnotherPlayer("Player 3"))
@@ -103,11 +93,10 @@ class AddPlayersViewModelTest : BaseViewModelTest() {
         runBlockingTest {
             MainScope().launch {
                 underTest.run {
-//                    launch()
                     handleInteraction(AddAnotherPlayer("Player 1"))
                     handleInteraction(AddAnotherPlayer("Player 2"))
-                    handleInteraction(SavePlayerDataAndExit("Player 3"))
-                    assert(viewEvent.value is AddPlayersViewEvent.NavigateToGameDetail)
+                    handleInteraction(SavePlayerDataAndExit)
+                    assert(viewEvent.value == Event(AddPlayersViewEvent.NavigateToGameDetail(game())))
                 }
             }
         }
@@ -118,9 +107,8 @@ class AddPlayersViewModelTest : BaseViewModelTest() {
         runBlockingTest {
             MainScope().launch {
                 underTest.run {
-//                    launch()
                     underTest.handleInteraction(GoBackHome)
-                    assert(underTest.viewEvent.value is AddPlayersViewEvent.NavigateHome)
+                    assert(underTest.viewEvent.value == Event(AddPlayersViewEvent.NavigateHome))
                 }
             }
         }
@@ -130,7 +118,6 @@ class AddPlayersViewModelTest : BaseViewModelTest() {
         runBlockingTest {
             MainScope().launch {
                 underTest.run {
-//                    launch()
                     underTest.handleInteraction(AddAnotherPlayer(""))
                     assert(underTest.viewState.value is TextEntryError)
                 }
@@ -143,7 +130,6 @@ class AddPlayersViewModelTest : BaseViewModelTest() {
         runBlockingTest {
             MainScope().launch {
                 underTest.run {
-//                    launch()
                     underTest.handleInteraction(EmptyText)
                     assert(underTest.viewState.value is PlusButtonEnabled)
                 }

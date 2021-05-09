@@ -56,14 +56,11 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
                     enabled = viewState.game.strategy == GameStrategy.LowestScoreWins
                 )
             }
-            EditGameViewState.Loading -> Unit
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val gameId = requireArguments()["gameArg"] as String
-//        viewModel.launch(gameId)
         viewModel.viewState.observe(this as LifecycleOwner, {
             handleViewState(it)
         })
@@ -101,7 +98,6 @@ class EditGameFragment : BaseFragment(R.layout.edit_game_fragment) {
             is EditGameViewEvent.ReturnToGameDetail -> {
                 navigate(Destination.GameDetail(viewEvent.game))
             }
-            EditGameViewEvent.None -> Unit
         }
     }
 }

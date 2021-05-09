@@ -33,8 +33,6 @@ sealed class GameDetailViewState {
 
 sealed class GameDetailViewEvent {
 
-    object None : GameDetailViewEvent()
-
     data class AddPlayersClicked(val game: Game) : GameDetailViewEvent()
 
     data class EditScoreForPlayer(val game: Game, val player: Player) : GameDetailViewEvent()

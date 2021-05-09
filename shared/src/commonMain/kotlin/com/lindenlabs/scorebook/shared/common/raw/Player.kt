@@ -15,18 +15,15 @@ data class Player(
 ) {
 
     fun addToScore(score: Int) {
-//        this.rounds += Round(score = score)
         this.scoreTotal += score
     }
 
     fun deductFromScore(score: Int) {
         if (score < 0) throw IllegalStateException()
-//        this.rounds += Round(score = -score)
         this.scoreTotal -= score
     }
 
     fun resetScore() {
-//        this.rounds = mutableListOf()
         this.scoreTotal = 0
     }
 }
