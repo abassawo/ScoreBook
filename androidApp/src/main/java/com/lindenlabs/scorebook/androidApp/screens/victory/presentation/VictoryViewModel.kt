@@ -1,6 +1,10 @@
 package com.lindenlabs.scorebook.androidApp.screens.victory.presentation
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.lindenlabs.scorebook.androidApp.base.utils.postEvent
+import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
 import com.lindenlabs.scorebook.shared.common.entities.victory.VictoryInteraction
 import com.lindenlabs.scorebook.shared.common.entities.victory.VictoryState
@@ -8,8 +12,8 @@ import com.lindenlabs.scorebook.shared.common.entities.victory.VictoryViewEvent
 import kotlinx.coroutines.launch
 
 class VictoryViewModel(val appRepository: AppRepository, gameId: String) : ViewModel() {
-    val viewState: MutableLiveData<VictoryState> =  MutableLiveData()
-    val viewEvent: MutableLiveData<VictoryViewEvent> = MutableLiveData()
+    val viewState: MutableLiveData<VictoryState> = MutableLiveData()
+    val viewEvent: MutableLiveData<Event<VictoryViewEvent>> = MutableLiveData()
 
     init {
         launch(gameId)
@@ -25,7 +29,7 @@ class VictoryViewModel(val appRepository: AppRepository, gameId: String) : ViewM
 
     fun handleInteraction(interaction: VictoryInteraction) {
         when (interaction) {
-            is VictoryInteraction.GoHome -> Unit // viewEvent.value = VictoryViewEvent.GoHome
+            is VictoryInteraction.GoHome -> viewEvent.postEvent(VictoryViewEvent.GoHome)
         }
     }
 }

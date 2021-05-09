@@ -21,11 +21,9 @@ sealed class AddPlayerInteraction {
 sealed class AddPlayersViewEvent {
     data class NavigateToGameDetail(val game: Game) : AddPlayersViewEvent()
     object NavigateHome : AddPlayersViewEvent()
-    object None : AddPlayersViewEvent()
 }
 
 sealed class AddPlayersViewState {
-    object None : AddPlayersViewState()
     data class LoadAutocompleteAdapter(val suggestedPlayerNames: List<String>) : AddPlayersViewState()
     data class UpdateCurrentPlayersText(val playersText: String) : AddPlayersViewState()
     data class PlusButtonEnabled(val isEnabled: Boolean): AddPlayersViewState()

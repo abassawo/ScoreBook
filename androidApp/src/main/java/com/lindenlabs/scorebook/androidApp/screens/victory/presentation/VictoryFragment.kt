@@ -11,6 +11,7 @@ import com.lindenlabs.scorebook.androidApp.databinding.FragmentVictoryBinding
 import com.lindenlabs.scorebook.androidApp.di.ArgModule
 import com.lindenlabs.scorebook.androidApp.di.ArgumentPayload
 import com.lindenlabs.scorebook.androidApp.di.ViewModelFactory
+import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.entities.victory.VictoryState
 import com.lindenlabs.scorebook.shared.common.entities.victory.VictoryViewEvent
 import javax.inject.Inject
@@ -44,12 +45,11 @@ class VictoryFragment : Fragment(R.layout.fragment_victory) {
         viewModel.viewEvent.observe(viewLifecycleOwner, ::handleViewEvent )
     }
 
-    private fun handleViewEvent(viewEvent: VictoryViewEvent) {
-        when(viewEvent) {
-            VictoryViewEvent.None -> Unit
-            VictoryViewEvent.GoHome -> goHome()
+    private fun handleViewEvent(viewEvent: Event<VictoryViewEvent>) =
+        when(val action = viewEvent.getContentIfNotHandled()) {
+            is VictoryViewEvent.GoHome -> goHome()
+            null -> TODO()
         }
-    }
 
     private fun goHome(): Boolean {
         (activity as MainActivity).navigateFirstTabWithClearStack()

@@ -3,6 +3,7 @@ package com.lindenlabs.scorebook.androidApp.screens.home.presentation
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lindenlabs.scorebook.androidApp.base.utils.postEvent
 import com.lindenlabs.scorebook.shared.common.Event
 import com.lindenlabs.scorebook.shared.common.data.AppRepository
 import com.lindenlabs.scorebook.shared.common.domain.GamesMapper
@@ -14,6 +15,7 @@ import com.lindenlabs.scorebook.shared.common.entities.home.HomeViewEvent
 import com.lindenlabs.scorebook.shared.common.entities.home.HomeViewState
 import com.lindenlabs.scorebook.shared.common.raw.Game
 import com.lindenlabs.scorebook.shared.common.raw.GameStrategy
+import com.lindenlabs.scorebook.shared.common.raw.GameStrategy.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -50,31 +52,38 @@ class HomeViewModel(val appRepository: AppRepository, private val userSettingsSt
     }
 
     internal fun handleInteraction(interaction: HomeInteraction) = when (interaction) {
-        is HomeInteraction.GameDetailsEntered -> {
-            if (interaction.name.isNullOrEmpty())
-                showError()
-            else {
-                val strategy =
-                    if (interaction.lowestScoreWins) GameStrategy.LowestScoreWins else GameStrategy.HighestScoreWins
-                onNewGameCreated(interaction.name!!, strategy)
-            }
-        }
+        HomeInteraction.Refresh -> loadGames()
         is HomeInteraction.GameClicked -> onGameClicked(interaction.game)
-        is HomeInteraction.SwipeToDelete -> viewModelScope.launch {
+        is HomeInteraction.SwipeToDelete -> deleteGame(interaction)
+        is HomeInteraction.UndoDelete -> restoreDeletedGame(interaction)
+        is HomeInteraction.DismissWelcome -> viewEvent.postEvent(HomeViewEvent.DismissWelcomeMessage)
+        is HomeInteraction.GameDetailsEntered -> processFormEntry(interaction)
+    }
+
+    private fun processFormEntry(interaction: HomeInteraction.GameDetailsEntered) =
+        interaction.run {
+            name?.let { onNewGameCreated(it, interaction.strategy()) }
+        } ?: showError()
+
+    private fun HomeInteraction.GameDetailsEntered.strategy() =
+        if (lowestScoreWins) LowestScoreWins else HighestScoreWins
+
+    private fun deleteGame(interaction: HomeInteraction.SwipeToDelete) {
+        viewModelScope.launch {
             runCatching { deleteGame(interaction.game) }
-                .onSuccess {
+                .onSuccess { deleteIndex ->
                     loadGames()
-                    viewEvent.postValue(Event(HomeViewEvent.ShowUndoDeletePrompt(interaction.game, it)))
+                    showUndoDeletePrompt(interaction.game, deleteIndex)
                 }
                 .onFailure { Timber.e(it) }
         }
-        is HomeInteraction.UndoDelete -> restoreDeletedGame(interaction)
-        HomeInteraction.DismissWelcome -> viewEvent.postValue(Event(HomeViewEvent.DismissWelcomeMessage))
-        HomeInteraction.Refresh -> loadGames()
     }
 
+    private fun showUndoDeletePrompt(game: Game, index: Int) =
+        viewEvent.postEvent(HomeViewEvent.ShowUndoDeletePrompt(game, index))
+
     private fun onGameClicked(game: Game) =
-            viewEvent.postValue(Event(HomeViewEvent.ShowGameDetail(game)))
+        viewEvent.postValue(Event(HomeViewEvent.ShowGameDetail(game)))
 
     private fun restoreDeletedGame(interaction: HomeInteraction.UndoDelete) {
         games.add(interaction.restoreIndex, interaction.game)
@@ -83,7 +92,7 @@ class HomeViewModel(val appRepository: AppRepository, private val userSettingsSt
         viewModelScope.launch {
             runCatching { appRepository.storeGame(interaction.game) }
                 .onSuccess { loadGames() }
-                .onFailure { Timber.e( "error trying to re-add game") }
+                .onFailure { Timber.e("error trying to re-add game") }
         }
     }
 
