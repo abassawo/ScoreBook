@@ -1,45 +1,46 @@
 import SwiftUI
+import Combine
 import shared
-
-class HomeViewModel : ObservableObject, Identifiable {
-    @State private var engine: HomeEngine = HomeEngine(coroutineScope: MainScope(), environment: Environment(database: DatabaseFactory().createDB()),
-                                                                userSettings: UserSettingsStore())
-    @Published var viewState: HomeViewState = engine.
-    @Published var viewEvent: Event<HomeViewEvent> = []
-
-    init() {
-        viewState.removeAll()
-        viewEvent.removeAll()
-        viewState.append(engine.viewState.value as! HomeViewState)
-        viewEvent.append(engine.viewEvent.value as! Event<HomeViewEvent>)
-    }
-}
 
 func greet() -> String {
     return Greeting().greeting()
+}
+
+class HomeViewModel: ObservableObject {
+    @Published var games = [Game]()
+
+    private let repository = AppRepository(database: DatabaseFactory().createDB())
+
+    func fetch() {
+//         repository.storeDummyGame(completionHandler: { unit, error in
+//             print(result)
+//          }
+        repository.loadGames(completionHandler: { game, error in
+                    if game != nil {
+//                         print("Game processed " + game.name())
+                        self.games = game!
+                    } else {
+                        // log error
+                    }
+
+                })
+    }
 }
 
 struct ContentView: View {
     @State private var gameName: String = ""
     @State private var isEditing = false
     @State private var selection: String? = nil
-    @State private var viewModel:  HomeViewModel = HomeViewModel()
 
-    init() {
-        for entity in viewModel.viewState.first!.entities {
-            let unwrappedEntity = entity as? GameRowEntity.HeaderType
-            let title = unwrappedEntity?.title ?? ""
-            print( "Hello " + title)
-        }
-    }
-
+    @State var viewModel = HomeViewModel()
 
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                ForEach(viewModel.viewState.value.entities { entity in
-                    Text("Testing ")
-                }
+
+//                  ForEach(viewModel.games { entity in
+//                     Text(String.valueOf(viewModel.games))
+//                 }) ≥
             }
             VStack(spacing: 0) {
                 Text("Create a new game").multilineTextAlignment(.center)
@@ -67,6 +68,7 @@ struct ContentView: View {
         }.padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
     }
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

@@ -22,7 +22,5 @@ class AppModule(private val application: ScoreBookApplication) {
 
     @Provides
     @Singleton
-    fun provideAppRepository(): AppRepository = with(application.scoreBookDatabase) {
-        AppRepository(this.gameHistoryQueries, this.playerHistoryQueries)
-    }
+    fun provideAppRepository(): AppRepository = AppRepository(application.scoreBookDatabase)
 }

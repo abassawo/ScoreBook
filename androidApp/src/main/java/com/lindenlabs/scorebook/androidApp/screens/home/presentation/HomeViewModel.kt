@@ -79,6 +79,7 @@ class HomeViewModel(val appRepository: AppRepository, private val userSettingsSt
     private fun restoreDeletedGame(interaction: HomeInteraction.UndoDelete) {
         games.add(interaction.restoreIndex, interaction.game)
 
+
         viewModelScope.launch {
             runCatching { appRepository.storeGame(interaction.game) }
                 .onSuccess { loadGames() }

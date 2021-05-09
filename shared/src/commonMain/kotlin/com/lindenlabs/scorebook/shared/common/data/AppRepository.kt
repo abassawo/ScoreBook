@@ -9,14 +9,16 @@ import comlindenlabsscorebooksharedcommon.PlayerHistoryQueries
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-class AppRepository(
-    private val gameHistoryQueries: GameHistoryQueries,
-    private val playerHistoryQueries: PlayerHistoryQueries,
-    val dispatcher: CoroutineDispatcher = DefaultDispatcherProvider().default(),
-) {
-
+class AppRepository(database: AppDatabase) {
+    private val gameHistoryQueries: GameHistoryQueries = database.gameHistoryQueries
+    private val playerHistoryQueries: PlayerHistoryQueries = database.playerHistoryQueries
     private var games: MutableList<Game> = mutableListOf()
     private var players: MutableList<Player> = mutableListOf()
+
+    val dispatcher: CoroutineDispatcher = DefaultDispatcherProvider().default()
+
+    suspend fun storeDummyGame() =
+        storeGame(Game(name = "Testing"))
 
     suspend fun loadGames(): List<Game> = withContext(dispatcher) {
         games = mutableListOf<Game>().also { games ->

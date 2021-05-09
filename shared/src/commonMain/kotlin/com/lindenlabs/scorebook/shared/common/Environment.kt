@@ -6,9 +6,6 @@ import com.lindenlabs.scorebook.shared.common.data.PlayerDataSource
 import com.lindenlabs.scorebook.shared.common.data.persistence.ScoreBookDatabase
 
 class Environment(database: ScoreBookDatabase) {
-    val appRepository =
-        AppRepository(
-            GameDataSource(database.gameHistoryQueries),
-            PlayerDataSource(database.playerHistoryQueries),
-        )
+    val appRepository = AppRepository(database)
+
 }
