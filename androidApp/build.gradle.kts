@@ -1,4 +1,3 @@
-
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -24,10 +23,10 @@ dependencies {
 
     implementation("com.facebook.stetho:stetho:1.5.1")
 
-    val daggerVersion=2.33
+    val daggerVersion=2.42
 
     implementation("com.google.dagger:dagger:$daggerVersion")
-    implementation("com.google.dagger:dagger-android:2.33")
+    implementation("com.google.dagger:dagger-android:2.35.1")
     kapt("com.google.dagger:dagger-android-processor:$daggerVersion")
     kapt("com.google.dagger:dagger-compiler:$daggerVersion")
 
