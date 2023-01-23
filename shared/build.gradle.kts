@@ -21,9 +21,9 @@ kotlin {
         }
     }
 
-    val onPhone = System.getenv("SDK_NAME")?.startsWith("iphoneos") ?: false
-    if (onPhone) iosArm64("ios")
-    else iosX64("ios")
+//    val onPhone = System.getenv("SDK_NAME")?.startsWith("iphoneos") ?: false
+//    if (onPhone) iosArm64("ios")
+//    else iosX64("ios")
 
     // or sourceSets.iosMain, sourceSets.windowsMain, etc.
     sourceSets {
@@ -34,57 +34,45 @@ kotlin {
                 implementation("com.squareup.sqldelight:runtime:1.5.3")
             }
         }
-        val androidMain by getting {
-            dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
-                implementation("com.squareup.sqldelight:android-driver:1.5.3")
-                implementation("com.google.android.material:material:1.3.0")
-            }
-        }
-
-        val iosMain by getting {
-            dependsOn(commonMain)
-//            iosX64Main.dependsOn(this)
-//            iosArm64Main.dependsOn(this)
-//            iosSimulatorArm64Main.dependsOn(this)
-
-            dependencies {
-                implementation("com.squareup.sqldelight:native-driver:1.4.4")
-            }
-        }
-
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
             }
         }
-//        val androidMain by getting
-        val androidTest by getting
+        val androidMain by getting {
+            dependencies {
+//                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
+                implementation("com.squareup.sqldelight:android-driver:1.5.3")
+//                implementation("com.google.android.material:material:1.3.0")
+            }
+        }
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
-
+        val iosMain by creating {
+            dependencies {
+                implementation("com.squareup.sqldelight:native-driver:1.5.3")
+            }
+            dependsOn(commonMain)
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+        }
         val iosX64Test by getting
         val iosArm64Test by getting
         val iosSimulatorArm64Test by getting
-
-//        val iosTest by creating {
-//            dependsOn(commonTest)
-//            iosX64Test.dependsOn(this)
-//            iosArm64Test.dependsOn(this)
-//            iosSimulatorArm64Test.dependsOn(this)
-//        }
+        val iosTest by creating {
+            dependsOn(commonTest)
+            iosX64Test.dependsOn(this)
+            iosArm64Test.dependsOn(this)
+            iosSimulatorArm64Test.dependsOn(this)
+        }
     }
-}
 
-android {
-    compileSdkVersion(31)
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    defaultConfig {
-        minSdkVersion(24)
-        targetSdkVersion(31)
+
+    dependencies {
+        implementation("androidx.core:core-ktx:+")
     }
-}
 
 //val packForXcode by tasks.creating(Sync::class) {
 //    group = "build"
@@ -102,9 +90,19 @@ android {
 //
 //tasks.getByName("build").dependsOn(packForXcode)
 
-sqldelight {
-    database(name = "AppDatabase") {
-        packageName = "com.lindenlabs.scorebook.shared.common.data"
-        sourceFolders = listOf("sqldelight")
+    sqldelight {
+        database(name = "AppDatabase") {
+            packageName = "com.lindenlabs.scorebook.shared.common.data"
+            sourceFolders = listOf("sqldelight")
+        }
+    }
+}
+
+android {
+    compileSdkVersion(31)
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    defaultConfig {
+        minSdkVersion(24)
+        targetSdkVersion(31)
     }
 }

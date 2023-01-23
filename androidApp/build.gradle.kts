@@ -31,8 +31,8 @@ dependencies {
     kapt("com.google.dagger:dagger-compiler:$daggerVersion")
 
 //    implementation("androidx.room:room-runtime:2.2.6")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.3.3")
-    implementation("androidx.navigation:navigation-ui-ktx:2.3.3")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
     implementation("com.jakewharton.timber:timber:4.7.1")
     implementation("com.google.code.gson:gson:2.8.6")
     kapt("androidx.room:room-compiler:2.2.6")
@@ -67,7 +67,7 @@ dependencies {
 }
 
 android {
-    compileSdkVersion(29)
+    compileSdkVersion(31)
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }

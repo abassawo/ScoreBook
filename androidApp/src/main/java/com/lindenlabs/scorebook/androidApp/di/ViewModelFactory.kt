@@ -19,7 +19,7 @@ class ViewModelFactory constructor(
 ) :
     ViewModelProvider.NewInstanceFactory() {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val argPayload = when (modelClass) {
             HomeViewModel::class.java -> ArgumentPayload.None
             UpdatePointsViewModel::class.java -> argumentPayload as ArgumentPayload.WithGameIdAndPlayerId
