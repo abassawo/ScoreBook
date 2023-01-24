@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment
         val inflater = navHostFragment.navController.navInflater
         val graph = inflater.inflate(R.navigation.score_book_nav)
-        graph.startDestination = R.id.navHomeFragment
+        graph.setStartDestination(R.id.navHomeFragment)
         navController.graph = graph
     }
 

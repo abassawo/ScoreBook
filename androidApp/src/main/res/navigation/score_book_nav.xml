@@ -12,8 +12,7 @@
 
         <action
             android:id="@+id/navigateToAddPlayersScreen"
-            app:destination="@id/navAddPlayers"
-            app:enterAnim="@anim/fragment_fade_exit">
+            app:destination="@id/navAddPlayers">
 
             <argument
                 android:name="gameArg"
@@ -23,8 +22,7 @@
 
         <action
             android:id="@+id/navigateToScoreGameScreen"
-            app:destination="@id/navActiveGame"
-            app:enterAnim="@anim/fragment_fade_exit">
+            app:destination="@id/navActiveGame">
 
             <argument
                 android:name="gameArg"
@@ -102,12 +100,11 @@
 
         <action
             android:id="@+id/navigateToEditGameScreen"
-            app:destination="@+id/navEditGame"
-            app:enterAnim="@anim/fragment_fade_exit">
+            app:destination="@+id/navEditGame">
 
-            <argument
-                android:name="gameArg"
-                app:argType="string" />
+<!--            <argument-->
+<!--                android:name="gameArg"-->
+<!--                app:argType="string" />-->
 
         </action>
 

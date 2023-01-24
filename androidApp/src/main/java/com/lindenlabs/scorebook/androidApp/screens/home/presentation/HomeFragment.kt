@@ -39,7 +39,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         viewModelFactory.makeViewModel(this, HomeViewModel::class.java)
     }
     private lateinit var binding: HomeFragmentBinding
-    private lateinit var gameBinding: IncludeHomeScreenBinding
     private val gameAdapter = GameAdapter()
 
     @Inject
@@ -57,7 +56,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = view.viewBinding()
-        gameBinding = view.homeScreenBinding()
         binding.updateUi()
         viewModel.viewState.observe(this as LifecycleOwner, this::showGames)
         viewModel.viewEvent.observe(this as LifecycleOwner, this::processViewEvent)
@@ -67,9 +65,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         super.onResume()
         viewModel.handleInteraction(HomeInteraction.Refresh)
     }
-
-    private fun View.homeScreenBinding() =
-        IncludeHomeScreenBinding.bind(findViewById(R.id.homeScrenRoot))
 
     private fun View.viewBinding(): HomeFragmentBinding {
         val rootView = findViewById<View>(R.id.main_view)
@@ -118,7 +113,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             requireContext(),
             android.R.drawable.stat_notify_error
         )
-        gameBinding.enterNewGameEditText.setError(errorPair.first, errorPair.second)
+        binding.enterNewGameEditText.setError(errorPair.first, errorPair.second)
     }
 
     private fun showWelcomeConfetti() {
@@ -158,11 +153,11 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                 LinearSnapHelper().attachToRecyclerView(this)
             }
         }.also {
-            gameBinding.bind()
+            binding.bind()
         }
     }
 
-    fun IncludeHomeScreenBinding.bind() {
+    fun HomeFragmentBinding.bind() {
         newGameButton.setOnClickListener {
             val enteredText = enterNewGameEditText.text.toString()
             viewModel.handleInteraction(
